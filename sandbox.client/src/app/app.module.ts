@@ -2,26 +2,46 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
-import {LoginComponent} from './login/login.component';
 import {HttpService} from "./http.service";
 import {HttpClientModule} from "@angular/common/http";
-import {LoginService} from "./login/login.service";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ClientListComponent} from './client-list/client-list.component';
-import {ClientListService} from "./client-list/client-list.service";
-import { AboutComponent } from './about/about.component';
+import {AboutComponent} from './about/about.component';
+import {EditClientComponent} from './edit-client/edit-client.component';
+import {AddClientComponent} from './add-client/add-client.component';
+import {ClientService} from "./service/client.service";
+import {routing} from "./app.routing";
+
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatButtonModule, MatCheckboxModule, MatDialogModule, MatTableModule} from '@angular/material';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
     ClientListComponent,
     AboutComponent,
+    EditClientComponent,
+    AddClientComponent
+  ],
+  entryComponents: [
+    EditClientComponent,
+    AddClientComponent
   ],
   imports: [
-    BrowserModule, HttpClientModule, FormsModule,
+    routing,
+    BrowserModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatTableModule,
+    MatDialogModule
+
   ],
-  providers: [HttpService, LoginService, ClientListService],
+  providers: [HttpService, ClientService],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+}

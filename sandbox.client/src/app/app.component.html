@@ -1,8 +1,10 @@
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
 <div class="main">
   <h1>
-    Добро пожаловать на {{ title }} Welcome!
+    Добро пожаловать на {{ title }}!
   </h1>
-  <app-login></app-login>
-  <app-about *ngIf="login.canViewAbout"></app-about>
-  <app-client-list *ngIf="login.canViewUsers"></app-client-list>
+  <router-outlet></router-outlet>
 </div>

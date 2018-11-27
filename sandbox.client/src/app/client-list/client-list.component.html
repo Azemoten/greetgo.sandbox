@@ -1,19 +1,48 @@
-<div>
-  <h3>Список персон</h3>
-  <table>
+<div class="col-md-6">
+  <h2> Client Details</h2>
+
+  <table class="table table-striped">
     <thead>
     <tr>
-      <th>Username</th>
-      <th>ФИО</th>
-      <th>Права</th>
+      <th>ФИО
+        <!--//TODO переименовать onClickMe-->
+        <!--//TODO FIXED-->
+        <button (click)="sortBy('name')" class="fa fa-sort"></button>
+        <input class="fio" (keyup)="filterBy($event)">
+        <select [(ngModel)]="selectedOrder">
+          <option *ngFor="let o of orders">{{o.name[1]}}</option>
+        </select>
+      </th>
+      <th>Характер</th>
+      <th>Возраст
+      </th>
+      <th>Общий остаток счетов
+      </th>
+      <th>Максимальный остаток
+        <button (click)="sortBy('max_money')" class="fa fa-sort"></button>
+      </th>
+      <th>Минимальный остаток
+        <button (click)="sortBy('min_money')" class="fa fa-sort"></button>
+      </th>
+      <th class="bor"></th>
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let r of listService.list">
-      <td>{{r.username}}</td>
-      <td>{{r.fio}}</td>
-      <td>{{r.cans}}</td>
+    <tr *ngFor="let client of clients">
+      <td>{{client.name}} {{ client.surname}} {{client.tname}}</td>
+      <td>{{client.charm}}</td>
+      <td>{{currDate.getFullYear()-client.birth_date.substring(0,4)}}</td>
+      <td>{{(+client.max_money) + (+client.min_money)}}</td>
+      <td>{{client.max_money}}</td>
+      <td>{{client.min_money}}</td>
+      <td class="bor">
+        <button class="btn fa fa-plus" (click)="addClient('addClient')"></button>
+        <button style="margin-left: 10px;" class="btn fa fa-minus" (click)="deleteClient(client.id)"></button>
+        <button class="btn fa fa-window-minimize" (click)="editClient(client.id)"
+                style="margin-left: 10px;"></button>
+      </td>
     </tr>
     </tbody>
   </table>
 </div>
+
