@@ -1,0 +1,46 @@
+{
+  "users": [
+    {
+      "id": 15,
+      "name": "zzZ",
+      "surname": "asd45",
+      "tname": "asd",
+      "charm": "second",
+      "min_money": 900,
+      "max_money": 1600,
+      "birth_date": "2010-05-11"
+    },
+    {
+      "id": 16,
+      "name": "4545",
+      "surname": "Morgan",
+      "tname": "Asdf",
+      "charm": "second",
+      "min_money": "1000",
+      "max_money": "25000",
+      "birth_date": "2012-04-04"
+    },
+    {
+      "surname": "asdq",
+      "name": "ASd",
+      "tname": "gegd",
+      "charm": "second",
+      "min_money": "1233",
+      "max_money": "18556",
+      "address": null,
+      "birth_date": "2018-11-07",
+      "id": 18
+    },
+    {
+      "surname": "asdq",
+      "name": "ASd",
+      "tname": "gegd",
+      "charm": "second",
+      "min_money": "1233",
+      "max_money": "18556",
+      "address": null,
+      "birth_date": "2018-11-07",
+      "id": 23
+    }
+  ]
+}
