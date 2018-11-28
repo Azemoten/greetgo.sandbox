@@ -1,48 +1,72 @@
-<div class="col-md-6">
-  <h2> Client Details</h2>
+<div class="container">
+  <div class="row">
 
-  <table class="table table-striped">
-    <thead>
-    <tr>
-      <th>ФИО
-        <!--//TODO переименовать onClickMe-->
-        <!--//TODO FIXED-->
-        <button (click)="sortBy('name')" class="fa fa-sort"></button>
-        <input class="fio" (keyup)="filterBy($event)">
-        <select [(ngModel)]="selectedOrder">
-          <option *ngFor="let o of orders">{{o.name[1]}}</option>
-        </select>
-      </th>
-      <th>Характер</th>
-      <th>Возраст
-      </th>
-      <th>Общий остаток счетов
-      </th>
-      <th>Максимальный остаток
-        <button (click)="sortBy('max_money')" class="fa fa-sort"></button>
-      </th>
-      <th>Минимальный остаток
-        <button (click)="sortBy('min_money')" class="fa fa-sort"></button>
-      </th>
-      <th class="bor"></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let client of clients">
-      <td>{{client.name}} {{ client.surname}} {{client.tname}}</td>
-      <td>{{client.charm}}</td>
-      <td>{{currDate.getFullYear()-client.birth_date.substring(0,4)}}</td>
-      <td>{{(+client.max_money) + (+client.min_money)}}</td>
-      <td>{{client.max_money}}</td>
-      <td>{{client.min_money}}</td>
-      <td class="bor">
-        <button class="btn fa fa-plus" (click)="addClient('addClient')"></button>
-        <button style="margin-left: 10px;" class="btn fa fa-minus" (click)="deleteClient(client.id)"></button>
-        <button class="btn fa fa-window-minimize" (click)="editClient(client.id)"
-                style="margin-left: 10px;"></button>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+
+    <div class="col-md-12">
+      <h2>Детали клиента</h2>
+      <div class="table-responsive">
+
+
+        <table id="mytable" class="table table-bordred table-striped table-sortable">
+
+          <thead>
+          <tr>
+            <th class="table-sortable">ФИО <button *ngIf="clicked" class="fa fa-angle-down" (click)="sortBy('name')">
+            </button>  <button *ngIf="!clicked" class="fa fa-angle-up" (click)="sortBy('name')"></button>
+            </th>
+            <th>Характер</th>
+            <th>Возраст</th>
+            <th>Общий остаток счетов</th>
+            <th>максимальный остаток</th>
+            <th>минимальный остаток</th>
+            <th>редактировать</th>
+
+            <th>удалить</th>
+          </tr>
+          </thead>
+          <tbody>
+
+          <tr *ngFor="let client of clients">
+            <td>{{client.name}} {{client.surname}} {{client.tname}}</td>
+            <td>{{client.charm}}</td>
+            <td>11</td>
+            <td>{{(+client.max_money) + (+client.min_money)}}</td>
+            <td>{{client.max_money}}</td>
+            <td>{{client.min_money}}</td>
+            <td>
+              <p data-placement="top" data-toggle="tooltip" title="Edit">
+                <button class="btn btn-primary btn-xs" (click)="editClient(client.id)" data-title="Edit"
+                        data-toggle="modal" data-target="#edit"><span class="glyphicon glyphicon-pencil"></span>
+                </button>
+              </p>
+            </td>
+            <td>
+              <p data-placement="top" data-toggle="tooltip" title="Delete">
+                <button class="btn btn-danger btn-xs" (click)="deleteClient(client.id)" data-title="Delete"
+                        data-toggle="modal" data-target="#delete"><span class="glyphicon glyphicon-trash"></span>
+                </button>
+              </p>
+            </td>
+          </tr>
+
+
+          </tbody>
+
+        </table>
+
+        <div class="clearfix"></div>
+        <ul class="pagination pull-right">
+          <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+          <li class="active"><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+          <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+        </ul>
+
+      </div>
+
+    </div>
+  </div>
 </div>
-

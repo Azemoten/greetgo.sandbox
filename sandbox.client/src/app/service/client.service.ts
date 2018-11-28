@@ -18,7 +18,7 @@ export class ClientService {
   //TODO объеденить лист в один метод и передовать обхект toFilter
   //TODO done
   getClients(filter = new Filter()){
-    return this.http.get('users', filter.toJson(filter), 'json');
+    return this.http.get('users', filter.toJson(filter));
   }
 
   getClientById(id: number){

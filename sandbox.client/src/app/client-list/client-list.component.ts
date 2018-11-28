@@ -32,7 +32,7 @@ export class ClientListComponent implements OnInit {
   }
 
   loadClients() {
-    this.clientService.getClients().toPromise().then(
+    this.clientService.getClients(new Filter()).toPromise().then(
       data => {
         this.clients = data.body;
       });

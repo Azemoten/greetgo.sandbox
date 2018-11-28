@@ -1,49 +1,50 @@
 
-<div class="col-md-6">
-  <h2 class="text-center">Edit User</h2>
+<div class="col-md-12">
+  <h2 class="text-center"> Редактировать клиента</h2>
   <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="name">Name:</label>
+    <div class="form-group" style="padding-top:10px;">
+      <label for="name">Имя:</label>
       <input type="name" formControlName="name"
              name="name" class="form-control"
              id="name" value="{{client.name}}">
 
-      <label for="surname">Surname:</label>
+      <label for="surname">Фамилия:</label>
         <input type="surname" formControlName="surname"
              name="surname" class="form-control"
              id="surname" value="{{client.surname}}">
 
-      <label for="tname">Thirdname:</label>
+      <label for="tname">Отчество:</label>
       <input type="text" formControlName="tname"
              name="tname" class="form-control"
              id="tname" value="{{client.tname}}">
 
-      <label for="charm">Charm:</label>
+      <label for="charm">Характер:</label>
       <select name="charm" id="charm" formControlName="charm">
         <option value="first">First</option>
         <option value="second">Second</option>
       </select>
+      <br>
 
-      <label for="min_money">Minimum money:</label>
+      <label for="min_money">Минимальный остаток:</label>
       <input type="text" formControlName="min_money"
              name="min_money" class="form-control"
              id="min_money" value="{{client.min_money}}">
 
-      <label for="max_money">Max_money:</label>
+      <label for="max_money">Максимальный остаток:</label>
       <input type="text" formControlName="max_money"
              name="max_money" class="form-control"
              id="max_money" value="{{client.max_money}}">
 
-      <label for="birth_date">Date:</label>
+      <label for="birth_date">Дата рождения:</label>
       <input type="date" formControlName="birth_date"
              name="birth_date" class="form-control"
              id="birth_date" value="{{client.birth_date}}">
 
 
-    <button class="btn btn-success">Update</button>
+    <button class="btn btn-success">Сохранить</button>
     </div>
   </form>
-  <input value="Cancel" type="button" (click)="close()">
+  <input value="Отменить" type="button" (click)="close()">
 
 
 </div>
