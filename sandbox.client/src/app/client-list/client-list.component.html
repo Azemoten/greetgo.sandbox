@@ -6,22 +6,34 @@
       <h2>Детали клиента</h2>
       <div class="table-responsive">
 
+          <select class="form-control fl" id="exampleFormControlSelect1" style="width:80px;">
+            <option>Имя</option>
+            <option>Фамилия</option>
+            <option>Отчество</option>
+          </select>
+          <input (click)="filterBy()" type="text" class="form-control fl" placeholder="filter" style="width:110px;">
 
         <table id="mytable" class="table table-bordred table-striped table-sortable">
 
           <thead>
-          <tr>
-            <th class="table-sortable">ФИО <button *ngIf="clicked" class="fa fa-angle-down" (click)="sortBy('name')">
-            </button>  <button *ngIf="!clicked" class="fa fa-angle-up" (click)="sortBy('name')"></button>
+
+            <tr>
+            <th class="table-sortable">ФИО
+              <button *ngIf="clicked" class="fa fa-angle-down trans" (click)="sortBy('name')">
+              </button>
+              <button *ngIf="!clicked" class="fa fa-angle-up trans" (click)="sortBy('name')"></button>
             </th>
             <th>Характер</th>
             <th>Возраст</th>
             <th>Общий остаток счетов</th>
-            <th>максимальный остаток</th>
-            <th>минимальный остаток</th>
-            <th>редактировать</th>
+            <th>Максимальный остаток</th>
+            <th>Минимальный остаток</th>
+            <th><button class="btn btn-xs" (click)="editClient(0)" data-title="Edit"
+                        data-toggle="modal" data-target="#edit"><span class="glyphicon glyphicon-plus green"></span>
+            </button></th>
 
-            <th>удалить</th>
+
+
           </tr>
           </thead>
           <tbody>
@@ -34,18 +46,13 @@
             <td>{{client.max_money}}</td>
             <td>{{client.min_money}}</td>
             <td>
-              <p data-placement="top" data-toggle="tooltip" title="Edit">
-                <button class="btn btn-primary btn-xs" (click)="editClient(client.id)" data-title="Edit"
-                        data-toggle="modal" data-target="#edit"><span class="glyphicon glyphicon-pencil"></span>
-                </button>
-              </p>
-            </td>
-            <td>
-              <p data-placement="top" data-toggle="tooltip" title="Delete">
-                <button class="btn btn-danger btn-xs" (click)="deleteClient(client.id)" data-title="Delete"
-                        data-toggle="modal" data-target="#delete"><span class="glyphicon glyphicon-trash"></span>
-                </button>
-              </p>
+              <button class="btn btn-xs bs" (click)="editClient(client.id)" data-title="Edit"
+                      data-toggle="modal" data-target="#edit"><span class="	glyphicon glyphicon-option-vertical"></span>
+              </button>
+
+              <button class="btn btn-xs bs" (click)="deleteClient(client.id)" data-title="Delete"
+                      data-toggle="modal" data-target="#delete"><span class="glyphicon glyphicon-trash"></span>
+              </button>
             </td>
           </tr>
 
@@ -55,15 +62,15 @@
         </table>
 
         <div class="clearfix"></div>
-        <ul class="pagination pull-right">
-          <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-          <li class="active"><a href="#">1</a></li>
-          <li><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li><a href="#">4</a></li>
-          <li><a href="#">5</a></li>
-          <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-        </ul>
+        <!--<ul class="pagination pull-right">-->
+          <!--<li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>-->
+          <!--<li class="active"><a href="#">1</a></li>-->
+          <!--<li><a href="#">2</a></li>-->
+          <!--<li><a href="#">3</a></li>-->
+          <!--<li><a href="#">4</a></li>-->
+          <!--<li><a href="#">5</a></li>-->
+          <!--<li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>-->
+        <!--</ul>-->
 
       </div>
 

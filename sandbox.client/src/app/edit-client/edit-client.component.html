@@ -1,5 +1,5 @@
 
-<div class="col-md-12">
+<div class="col-md-12" style="height:600px;">
   <h2 class="text-center"> Редактировать клиента</h2>
   <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
     <div class="form-group" style="padding-top:10px;">
@@ -18,12 +18,12 @@
              name="tname" class="form-control"
              id="tname" value="{{client.tname}}">
 
-      <label for="charm">Характер:</label>
-      <select name="charm" id="charm" formControlName="charm">
-        <option value="first">First</option>
+      <label for="charm">Характер:</label><br>
+      <select class="form-control" name="charm" id="charm" formControlName="charm">
+        <option value="first" selected>First</option>
         <option value="second">Second</option>
       </select>
-      <br>
+
 
       <label for="min_money">Минимальный остаток:</label>
       <input type="text" formControlName="min_money"
@@ -40,11 +40,13 @@
              name="birth_date" class="form-control"
              id="birth_date" value="{{client.birth_date}}">
 
-
-    <button class="btn btn-success">Сохранить</button>
+    <div class="absolute">
+    <button class="btn btn-success bs">Сохранить</button>
+    <input value="Отменить" type="button" class="btn btn-default" (click)="close()">
+    </div>
     </div>
   </form>
-  <input value="Отменить" type="button" (click)="close()">
+
 
 
 </div>

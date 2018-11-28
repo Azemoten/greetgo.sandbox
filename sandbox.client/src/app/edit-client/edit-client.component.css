@@ -1,0 +1,9 @@
+div.absolute {
+  position: absolute;
+  right: 15px;
+  margin-top: 20px;
+}
+
+.bs {
+  margin-right: 10px;
+}

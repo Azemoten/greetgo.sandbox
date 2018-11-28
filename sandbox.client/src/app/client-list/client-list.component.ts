@@ -6,6 +6,7 @@ import {MatDialog} from "@angular/material";
 import {EditClientComponent} from "../edit-client/edit-client.component";
 import {AddClientComponent} from "../add-client/add-client.component";
 import {Filter} from "../../model/filter";
+import {ConfirmationComponent} from "../confirmation/confirmation.component";
 
 @Component({
   selector: 'app-client-list',
@@ -14,7 +15,6 @@ import {Filter} from "../../model/filter";
 })
 export class ClientListComponent implements OnInit {
 
-  currDate = new Date();
   clients: Client[] = [];
   clicked = false;
   orders = [{'name': ['name', 'Имя']}, {'name': ['surname', 'Фамилия']}, {'name': ['tname', 'Отчество']}];
@@ -24,7 +24,8 @@ export class ClientListComponent implements OnInit {
   isOpen = false;
 
   constructor(public clientService: ClientService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              public dialogDelete: MatDialog) {
   }
 
   ngOnInit() {
@@ -55,12 +56,20 @@ export class ClientListComponent implements OnInit {
       });
   }
 
-  deleteClient(id: number) {
-    this.clientService.deleteById(id).toPromise().then(
-      data => {
-        this.loadClients()
-      }
-    )
+  deleteClient(id: number): void {
+    const dialogDel = this.dialogDelete.open(ConfirmationComponent, {
+      data:id
+    });
+    dialogDel.afterClosed().subscribe( () =>{
+      this.loadClients();
+    })
+    // const dialogRefer = this.dialogDelete.open(ConfirmationComponent, {
+    //   data: id
+    // });
+    // dialogRefer.afterClosed().subscribe(() => {
+    //   this.loadClients();
+    // })
+
   }
 
 
@@ -79,7 +88,7 @@ export class ClientListComponent implements OnInit {
 
   //TODO Убраьть локалСторедж!
   //TODO done
-  editClient(id: number,): void {
+  editClient(id: number): void {
     const dialogRef = this.dialog.open(EditClientComponent, {
       data: id
     });
@@ -97,3 +106,4 @@ export class ClientListComponent implements OnInit {
 
 
 }
+

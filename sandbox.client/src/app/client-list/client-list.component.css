@@ -1,3 +1,19 @@
 table th {
   text-align: center;
 }
+.trans{
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+}
+
+.bs {
+  margin-right: 10px;
+}
+
+.fl{
+  float: left;
+}

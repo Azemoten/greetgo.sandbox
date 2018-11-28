@@ -30,11 +30,11 @@ export class EditClientComponent implements OnInit {
   //+
   ngOnInit() {
     let clientId = this.data;
-    if (!clientId) {
-      alert("Invalid action.")
-      this.router.navigate(['list-client']);
-      return;
-    }
+    // if (!clientId) {
+    //   alert("Invalid action.")
+    //   this.router.navigate(['list-client']);
+    //   return;
+    // }
     this.clientService.getClientById(clientId).subscribe( data=>{
       this.client = data.body[0]
     });

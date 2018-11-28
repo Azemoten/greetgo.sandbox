@@ -14,6 +14,7 @@ import {routing} from "./app.routing";
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatButtonModule, MatCheckboxModule, MatDialogModule, MatTableModule} from '@angular/material';
+import { ConfirmationComponent } from './confirmation/confirmation.component';
 
 @NgModule({
   declarations: [
@@ -21,11 +22,13 @@ import {MatButtonModule, MatCheckboxModule, MatDialogModule, MatTableModule} fro
     ClientListComponent,
     AboutComponent,
     EditClientComponent,
-    AddClientComponent
+    AddClientComponent,
+    ConfirmationComponent
   ],
   entryComponents: [
     EditClientComponent,
-    AddClientComponent
+    AddClientComponent,
+    ConfirmationComponent
   ],
   imports: [
     routing,
