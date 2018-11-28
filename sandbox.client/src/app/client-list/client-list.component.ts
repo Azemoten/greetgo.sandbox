@@ -1,10 +1,8 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
 import {ClientService} from "../service/client.service";
 import {Client} from "../../model/client";
-import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material";
 import {EditClientComponent} from "../edit-client/edit-client.component";
-import {AddClientComponent} from "../add-client/add-client.component";
 import {Filter} from "../../model/filter";
 import {ConfirmationComponent} from "../confirmation/confirmation.component";
 
@@ -58,17 +56,11 @@ export class ClientListComponent implements OnInit {
 
   deleteClient(id: number): void {
     const dialogDel = this.dialogDelete.open(ConfirmationComponent, {
-      data:id
+      data: id
     });
-    dialogDel.afterClosed().subscribe( () =>{
+    dialogDel.afterClosed().subscribe(() => {
       this.loadClients();
     })
-    // const dialogRefer = this.dialogDelete.open(ConfirmationComponent, {
-    //   data: id
-    // });
-    // dialogRefer.afterClosed().subscribe(() => {
-    //   this.loadClients();
-    // })
 
   }
 
@@ -97,12 +89,12 @@ export class ClientListComponent implements OnInit {
     });
   }
 
-  addClient() {
-    const dialogRef = this.dialog.open(AddClientComponent, {});
-    dialogRef.afterClosed().subscribe(result => {
-      this.loadClients();
-    });
-  }
+  // addClient() {
+  //   const dialogRef = this.dialog.open(AddClientComponent, {});
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     this.loadClients();
+  //   });
+  // }
 
 
 }

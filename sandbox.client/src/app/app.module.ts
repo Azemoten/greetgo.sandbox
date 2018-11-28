@@ -8,7 +8,6 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ClientListComponent} from './client-list/client-list.component';
 import {AboutComponent} from './about/about.component';
 import {EditClientComponent} from './edit-client/edit-client.component';
-import {AddClientComponent} from './add-client/add-client.component';
 import {ClientService} from "./service/client.service";
 import {routing} from "./app.routing";
 
@@ -22,12 +21,10 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
     ClientListComponent,
     AboutComponent,
     EditClientComponent,
-    AddClientComponent,
     ConfirmationComponent
   ],
   entryComponents: [
     EditClientComponent,
-    AddClientComponent,
     ConfirmationComponent
   ],
   imports: [
