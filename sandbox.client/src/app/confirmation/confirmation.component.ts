@@ -7,18 +7,19 @@ import {ClientService} from "../service/client.service";
   templateUrl: './confirmation.component.html',
   styleUrls: ['./confirmation.component.css']
 })
-export class ConfirmationComponent implements OnInit{
+export class ConfirmationComponent implements OnInit {
 
   constructor(private clientService: ClientService,
               public dialogDel: MatDialogRef<ConfirmationComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
-  ngOnInit(){}
+  ngOnInit() {
+  }
 
   deleteClient() {
     this.clientService.deleteById(this.data).subscribe(
-      () =>{
+      () => {
         this.close();
       }
     )
