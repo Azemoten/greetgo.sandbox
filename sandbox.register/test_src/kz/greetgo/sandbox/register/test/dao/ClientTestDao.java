@@ -1,16 +1,13 @@
 package kz.greetgo.sandbox.register.test.dao;
 
 import kz.greetgo.sandbox.controller.model.Charm;
-import kz.greetgo.sandbox.controller.model.ClientDisplay;
+import kz.greetgo.sandbox.controller.model.Client;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-
-import java.util.List;
 
 
-public interface CrudDao {
+public interface ClientTestDao {
     @Results({
             @Result(property = "cid", column = "id"),
             @Result(property = "cname", column = "name"),
@@ -23,10 +20,6 @@ public interface CrudDao {
             "VALUES(#{cid}, #{cname}, #{csurname}, #{csex}, #{cbirthDate})")
     void insertCharm(Charm charm);
 
-    @Select("select * from client")
-    ClientDisplay getClientById(Integer id);
 
-
-
-    void insertClient(ClientDisplay client);
+    void insertClient(Client client);
 }

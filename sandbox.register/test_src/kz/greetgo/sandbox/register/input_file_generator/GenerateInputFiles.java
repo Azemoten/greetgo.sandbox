@@ -68,7 +68,7 @@ public class GenerateInputFiles {
 
     public void printTo(PrintStream pr) {
       pr.println("Unique good client count = " + goodClientIds.size());
-      pr.println("Client error record count = " + clientErrorRecordCount);
+      pr.println("ClientsDisplay error record count = " + clientErrorRecordCount);
       pr.println("Transaction count = " + transactionCount);
       pr.println("Account count = " + accountCount);
     }

@@ -7,7 +7,7 @@ import kz.greetgo.util.RND;
 import java.time.LocalDate;
 import java.util.Random;
 
-public class ClientData {
+public class ClientEntity {
 
     static Random rnd = new Random();
     static int min = 100000;
@@ -30,14 +30,15 @@ public class ClientData {
     }
 
 
-    public static Client getClient() {
+    public static Client getClient(Integer charmId) {
         Client client = new Client();
         client.id = min + rnd.nextInt(max - min + 1);
         client.surname = RND.str(10);
         client.name = RND.str(10);
         client.patronymic = RND.str(10);
-        client.sex = Client.gender.FEMALE;
-        client.birth_date = ClientData.createRandomDate(1800, 1900);
+        client.gender = Client.gender.MALE;
+        client.birthDate = createRandomDate(1000, 1900);
+        client.charm = charmId;
         return client;
     }
 
@@ -46,7 +47,7 @@ public class ClientData {
         charm.id = min + rnd.nextInt(max - min + 1);
         charm.name = RND.str(10);
         charm.description = RND.str(10);
-        charm.energy = ClientData.createFloatNumber(1, 10);
+        charm.energy = ClientEntity.createFloatNumber(1, 10);
         return charm;
     }
 }

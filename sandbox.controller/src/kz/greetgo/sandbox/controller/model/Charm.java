@@ -1,8 +1,8 @@
 package kz.greetgo.sandbox.controller.model;
 
-public class Character {
-    int id;
-    String name;
-    String description;
-    float energy;
+public class Charm {
+    public int id;
+    public String name;
+    public String description;
+    public float energy;
 }

@@ -1,4 +1,8 @@
 package kz.greetgo.sandbox.register.dao.postgres;
 
-public class ClientDaoPostgres {
+import kz.greetgo.depinject.core.Bean;
+import kz.greetgo.sandbox.register.dao.ClientDao;
+
+@Bean
+public interface ClientDaoPostgres extends ClientDao {
 }
