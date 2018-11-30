@@ -5,7 +5,7 @@ import kz.greetgo.sandbox.controller.model.Charm;
 import kz.greetgo.sandbox.controller.model.ClientsDisplay;
 import kz.greetgo.sandbox.controller.model.Client;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
-import kz.greetgo.sandbox.register.dataForTest.ClientEntity;
+import kz.greetgo.sandbox.register.dto.ClientEntity1;
 import kz.greetgo.sandbox.register.test.dao.ClientTestDao;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
 import org.testng.annotations.Test;
@@ -31,8 +31,8 @@ public class GetRegisterImplTest extends ParentTestNg {
     public void getClients() {
         //
         //
-        Charm charm = ClientEntity.getCharm();
-        Client testClient = ClientEntity.getClient(charm.id);
+        Charm charm = ClientEntity1.getCharm();
+        Client testClient = ClientEntity1.getClient(charm.id);
         //
         //
         //

@@ -56,5 +56,7 @@ finished_at timestamp,
 type integer references transaction_type(id)
 );
 
+
+
 select c.id, c.name, c.surname, c.patronymic, ch.name charmName, (current_date-c.birth_date)/365 age, sum(c_acc.money) commonMoney, MAX(c_acc.money) maxMoney, MIN(c_acc.money) minMoney 
-from client c inner join charm ch on c.charm = ch.id inner join client_account c_acc on c.id = c_acc.client where c.actual=true group by c.id, c.name, c.surname, c.patronymic, ch.name
+from client c inner join charm ch on c.charm = ch.id inner join client_account c_acc on c.id = c_acc.client where c.actual=true group by c.id, ch.name

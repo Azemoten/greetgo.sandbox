@@ -60,4 +60,103 @@
     ]]></sql>
   </changeSet>
 
+  <changeSet author="pompei" id="create-table-charm">
+    <sql endDelimiter=";;">create table charm(
+    id serial PRIMARY KEY,
+    name varchar(100),
+    description varchar(255),
+    energy float
+    )
+    </sql>
+  </changeSet>
+  <changeSet author="pompei" id="create-type-gender">
+    <sql endDelimiter=";;">
+      create type gender as ENUM('MALE', 'FEMALE');
+    </sql>
+  </changeSet>
+
+  <changeSet author="pompei" id="create-type-address">
+    <sql endDelimiter=";;">
+      create type address as ENUM('FACT', 'REG');
+    </sql>
+  </changeSet>
+
+  <changeSet author="pompei" id="create-type-phone">
+    <sql endDelimiter=";;">
+      create type phone as ENUM('HOME', 'WORK', 'MOBILE');
+    </sql>
+  </changeSet>
+
+  <changeSet author="pompei" id="create-table-client">
+    <sql endDelimiter=";;">
+      create table client(
+      id serial PRIMARY KEY,
+      surname varchar(100) NOT NULL,
+      name varchar(100) NOT NULL,
+      patronymic varchar(200),
+      gender gender NOT NULL,
+      birth_date date,
+      actual boolean DEFAULT true,
+      charm integer references charm(id)
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="pompei" id="create-table-client_addr">
+    <sql endDelimiter=";;">
+      create table client_addr(
+      client integer references client(id),
+      type address,
+      street varchar(255),
+      house varchar(255),
+      flat varchar(255),
+      PRIMARY KEY(client, type)
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="pompei" id="create-table-client_phone">
+    <sql endDelimiter=";;">
+      create table client_phone(
+      client integer references client(id),
+      number varchar(100),
+      type phone
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="pompei" id="create-table-client_account">
+    <sql endDelimiter=";;">
+      create table client_account(
+      id serial PRIMARY KEY,
+      client integer references client(id),
+      money float,
+      number varchar(100),
+      registered_at timestamp
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="pompei" id="create-table-transaction_type">
+    <sql endDelimiter=";;">
+      create table transaction_type(
+      id serial PRIMARY KEY,
+      code varchar(100),
+      name varchar(255)
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="pompei" id="create-table-client_account_transaction">
+    <sql endDelimiter=";;">
+      create table client_account_transaction(
+      id serial PRIMARY KEY,
+      account integer references client_account(id),
+      money float,
+      finished_at timestamp,
+      type integer references transaction_type(id)
+      );
+    </sql>
+  </changeSet>
+
 </databaseChangeLog>

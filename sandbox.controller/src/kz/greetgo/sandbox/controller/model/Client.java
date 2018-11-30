@@ -7,7 +7,7 @@ public Integer id;
 public String name;
 public String surname;
 public String patronymic;
-public static gender gender;
+public gender gender;
 public LocalDate  birthDate;
 public Integer charm;
 
