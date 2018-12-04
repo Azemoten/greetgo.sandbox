@@ -2,6 +2,7 @@ package kz.greetgo.sandbox.register.dto;
 
 import kz.greetgo.sandbox.controller.model.Charm;
 import kz.greetgo.sandbox.controller.model.Client;
+import kz.greetgo.sandbox.controller.model.Filter;
 import kz.greetgo.util.RND;
 
 import java.time.LocalDate;
@@ -37,7 +38,7 @@ public class ClientEntity1 {
         client.name = RND.str(10);
         client.patronymic = RND.str(10);
 //        client.gender = Client.gender.MALE;
-        client.birthDate = createRandomDate(1000, 1900);
+        client.bDate = createRandomDate(1000, 1900);
         client.charm = charmId;
         return client;
     }
@@ -75,5 +76,18 @@ public class ClientEntity1 {
     static Object extractTypeOfRelation(final String linkRelation) {
         final int positionOfEquals = linkRelation.indexOf('=');
         return linkRelation.substring(positionOfEquals + 2, linkRelation.length() - 1).trim();
+    }
+
+    public static String filterByAttr(Filter filter){
+        String sql = "";
+        if(filter.name!=null || filter.name!=""){ sql+=" LOWER(c.name) like LOWER(#{filter.name}) || '%'"; }
+        if(filter.patronymic!=null || filter.patronymic!=""){ sql+=" LOWER(c.patronymic) like LOWER(#{filter.patronymic}) || '%'"; }
+        if(filter.surname!=null || filter.surname!=""){ sql+=" LOWER(c.patronymic) like LOWER(#{filter.patronymic}) || '%'";}
+
+        return sql;
+    }
+    public static String orderBy(Filter filter){
+        String sql ="";
+        if(filter.sort!=null || )
     }
 }

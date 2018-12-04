@@ -30,9 +30,10 @@ public class PersonController implements Controller {
 
     @PublicAccess
     @ToJson
-    @OnPost("/listClients")
-    public List<ClientsDisplay> listClients(@ParamsTo @Json Filter filter) {
-        return clientRegister.get().listClients(filter);
+    @OnGet("/listClients/{page}")
+    public List<ClientsDisplay> listClients(@ParamsTo Filter filter, @ParPath("page") Integer page) {
+        Filter f = new Filter();
+        return clientRegister.get().listClients(f, page);
     }
 
     @PublicAccess

@@ -15,8 +15,8 @@ public class ClientRegisterImpl implements ClientRegister {
     public BeanGetter<ClientDao> clientDao;
 
     @Override
-    public List<ClientsDisplay> listClients(Filter filter) {
-        return clientDao.get().listClients(filter);
+    public List<ClientsDisplay> listClients(Filter filter, Integer page) {
+        return clientDao.get().listClients(filter, page);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class ClientRegisterImpl implements ClientRegister {
         Client cl = new Client();
         cl.name = clientSave.name;
         cl.surname = clientSave.surname;
-        cl.birthDate = clientSave.birthDate;
+        cl.bDate = clientSave.birthDate;
         cl.charm = clientSave.charm;
         cl.patronymic = clientSave.patronymic;
         cl.gender = clientSave.gender;

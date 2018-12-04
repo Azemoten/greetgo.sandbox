@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ClientRegister {
 
-    List<ClientsDisplay> listClients(Filter filter);
+    List<ClientsDisplay> listClients(Filter filter, Integer page);
 
     List<Charm> listCharms();
 

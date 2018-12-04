@@ -11,6 +11,6 @@ public class Filter {
         this.surname="";
         this.patronymic="";
         this.sort = "name";
-
+        this.order = "";
     }
 }
