@@ -15,13 +15,18 @@ public class ClientRegisterImpl implements ClientRegister {
     public BeanGetter<ClientDao> clientDao;
 
     @Override
-    public List<ClientsDisplay> listClients() {
-        return clientDao.get().listClients();
+    public List<ClientsDisplay> listClients(Filter filter) {
+        return clientDao.get().listClients(filter);
     }
 
     @Override
     public List<Charm> listCharms() {
         return clientDao.get().listCharms();
+    }
+
+    @Override
+    public Integer getClientListCount() {
+        return clientDao.get().getClientListCount();
     }
 
     @Override
@@ -40,15 +45,22 @@ public class ClientRegisterImpl implements ClientRegister {
         cl.gender = clientSave.gender;
         Client created = clientDao.get().createClient(cl);
 
-        ClientAddr clientAddr1 = new ClientAddr();
-        clientAddr1.client = created.id;
-        clientAddr1.flat = clientSave.factFlat;
-        clientAddr1.house = clientSave.factHouse;
-        clientAddr1.street = clientSave.factStreet;
-        clientAddr1.type = ClientAddr.addrType.FACT;
-        clientDao.get().createAddr(clientAddr1);
-
-        ClientPhone clientPhone1 = new Clien
-        clientDao.get().createClientPhone();
+//        ClientAddr clientAddr1 = new ClientAddr();
+//        clientAddr1.client = created.id;
+//        clientAddr1.flat = clientSave.factFlat;
+//        clientAddr1.house = clientSave.factHouse;
+//        clientAddr1.street = clientSave.factStreet;
+//        clientAddr1.type = ClientAddr.addrType.FACT;
+//        clientDao.get().createAddr(clientAddr1);
+//
+//        ClientPhone clientPhone1 = new Clien
+//        clientDao.get().createClientPhone();
     }
+
+    @Override
+    public void exCreate(Client client) {
+        clientDao.get().exCreate(client);
+    }
+
+
 }

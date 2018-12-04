@@ -36,7 +36,7 @@ public class ClientEntity1 {
         client.surname = RND.str(10);
         client.name = RND.str(10);
         client.patronymic = RND.str(10);
-        client.gender = Client.gender.MALE;
+//        client.gender = Client.gender.MALE;
         client.birthDate = createRandomDate(1000, 1900);
         client.charm = charmId;
         return client;
@@ -49,5 +49,31 @@ public class ClientEntity1 {
         charm.description = RND.str(10);
         charm.energy = createFloatNumber(1, 10);
         return charm;
+    }
+
+
+    public static String extractURIByRel(final String linkHeader, final String rel) {
+        if (linkHeader == null) {
+            return null;
+        }
+
+        String uriWithSpecifiedRel = null;
+        final String[] links = linkHeader.split(", ");
+        String linkRelation = null;
+        for (final String link : links) {
+            final int positionOfSeparator = link.indexOf(';');
+            linkRelation = link.substring(positionOfSeparator + 1, link.length()).trim();
+            if (extractTypeOfRelation(linkRelation).equals(rel)) {
+                uriWithSpecifiedRel = link.substring(1, positionOfSeparator - 1);
+                break;
+            }
+        }
+
+        return uriWithSpecifiedRel;
+    }
+
+    static Object extractTypeOfRelation(final String linkRelation) {
+        final int positionOfEquals = linkRelation.indexOf('=');
+        return linkRelation.substring(positionOfEquals + 2, linkRelation.length() - 1).trim();
     }
 }

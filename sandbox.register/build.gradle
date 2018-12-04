@@ -11,4 +11,9 @@ dependencies {
   compile group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.1.1'
 
   testCompile "kz.greetgo.depinject:greetgo.depinject.testng:$depinjectVersion"
+  testCompile 'io.rest-assured:rest-assured:3.2.0'
+
+// https://mvnrepository.com/artifact/com.google.guava/guava
+  compile group: 'com.google.guava', name: 'guava', version: '19.0'
+
 }

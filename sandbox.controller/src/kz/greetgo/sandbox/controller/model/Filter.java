@@ -6,4 +6,11 @@ public class Filter {
     public String patronymic;
     public String sort;
     public String order;
+    public Filter(){
+        this.name="";
+        this.surname="";
+        this.patronymic="";
+        this.sort = "name";
+
+    }
 }
