@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface ClientRegister {
 
-    List<ClientsDisplay> listClients(Filter filter, Integer page);
+    List<ClientRecord> getList(ClientFilter clientFilter);
 
     List<Charm> listCharms();
 
-    Integer getClientListCount();
+    Integer numPage();
 
     void deleteClient(Integer id);
 

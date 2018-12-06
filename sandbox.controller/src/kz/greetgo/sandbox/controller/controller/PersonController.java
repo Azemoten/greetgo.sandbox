@@ -22,18 +22,12 @@ public class PersonController implements Controller {
     public BeanGetter<PersonRegister> personRegister;
     public BeanGetter<ClientRegister> clientRegister;
 
-    @ToJson
-    @OnGet("/list")
-    public List<PersonRecord> list() {
-        return personRegister.get().list();
-    }
 
     @PublicAccess
     @ToJson
-    @OnGet("/listClients/{page}")
-    public List<ClientsDisplay> listClients(@ParamsTo Filter filter, @ParPath("page") Integer page) {
-        Filter f = new Filter();
-        return clientRegister.get().listClients(f, page);
+    @OnGet("/getList")
+    public List<ClientRecord> getList(@ParamsTo ClientFilter clientFilter) {
+        return clientRegister.get().getList(clientFilter);
     }
 
     @PublicAccess
@@ -45,9 +39,9 @@ public class PersonController implements Controller {
 
     @PublicAccess
     @ToJson
-    @OnGet("/listCount")
-    public Integer listCount(){
-        return clientRegister.get().getClientListCount();
+    @OnGet("/numPage")
+    public Integer numPage(){
+        return clientRegister.get().numPage();
     }
 
 

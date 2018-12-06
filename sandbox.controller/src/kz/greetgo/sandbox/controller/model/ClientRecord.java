@@ -2,7 +2,7 @@ package kz.greetgo.sandbox.controller.model;
 
 import java.time.LocalDate;
 
-public class ClientsDisplay {
+public class ClientRecord {
     public Integer id;
     public String name;
     public String surname;
