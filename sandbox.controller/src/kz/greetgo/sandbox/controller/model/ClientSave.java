@@ -7,7 +7,7 @@ public  class ClientSave {
     public String surname;
     public String name;
     public String patronymic;
-    public Client.gender gender;
+    public Gender gender;
     public LocalDate birthDate;
     public Integer charm;
     public List<ClientAddr> addrs;

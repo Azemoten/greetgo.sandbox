@@ -34,6 +34,6 @@ public interface ClientDao {
             "    values (#{surname}, #{name}, #{patronymic}, 'MALE', #{birthDate}, 1)")
     void exCreate(Client client);
 
-    @Select("select count(*)/5 - 1 from client")
+    @Select("select count(*)/5 from client where actual=true")
     Integer numPage();
 }

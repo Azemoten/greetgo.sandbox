@@ -9,8 +9,8 @@ public class ClientRecord {
     public String patronymic;
     public String charmName;
     public Integer age;
-    public float commonMoney;
-    public float maxMoney;
-    public float minMoney;
+    public double commonMoney;
+    public double maxMoney;
+    public double minMoney;
 
 }

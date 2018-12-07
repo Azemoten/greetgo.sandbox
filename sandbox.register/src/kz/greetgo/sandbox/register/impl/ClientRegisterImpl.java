@@ -42,7 +42,7 @@ public class ClientRegisterImpl implements ClientRegister {
         //cl.bDate = clientSave.birthDate;
         cl.charm = clientSave.charm;
         cl.patronymic = clientSave.patronymic;
-        cl.gender = clientSave.gender;
+        cl.gender = Gender.valueOf("MALE");
         Client created = clientDao.get().createClient(cl);
 
 
