@@ -27,48 +27,53 @@ public class ClientRegisterImplTest extends ParentTestNg {
     final String baseUrl = "http://localhost:1313/sandbox/api/person/listClient";
 
 
-//    @Test
-//    public void list_assign_column() {
-//        Charm charm = randomEntity.charm();
-//        saver.save(charm);
-//
-//        Client client = randomEntity.client(charm);
-//        saver.save(client, charm);
-//        int count = clientTestDao.get().getNumOfClients()%clientRegister.get().numPage();
-//
-//
-//        ClientFilter clientFilter = randomEntity.clientSortById();
-//        //
-//        //
-//        List<ClientRecord> list = clientRegister.get().getList(clientFilter);
-//        //
-//        //
-//        assertThat(list.size()).isEqualTo(4);
-//    }
+    @Test
+    public void numberOfPageAfterSorting() {
+        Charm charm = randomEntity.charm();
+        Client client = randomEntity.client(charm);
+        ClientFilter clientFilter = randomEntity.clientFilterBy("name", client);
+        ClientFilter clientFilter1 = new ClientFilter();
+        //
+        //
+        clientTestDao.get().insertCharm(charm);
+        clientTestDao.get().insertClient(client);
+        //
+        //
+        int page1 = clientRegister.get().numPage(clientFilter);
+        int page2 = clientRegister.get().numPage(clientFilter1);
+        //
+        //
+        assertThat(page1).isNotEqualTo(page2);
+        //
+        //
+        clientRegister.get().deleteClient(client.id);
+    }
 
     @Test
     public void nextPageAfterFirst() {
 
         ClientFilter clientFilter = randomEntity.clientSortById();
         clientFilter.page = 1;
+        int numberOfClients = clientTestDao.get().getNumOfClients();
+        int numberOfLastPage = randomEntity.numOfLastPage(numberOfClients);
         //
         //
         List<ClientRecord> list = clientRegister.get().getList(clientFilter);
         //
         //
-        assertThat(list.size()).isEqualTo(5);
+        if (numberOfClients >= 10) {
+            assertThat(list.size()).isEqualTo(5);
+        } else {
+            assertThat(list.size()).isEqualTo(numberOfLastPage);
+        }
+
     }
+
 
     @Test
     public void lastPage_size() {
-//        Charm charm = randomEntity.charm();
-//        Client client1 = randomEntity.client(charm);
-//        Client client2 = randomEntity.client(charm);
-//        Client client3 = randomEntity.client(charm);
-//        Client client4 = randomEntity.client(charm);
-//        Client client5 = randomEntity.client(charm);
         ClientFilter clientFilter = randomEntity.clientSortById();
-        clientFilter.page = clientRegister.get().numPage();
+        clientFilter.page = clientRegister.get().numPage(clientFilter);
         int numberOfClients = clientTestDao.get().getNumOfClients();
         int numberOfLastPage = randomEntity.numOfLastPage(numberOfClients);
         //
@@ -77,19 +82,12 @@ public class ClientRegisterImplTest extends ParentTestNg {
         //
         //
         assertThat(list.size()).isEqualTo(numberOfLastPage);
-
-//        clientRegister.get().deleteClient(client1.id);
-//        clientRegister.get().deleteClient(client2.id);
-//        clientRegister.get().deleteClient(client3.id);
-//        clientRegister.get().deleteClient(client4.id);
-//        clientRegister.get().deleteClient(client5.id);
-
     }
 
     @Test
     public void nextAfterLastPage() {
         ClientFilter clientFilter = randomEntity.clientSortById();
-        clientFilter.page = clientRegister.get().numPage() + 1;
+        clientFilter.page = clientRegister.get().numPage(clientFilter) + 1;
         //
         //
         //
@@ -102,10 +100,82 @@ public class ClientRegisterImplTest extends ParentTestNg {
 
     @Test
     public void updateClient() {
+        Charm charm = randomEntity.charm();
+        Client client = randomEntity.client(charm);
+        List<ClientPhone> clientPhoneList = randomEntity.clientPhones(client);
+        List<ClientAddr> clientAddrList = randomEntity.clientAddr(client);
+        ClientSave clientSave = new ClientSave();
+        clientSave.client=client;
+        clientSave.addrs = clientAddrList;
+        clientSave.phones = clientPhoneList;
+
+        //
+        //
+        //
+        //
+        //
+        clientTestDao.get().insertCharm(charm);
+        clientTestDao.get().insertClient(client);
+        for (ClientAddr addr : clientAddrList) {
+            clientTestDao.get().insertAddress(addr);
+        }
+        for (ClientPhone phone : clientPhoneList) {
+            clientTestDao.get().insertPhone(phone);
+        }
+        clientSave.client.surname="Another";
+        clientSave.client.patronymic="NewAnothjer";
+        clientSave.addrs.get(0).house="newHouse";
+        //
+        //
+        clientRegister.get().updateClient(clientSave);
+        ClientSave item = clientRegister.get().getClientForEdit(client.id);
+        //
+        //
+        //
+
+
     }
 
     @Test
     public void insertClient() {
+        Charm charm = randomEntity.charm();
+        Client client = randomEntity.client(charm);
+        List<ClientPhone> clientPhoneList = randomEntity.clientPhones(client);
+        List<ClientAddr> clientAddrList = randomEntity.clientAddr(client);
+        //
+        //
+        //
+        //
+        //
+        clientTestDao.get().insertCharm(charm);
+        clientTestDao.get().insertClient(client);
+        for (ClientAddr addr : clientAddrList) {
+            clientTestDao.get().insertAddress(addr);
+        }
+        for (ClientPhone phone : clientPhoneList) {
+            clientTestDao.get().insertPhone(phone);
+        }
+        //
+        //
+        ClientSave list = clientRegister.get().getClientForEdit(client.id);
+        //
+        //
+        //
+
+
+        assertThat(list.client.id).isEqualTo(client.id);
+        assertThat(list.addrs.get(0).street).isEqualTo(clientAddrList.get(0).street);
+        assertThat(list.addrs.get(0).flat).isEqualTo(clientAddrList.get(0).flat);
+        assertThat(list.addrs.get(0).house).isEqualTo(clientAddrList.get(0).house);
+        assertThat(list.addrs.get(1).street).isEqualTo(clientAddrList.get(1).street);
+        assertThat(list.addrs.get(1).flat).isEqualTo(clientAddrList.get(1).flat);
+        assertThat(list.addrs.get(1).house).isEqualTo(clientAddrList.get(1).house);
+        assertThat(list.phones.get(0).number).isEqualTo(clientPhoneList.get(0).number);
+        assertThat(list.phones.get(0).type).isEqualTo(clientPhoneList.get(0).type);
+        assertThat(list.phones.get(1).number).isEqualTo(clientPhoneList.get(1).number);
+        assertThat(list.phones.get(1).type).isEqualTo(clientPhoneList.get(1).type);
+
+        clientRegister.get().deleteClient(client.id);
     }
 
     @Test
@@ -371,11 +441,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
         //2500
         //2450
         //2300
-        assertThat(list.get(0).age).isEqualTo(2018-2500);
-        assertThat(list.get(1).age).isEqualTo(2018-2450);
-        assertThat(list.get(2).age).isEqualTo(2018-2400);
-        assertThat(list.get(3).age).isEqualTo(2018-2350);
-        assertThat(list.get(4).age).isEqualTo(2018-2300);
+        assertThat(list.get(0).age).isEqualTo(2018 - 2500);
+        assertThat(list.get(1).age).isEqualTo(2018 - 2450);
+        assertThat(list.get(2).age).isEqualTo(2018 - 2400);
+        assertThat(list.get(3).age).isEqualTo(2018 - 2350);
+        assertThat(list.get(4).age).isEqualTo(2018 - 2300);
         //
         //
         clientRegister.get().deleteClient(client1.id);
@@ -419,11 +489,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
         //2500
         //2450
         //2300
-        assertThat(list.get(0).age).isEqualTo(2018-1000);
-        assertThat(list.get(1).age).isEqualTo(2018-1050);
-        assertThat(list.get(2).age).isEqualTo(2018-1100);
-        assertThat(list.get(3).age).isEqualTo(2018-1150);
-        assertThat(list.get(4).age).isEqualTo(2018-1200);
+        assertThat(list.get(0).age).isEqualTo(2018 - 1000);
+        assertThat(list.get(1).age).isEqualTo(2018 - 1050);
+        assertThat(list.get(2).age).isEqualTo(2018 - 1100);
+        assertThat(list.get(3).age).isEqualTo(2018 - 1150);
+        assertThat(list.get(4).age).isEqualTo(2018 - 1200);
         //
         //
         clientRegister.get().deleteClient(client1.id);

@@ -1,9 +1,7 @@
 package kz.greetgo.sandbox.register.test.dao;
 
 import kz.greetgo.depinject.core.Bean;
-import kz.greetgo.sandbox.controller.model.Charm;
-import kz.greetgo.sandbox.controller.model.Client;
-import kz.greetgo.sandbox.controller.model.ClientAccount;
+import kz.greetgo.sandbox.controller.model.*;
 import org.apache.ibatis.annotations.*;
 
 
@@ -23,4 +21,10 @@ public interface ClientDaoTest {
 
     @Insert("insert into client_account(id, client, money, number ) values(#{id}, #{client}, #{money}, #{number})")
     void insertAccount(ClientAccount clientAccount);
+
+    @Insert("insert into client_phone(client, number, type) values(#{client}, #{number}, #{type}::phone)")
+    void insertPhone(ClientPhone clientPhone);
+
+    @Insert("insert into client_addr(client, type, street, house, flat) values(#{client}, #{type}::address, #{street}, #{house}, #{flat})")
+    void insertAddress(ClientAddr clientAddr);
 }

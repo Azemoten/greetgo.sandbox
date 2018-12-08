@@ -10,11 +10,13 @@ public interface ClientRegister {
 
     List<Charm> listCharms();
 
-    Integer numPage();
+    Integer numPage(ClientFilter clientFilter);
 
     void deleteClient(Integer id);
 
-    void createFullClient(ClientSave clientSave);
+    void createClient(ClientSave clientSave);
 
-    void exCreate(Client client);
+    ClientSave getClientForEdit(int id);
+
+    void updateClient(ClientSave clientSave);
 }

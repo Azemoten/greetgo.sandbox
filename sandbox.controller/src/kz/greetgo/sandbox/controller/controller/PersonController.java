@@ -40,8 +40,8 @@ public class PersonController implements Controller {
     @PublicAccess
     @ToJson
     @OnGet("/numPage")
-    public Integer numPage(){
-        return clientRegister.get().numPage();
+    public Integer numPage(@ParamsTo ClientFilter clientFilter){
+        return clientRegister.get().numPage(clientFilter);
     }
 
 
@@ -54,17 +54,23 @@ public class PersonController implements Controller {
 
     @PublicAccess
     @ToJson
-    @OnPost("/createFullClient")
-    public void createFullClient(@ParamsTo ClientSave saveClient) {
-        clientRegister.get().createFullClient(saveClient);
+    @OnPost("/createClient")
+    public void createClient(@ParamsTo ClientSave saveClient) {
+        clientRegister.get().createClient(saveClient);
     }
 
+    @PublicAccess
+    @ToJson
+    @OnPost("/updateClient")
+    public void updateClientSave(@RequestInput @Json ClientSave clientSave) {
+        clientRegister.get().updateClient(clientSave);
+    }
 
 
     @ToJson
     @PublicAccess
-    @OnPost("/exCreate")
-    public void exCreate(@RequestInput @Json Client client) {
-        clientRegister.get().exCreate(client);
+    @OnGet("/getClientForEdit/{id}")
+    public ClientSave getClientForEdit(@ParPath("id") int id){
+        return clientRegister.get().getClientForEdit(id);
     }
 }

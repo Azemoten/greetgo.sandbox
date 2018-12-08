@@ -25,8 +25,8 @@ public class ClientRegisterImpl implements ClientRegister {
     }
 
     @Override
-    public Integer numPage() {
-        return clientDao.get().numPage();
+    public Integer numPage(ClientFilter clientFilter) {
+        return clientDao.get().numPage(clientFilter);
     }
 
     @Override
@@ -35,22 +35,41 @@ public class ClientRegisterImpl implements ClientRegister {
     }
 
     @Override
-    public void createFullClient(ClientSave clientSave) {
-        Client cl = new Client();
-        cl.name = clientSave.name;
-        cl.surname = clientSave.surname;
-        //cl.bDate = clientSave.birthDate;
-        cl.charm = clientSave.charm;
-        cl.patronymic = clientSave.patronymic;
-        cl.gender = Gender.valueOf("MALE");
-        Client created = clientDao.get().createClient(cl);
-
-
+    public void createClient(ClientSave clientSave) {
+        int clientId = clientDao.get().insertClient(clientSave.client);
+        for (int i = 0; i < clientSave.addrs.size(); i++) {
+            ClientAddr addr = clientSave.addrs.get(i);
+            addr.client = clientId;
+            clientDao.get().insertAddress(addr);
+        }
+        for (int i = 0; i<clientSave.phones.size(); i++) {
+            ClientPhone clientPhone = clientSave.phones.get(i);
+            clientDao.get().insertPhone(clientPhone);
+        }
     }
 
     @Override
-    public void exCreate(Client client) {
-        clientDao.get().exCreate(client);
+    public ClientSave getClientForEdit(int id) {
+        ClientSave clientSave = new ClientSave();
+        clientSave.client = clientDao.get().getClient(id);
+        clientSave.addrs = clientDao.get().getAddresses(id);
+        clientSave.phones = clientDao.get().getPhones(id);
+        return clientSave;
+    }
+
+    @Override
+    public void updateClient(ClientSave clientSave) {
+        List<ClientAddr> addrList = clientSave.addrs;
+        List<ClientPhone> phoneList = clientSave.phones;
+        Client client = clientSave.client;
+        clientDao.get().updateClient(client);
+        for (ClientAddr addr : addrList) {
+            clientDao.get().updateAddr(addr);
+        }
+        for (ClientPhone phone : phoneList) {
+            clientDao.get().updatePhone(phone);
+        }
+
     }
 
 
