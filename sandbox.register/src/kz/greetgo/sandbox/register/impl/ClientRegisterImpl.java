@@ -42,8 +42,9 @@ public class ClientRegisterImpl implements ClientRegister {
             addr.client = clientId;
             clientDao.get().insertAddress(addr);
         }
-        for (int i = 0; i<clientSave.phones.size(); i++) {
+        for (int i = 0; i < clientSave.phones.size(); i++) {
             ClientPhone clientPhone = clientSave.phones.get(i);
+            clientPhone.client = clientId;
             clientDao.get().insertPhone(clientPhone);
         }
     }
@@ -59,15 +60,17 @@ public class ClientRegisterImpl implements ClientRegister {
 
     @Override
     public void updateClient(ClientSave clientSave) {
-        List<ClientAddr> addrList = clientSave.addrs;
-        List<ClientPhone> phoneList = clientSave.phones;
         Client client = clientSave.client;
         clientDao.get().updateClient(client);
-        for (ClientAddr addr : addrList) {
-            clientDao.get().updateAddr(addr);
+        for (int i=0;i<clientSave.addrs.size();i++) {
+            ClientAddr clientAddr = clientSave.addrs.get(0);
+            clientAddr.client=client.id;
+            clientDao.get().updateAddr(clientAddr);
         }
-        for (ClientPhone phone : phoneList) {
-            clientDao.get().updatePhone(phone);
+        for (int i=0; i<clientSave.phones.size(); i++) {
+            ClientPhone clientPhone = clientSave.phones.get(0);
+            clientPhone.client=client.id;
+            clientDao.get().updatePhone(clientPhone);
         }
 
     }

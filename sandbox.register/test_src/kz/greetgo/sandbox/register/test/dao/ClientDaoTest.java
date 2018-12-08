@@ -16,6 +16,8 @@ public interface ClientDaoTest {
             "#{birthDate}, #{charm})")
     void insertClient(Client client);
 
+
+
     @Select("select count(*) from client where actual=true")
     int getNumOfClients();
 
@@ -27,4 +29,7 @@ public interface ClientDaoTest {
 
     @Insert("insert into client_addr(client, type, street, house, flat) values(#{client}, #{type}::address, #{street}, #{house}, #{flat})")
     void insertAddress(ClientAddr clientAddr);
+
+    @Select("Select * from client where id=#{id} and actual=false")
+    boolean checkDel(int id);
 }

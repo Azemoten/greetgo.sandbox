@@ -2,7 +2,6 @@ package kz.greetgo.sandbox.register.dao;
 
 import kz.greetgo.sandbox.controller.model.*;
 import kz.greetgo.sandbox.register.util.SqlProvider;
-import liquibase.sql.Sql;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -17,12 +16,11 @@ public interface ClientDao {
     @Delete("update client set actual=false where id=#{id}")
     void deleteClient(Integer id);
 
-    @Insert("insert into client(surname, name, patronymic, gender, birth_date, charm)" +
-            " values(#{surname}, #{name}, #{patronymic}, #{gender}::gender, " +
-            "#{birthDate}, #{charm}) RETURNING id")
+    @SelectProvider(type = SqlProvider.class, method = "createClient")
     int insertClient(Client client);
 
-    @Insert("insert into client_phone(client, number, type) values(currval('persons_id_seq'), #{number}, #{type}::phone)")
+
+    @Insert("insert into client_phone(client, number, type) values(#{client}, #{number}, #{type}::phone)")
     void insertPhone(ClientPhone clientPhone);
 
     @Insert("insert into client_addr(client, type, street, house, flat) values(#{client}, #{type}::address, #{street}, #{house}, #{flat})")
@@ -52,7 +50,7 @@ public interface ClientDao {
     void updateAddr(ClientAddr clientAddr);
 
     @Update("UPDATE client_phone\n" +
-            "   SET \"number\"=?\n" +
+            "   SET \"number\"=#{number}\n" +
             " WHERE client=#{client} and type=#{type}::phone\n")
     void updatePhone(ClientPhone clientPhone);
 }

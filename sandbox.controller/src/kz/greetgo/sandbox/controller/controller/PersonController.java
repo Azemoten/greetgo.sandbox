@@ -55,7 +55,7 @@ public class PersonController implements Controller {
     @PublicAccess
     @ToJson
     @OnPost("/createClient")
-    public void createClient(@ParamsTo ClientSave saveClient) {
+    public void createClient(@RequestInput @Json ClientSave saveClient) {
         clientRegister.get().createClient(saveClient);
     }
 

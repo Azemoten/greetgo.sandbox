@@ -99,87 +99,73 @@ public class ClientRegisterImplTest extends ParentTestNg {
     }
 
     @Test
-    public void updateClient() {
+    public void update_insert_Client() {
         Charm charm = randomEntity.charm();
         Client client = randomEntity.client(charm);
-        List<ClientPhone> clientPhoneList = randomEntity.clientPhones(client);
-        List<ClientAddr> clientAddrList = randomEntity.clientAddr(client);
-        ClientSave clientSave = new ClientSave();
-        clientSave.client=client;
-        clientSave.addrs = clientAddrList;
-        clientSave.phones = clientPhoneList;
-
-        //
-        //
+        ClientPhone clientPhone = new ClientPhone();
+        clientPhone.client = client.id;
+        clientPhone.type = PhoneType.HOME;
+        clientPhone.number = "4444444";
+        ClientAddr clientAddr = new ClientAddr();
+        clientAddr.client = client.id;
+        clientAddr.type = AddressType.FACT;
+        clientAddr.flat = "asdasd";
+        clientAddr.street = "street";
+        clientAddr.house = "asqqqqq";
         //
         //
         //
         clientTestDao.get().insertCharm(charm);
         clientTestDao.get().insertClient(client);
-        for (ClientAddr addr : clientAddrList) {
-            clientTestDao.get().insertAddress(addr);
-        }
-        for (ClientPhone phone : clientPhoneList) {
-            clientTestDao.get().insertPhone(phone);
-        }
-        clientSave.client.surname="Another";
-        clientSave.client.patronymic="NewAnothjer";
-        clientSave.addrs.get(0).house="newHouse";
+        clientTestDao.get().insertPhone(clientPhone);
+        clientTestDao.get().insertAddress(clientAddr);
+        //
+        //
+        clientPhone.number = "5555555";
+        clientAddr.flat="Changed";
+        client.surname = "ChangedName";
+        ClientSave clientSave = new ClientSave();
+        clientSave.phones = Arrays.asList(clientPhone);
+        clientSave.addrs = Arrays.asList(clientAddr);
+        clientSave.client = client;
         //
         //
         clientRegister.get().updateClient(clientSave);
-        ClientSave item = clientRegister.get().getClientForEdit(client.id);
         //
         //
-        //
+        ClientSave getClientSave = clientRegister.get().getClientForEdit(client.id);
 
-
-    }
-
-    @Test
-    public void insertClient() {
-        Charm charm = randomEntity.charm();
-        Client client = randomEntity.client(charm);
-        List<ClientPhone> clientPhoneList = randomEntity.clientPhones(client);
-        List<ClientAddr> clientAddrList = randomEntity.clientAddr(client);
-        //
-        //
-        //
-        //
-        //
-        clientTestDao.get().insertCharm(charm);
-        clientTestDao.get().insertClient(client);
-        for (ClientAddr addr : clientAddrList) {
-            clientTestDao.get().insertAddress(addr);
-        }
-        for (ClientPhone phone : clientPhoneList) {
-            clientTestDao.get().insertPhone(phone);
-        }
-        //
-        //
-        ClientSave list = clientRegister.get().getClientForEdit(client.id);
-        //
-        //
-        //
-
-
-        assertThat(list.client.id).isEqualTo(client.id);
-        assertThat(list.addrs.get(0).street).isEqualTo(clientAddrList.get(0).street);
-        assertThat(list.addrs.get(0).flat).isEqualTo(clientAddrList.get(0).flat);
-        assertThat(list.addrs.get(0).house).isEqualTo(clientAddrList.get(0).house);
-        assertThat(list.addrs.get(1).street).isEqualTo(clientAddrList.get(1).street);
-        assertThat(list.addrs.get(1).flat).isEqualTo(clientAddrList.get(1).flat);
-        assertThat(list.addrs.get(1).house).isEqualTo(clientAddrList.get(1).house);
-        assertThat(list.phones.get(0).number).isEqualTo(clientPhoneList.get(0).number);
-        assertThat(list.phones.get(0).type).isEqualTo(clientPhoneList.get(0).type);
-        assertThat(list.phones.get(1).number).isEqualTo(clientPhoneList.get(1).number);
-        assertThat(list.phones.get(1).type).isEqualTo(clientPhoneList.get(1).type);
+        assertThat(clientSave.client.id).isEqualTo(client.id);
+        assertThat(clientSave.phones.get(0).number).isEqualTo(clientPhone.number);
+        assertThat(clientSave.addrs.get(0).flat).isEqualTo(clientAddr.flat);
 
         clientRegister.get().deleteClient(client.id);
+
     }
 
     @Test
     public void deleteClient() {
+        Charm charm = randomEntity.charm();
+        Client client = randomEntity.client(charm);
+        //
+        //
+        //
+        clientTestDao.get().insertCharm(charm);
+        clientTestDao.get().insertClient(client);
+        //
+        //
+        clientRegister.get().deleteClient(client.id);
+        //
+        //
+        //
+
+        boolean deleted = clientTestDao.get().checkDel(client.id);
+        ///
+        //
+        //
+
+        assertThat(deleted).isEqualTo(true);
+
     }
 
     @Test
