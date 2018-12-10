@@ -135,9 +135,9 @@ public class ClientRegisterImplTest extends ParentTestNg {
         //
         ClientSave getClientSave = clientRegister.get().getClientForEdit(client.id);
 
-        assertThat(clientSave.client.id).isEqualTo(client.id);
-        assertThat(clientSave.phones.get(0).number).isEqualTo(clientPhone.number);
-        assertThat(clientSave.addrs.get(0).flat).isEqualTo(clientAddr.flat);
+        assertThat(getClientSave.client.id).isEqualTo(client.id);
+        assertThat(getClientSave.phones.get(0).number).isEqualTo(clientPhone.number);
+        assertThat(getClientSave.addrs.get(0).flat).isEqualTo(clientAddr.flat);
 
         clientRegister.get().deleteClient(client.id);
 
