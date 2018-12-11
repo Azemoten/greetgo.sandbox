@@ -1,52 +1,91 @@
-
 <div class="col-md-12" style="height:600px;">
-  <h2 class="text-center"> Редактировать клиента</h2>
-  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
-    <div class="form-group" style="padding-top:10px;">
-      <label for="name">Имя:</label>
-      <input type="name" formControlName="name"
-             name="name" class="form-control"
-             id="name" value="{{client.name}}">
+  <h1>Сохранение клиента</h1>
 
-      <label for="surname">Фамилия:</label>
-        <input type="surname" formControlName="surname"
-             name="surname" class="form-control"
-             id="surname" value="{{client.surname}}">
+  <form [formGroup]="editForm">
+    <div class="" style="padding-top:10px;">
+      <div formGroupName="client" class="form-group">
 
-      <label for="tname">Отчество:</label>
-      <input type="text" formControlName="tname"
-             name="tname" class="form-control"
-             id="tname" value="{{client.tname}}">
+        <div class="col-sm-4">
+          <label> Имя: </label>
+          <input type="text" class="form-control" formControlName="name" value="{{clientSave.client.name}}">
+        </div>
+        <div class="col-sm-4">
+          <label>Фамилия</label>
+          <input type="text" class="form-control" formControlName="surname" value="{{clientSave.client.surname}}">
+        </div>
+        <div class="col-sm-4">
+          <label>Отчество:</label>
+          <input type="text" class="form-control" formControlName="patronymic" value="{{clientSave.client?.patronymic}}">
+        </div>
+        <div class="col-sm-4">
+          <label> Дата рожения</label>
+          <input type="date" class="form-control" formControlName="birthDate" value="{{clientSave.client?.birthDate}}">
+        </div>
+        <div class="col-sm-4">
+          <label> Характер :</label>
+          <select class="form-control" formControlName="charm" value="{{clientSave.client.charm}}">
+            <option value="1">Характер 1</option>
+            <option value="2">Характер 2</option>
+          </select>
+        </div>
+        <div class="col-sm-4">
+          <label>Пол :</label>
+          <select class="form-control" formControlName="gender" value="{{clientSave.client.gender}}">
+            <option value="MALE">Мужской</option>
+            <option value="FEMALE">Женский</option>
+          </select>
+        </div>
+      </div>
+      <h3>Адрес проживания</h3>
+      <div formArrayName="addrs">
+        <div  class="form-group" [formGroupName]="0">
+          <label> Адресс регистрации</label><br>
+          <input type="hidden" formControlName="type" value="REG">
+          <label>Улица: </label>
+          <input type="text" formControlName="street" value="{{clientSave.addrs[0]?.flat}}">
+          <label>Дом: </label>
+          <input type="text" formControlName="house" value="{{clientSave.addrs[0]?.flat}}">
 
-      <label for="charm">Характер:</label><br>
-      <select class="form-control" name="charm" id="charm" formControlName="charm">
-        <option value="first" selected>First</option>
-        <option value="second">Second</option>
-      </select>
+          <label>Квартира:</label>
+          <input type="text" formControlName="flat" value="{{clientSave.addrs[0]?.flat}}">
+        </div>
 
+        <div  class="form-group" [formGroupName]="1">
+          <input type="hidden" value="FACT" formControlName="type">
+          <label>Адресс фактического проживания</label><br>
+          <label>Улица: </label>
+          <input type="text" formControlName="street" value="{{clientSave.addrs[0]?.street}}">
+          <label>Дом: </label>
+          <input type="text" formControlName="house" value="{{clientSave.addrs[0]?.house}}">
 
-      <label for="min_money">Минимальный остаток:</label>
-      <input type="text" formControlName="min_money"
-             name="min_money" class="form-control"
-             id="min_money" value="{{client.min_money}}">
+          <label>Квартира:</label>
+          <input type="text" formControlName="flat" value="{{clientSave.addrs[0]?.flat}}">
+        </div>
+      </div>
+      <div formArrayName="phones">
+      <div  [formGroupName]="0">
+          <label>Рабочий Телефон</label>
+          <input type="text" formControlName="number" value="{{clientSave.phones[0]?.number}}">
+        </div>
 
-      <label for="max_money">Максимальный остаток:</label>
-      <input type="text" formControlName="max_money"
-             name="max_money" class="form-control"
-             id="max_money" value="{{client.max_money}}">
+        <div [formGroupName]="1">
+          <label>Мобильный Телефон</label>
+          <input type="text" formControlName="number" value="{{clientSave.phones[1]?.number}}">
+        </div>
 
-      <label for="birth_date">Дата рождения:</label>
-      <input type="date" formControlName="birth_date"
-             name="birth_date" class="form-control"
-             id="birth_date" value="{{client.birth_date}}">
+        <div [formGroupName]="2">
+          <label>Домашний Телефон</label>
+          <input type="text" formControlName="number" value="{{clientSave.phones[2]?.number}}">
+        </div>
+      </div>
 
-    <div class="absolute">
-    <button class="btn btn-success bs">Сохранить</button>
-    <input value="Отменить" type="button" class="btn btn-default" (click)="close()">
-    </div>
+      <div class="absolute">
+        <button class="btn btn-success bs" [disabled]="" (click)="onSubmit()">Сохранить</button>
+        <input value="Отменить" type="button" class="btn btn-default" (click)="close()">
+      </div>
+
     </div>
   </form>
-
-
+  {{editForm.value| json}}
 
 </div>

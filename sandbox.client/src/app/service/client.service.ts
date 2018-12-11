@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Client} from "../../model/client";
+import {Injectable} from '@angular/core';
 import {HttpService} from "../http.service";
-import {Filter} from "../../model/filter";
+import {ClientFilter} from "../../model/clientFilter";
+import {ClientSave} from "../../model/client-save";
+import {t} from "@angular/core/src/render3";
 
 @Injectable({
   providedIn: 'root'
@@ -11,29 +11,41 @@ export class ClientService {
 
   //TODO Нужно использовать HtppService!
   //DONE
-  constructor(private http: HttpService,
-              private httpP: HttpClient) { }
+  constructor(private http: HttpService) {
+  }
 
 
   //TODO объеденить лист в один метод и передовать обхект toFilter
   //TODO done
-  getClients(filter = new Filter()){
-    return this.http.get('users', filter.toJson(filter));
+  getClients(filter = new ClientFilter()) {
+    return this.http.get('/getList', filter.toJson(filter));
   }
 
-  getClientById(id: number){
-    return this.http.get("users/", {id:id}, 'json');
+  getClientById(id: number) {
+    return this.http.get("/getClientForEdit/" + id);
   }
 
-  createClient(client: Client){
-    return this.http.post("users", client.toJson(client), 'json');
+  createClient(clientSave: ClientSave) {
+    return this.http.post("/createClient", {
+      client: JSON.stringify(clientSave.client),
+      addrs: JSON.stringify(clientSave.addrs),
+      phones: JSON.stringify(clientSave.phones)
+    });
   }
 
-  updateClient(client: Client){
-    return this.httpP.put('http://localhost:3000/users/'+client.id, client)
+  updateClient(clientSave: ClientSave) {
+    return this.http.post('/updateClient', {
+      client: JSON.stringify(clientSave.client),
+      addrs: JSON.stringify(clientSave.addrs),
+      phones: JSON.stringify(clientSave.phones)
+    });
   }
 
-  deleteById(id: number){
-    return this.http.delete('users/'+id);
+  deleteById(id: number) {
+    return this.http.delete('/deleteClient/' + id);
+  }
+
+  listCharms() {
+    return this.http.get('/listCharms');
   }
 }

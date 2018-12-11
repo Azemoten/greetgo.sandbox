@@ -39,12 +39,13 @@
           <tbody>
 
           <tr *ngFor="let client of clients">
-            <td>{{client.name}} {{client.surname}} {{client.tname}}</td>
-            <td>{{client.charm}}</td>
-            <td>11</td>
-            <td>{{(+client.max_money) + (+client.min_money)}}</td>
-            <td>{{client.max_money}}</td>
-            <td>{{client.min_money}}</td>
+            <td>{{client.name}} {{client.surname}} {{client.patronymic}}</td>
+            <td>{{client.charmName}}</td>
+            <td>{{client.age}}</td>
+            <td>{{client.commonMoney}}</td>
+            <td>{{client.maxMoney}}</td>
+            <td>{{client.minMoney}}</td>
+
             <td>
               <button class="btn btn-xs bs" (click)="editClient(client.id)" data-title="Edit"
                       data-toggle="modal" data-target="#edit"><span class="	glyphicon glyphicon-option-vertical"></span>

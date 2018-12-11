@@ -1,9 +1,9 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
 import {ClientService} from "../service/client.service";
-import {Client} from "../../model/client";
+import {ClientRecord} from "../../model/clientRecord";
 import {MatDialog} from "@angular/material";
 import {EditClientComponent} from "../edit-client/edit-client.component";
-import {Filter} from "../../model/filter";
+import {ClientFilter} from "../../model/clientFilter";
 import {ConfirmationComponent} from "../confirmation/confirmation.component";
 
 @Component({
@@ -13,8 +13,10 @@ import {ConfirmationComponent} from "../confirmation/confirmation.component";
 })
 export class ClientListComponent implements OnInit {
 
-  clients: Client[] = [];
+  clients: ClientRecord[] = [];
   clicked = false;
+  b: any;
+
   orders = [{'name': ['name', 'Имя']}, {'name': ['surname', 'Фамилия']}, {'name': ['tname', 'Отчество']}];
   selectedOrder = this.orders[0].name;
 
@@ -27,11 +29,11 @@ export class ClientListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadClients()
+    this.loadClients();
   }
 
   loadClients() {
-    this.clientService.getClients(new Filter()).toPromise().then(
+    this.clientService.getClients(new ClientFilter()).toPromise().then(
       data => {
         this.clients = data.body;
       });
@@ -48,7 +50,7 @@ export class ClientListComponent implements OnInit {
   }
 
   loadSorted(sort: string, ord: string): void {
-    this.clientService.getClients(new Filter(sort, ord)).toPromise().then(
+    this.clientService.getClients(new ClientFilter()).toPromise().then(
       data => {
         this.clients = data.body;
       });
@@ -68,7 +70,7 @@ export class ClientListComponent implements OnInit {
   //TODO перименить по человечкски
   //TODO done
   filterBy(like: string) {
-    this.clientService.getClients(new Filter("", "", this.selectedOrder[0], like)).toPromise().then(
+    this.clientService.getClients(new ClientFilter()).toPromise().then(
       data => {
         this.clients = data.body;
       });
