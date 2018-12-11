@@ -10,13 +10,13 @@ public interface ClientDao {
     @SelectProvider(type = SqlProvider.class, method = "getListClient")
     List<ClientRecord> listClients(ClientFilter clientFilter);
 
-    @Select("select * from charm where surname like #{surname} || '%'")
+    @Select("select * from charm")
     List<Charm> listCharms();
 
     @Delete("update client set actual=false where id=#{id}")
     void deleteClient(Integer id);
 
-    @SelectProvider(type = SqlProvider.class, method = "createClient")
+    @SelectProvider(type = SqlProvider.class, method = "create")
     int insertClient(Client client);
 
 

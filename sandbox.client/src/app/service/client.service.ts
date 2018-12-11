@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpService} from "../http.service";
 import {ClientFilter} from "../../model/clientFilter";
-import {ClientSave} from "../../model/client-save";
+import {ClientDetails} from "../../model/client-details";
 import {t} from "@angular/core/src/render3";
 
 @Injectable({
@@ -18,34 +18,27 @@ export class ClientService {
   //TODO объеденить лист в один метод и передовать обхект toFilter
   //TODO done
   getClients(filter = new ClientFilter()) {
-    return this.http.get('/getList', filter.toJson(filter));
+    return this.http.get('/list', {});
   }
 
   getClientById(id: number) {
-    return this.http.get("/getClientForEdit/" + id);
+    return this.http.get("/clientDetails/" + id);
   }
 
-  createClient(clientSave: ClientSave) {
-    return this.http.post("/createClient", {
-      client: JSON.stringify(clientSave.client),
-      addrs: JSON.stringify(clientSave.addrs),
-      phones: JSON.stringify(clientSave.phones)
-    });
+  create(clientDetails: ClientDetails) {
+    console.log("asd")
+    return this.http.post("/create", {clientDetail: JSON.stringify(clientDetails)});
   }
 
-  updateClient(clientSave: ClientSave) {
-    return this.http.post('/updateClient', {
-      client: JSON.stringify(clientSave.client),
-      addrs: JSON.stringify(clientSave.addrs),
-      phones: JSON.stringify(clientSave.phones)
-    });
+  update(clientDetails: ClientDetails) {
+    return this.http.post('/update', {clientDetail: JSON.stringify(clientDetails)});
   }
 
   deleteById(id: number) {
-    return this.http.delete('/deleteClient/' + id);
+    return this.http.delete('/remove/' + id);
   }
 
   listCharms() {
-    return this.http.get('/listCharms');
+    return this.http.get('/list/Charms');
   }
 }

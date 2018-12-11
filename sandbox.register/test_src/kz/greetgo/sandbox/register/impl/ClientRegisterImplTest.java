@@ -6,12 +6,10 @@ import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.register.test.util.RandomEntity;
 import kz.greetgo.sandbox.register.test.dao.ClientDaoTest;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
-import kz.greetgo.sandbox.register.test.util.SaverEntity;
 import org.testng.annotations.Test;
 
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -22,9 +20,6 @@ public class ClientRegisterImplTest extends ParentTestNg {
     public BeanGetter<ClientDaoTest> clientTestDao;
     public BeanGetter<ClientRegister> clientRegister;
     public RandomEntity randomEntity;
-
-
-    final String baseUrl = "http://localhost:1313/sandbox/api/person/listClient";
 
 
     @Test
@@ -46,7 +41,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         assertThat(page1).isNotEqualTo(page2);
         //
         //
-        clientRegister.get().deleteClient(client.id);
+        clientRegister.get().remove(client.id);
     }
 
     @Test
@@ -58,7 +53,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         int numberOfLastPage = randomEntity.numOfLastPage(numberOfClients);
         //
         //
-        List<ClientRecord> list = clientRegister.get().getList(clientFilter);
+        List<ClientRecord> list = clientRegister.get().list(clientFilter);
         //
         //
         if (numberOfClients >= 10) {
@@ -78,7 +73,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         int numberOfLastPage = randomEntity.numOfLastPage(numberOfClients);
         //
         //
-        List<ClientRecord> list = clientRegister.get().getList(clientFilter);
+        List<ClientRecord> list = clientRegister.get().list(clientFilter);
         //
         //
         assertThat(list.size()).isEqualTo(numberOfLastPage);
@@ -91,7 +86,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         //
         //
         //
-        List<ClientRecord> list = clientRegister.get().getList(clientFilter);
+        List<ClientRecord> list = clientRegister.get().list(clientFilter);
         //
         //
         //
@@ -124,22 +119,22 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientPhone.number = "5555555";
         clientAddr.flat="Changed";
         client.surname = "ChangedName";
-        ClientSave clientSave = new ClientSave();
-        clientSave.phones = Arrays.asList(clientPhone);
-        clientSave.addrs = Arrays.asList(clientAddr);
-        clientSave.client = client;
+        ClientDetail clientDetail = new ClientDetail();
+        clientDetail.phones = Arrays.asList(clientPhone);
+        clientDetail.addrs = Arrays.asList(clientAddr);
+        clientDetail.client = client;
         //
         //
-        clientRegister.get().updateClient(clientSave);
+        clientRegister.get().update(clientDetail);
         //
         //
-        ClientSave getClientSave = clientRegister.get().getClientForEdit(client.id);
+        ClientDetail getClientDetail = clientRegister.get().clientDetails(client.id);
 
-        assertThat(getClientSave.client.id).isEqualTo(client.id);
-        assertThat(getClientSave.phones.get(0).number).isEqualTo(clientPhone.number);
-        assertThat(getClientSave.addrs.get(0).flat).isEqualTo(clientAddr.flat);
+        assertThat(getClientDetail.client.id).isEqualTo(client.id);
+        assertThat(getClientDetail.phones.get(0).number).isEqualTo(clientPhone.number);
+        assertThat(getClientDetail.addrs.get(0).flat).isEqualTo(clientAddr.flat);
 
-        clientRegister.get().deleteClient(client.id);
+        clientRegister.get().remove(client.id);
 
     }
 
@@ -154,12 +149,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientTestDao.get().insertClient(client);
         //
         //
-        clientRegister.get().deleteClient(client.id);
-        //
+        clientRegister.get().remove(client.id);
+        boolean deleted = clientTestDao.get().checkDel(client.id);
         //
         //
 
-        boolean deleted = clientTestDao.get().checkDel(client.id);
         ///
         //
         //
@@ -180,7 +174,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientTestDao.get().insertClient(client);
         //
         //
-        List<ClientRecord> list = clientRegister.get().getList(clientFilter);
+        List<ClientRecord> list = clientRegister.get().list(clientFilter);
         //
         //
         assertThat(list).isNotNull();
@@ -201,7 +195,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientTestDao.get().insertClient(client);
         //
         //
-        List<ClientRecord> list = clientRegister.get().getList(clientFilter);
+        List<ClientRecord> list = clientRegister.get().list(clientFilter);
         //
         //
 
@@ -221,7 +215,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientTestDao.get().insertClient(client);
         //
         //
-        List<ClientRecord> list = clientRegister.get().getList(clientFilter);
+        List<ClientRecord> list = clientRegister.get().list(clientFilter);
         //
         //
 
@@ -247,7 +241,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientTestDao.get().insertClient(client5);
         //
         //
-        List<ClientRecord> list = clientRegister.get().getList(clientFilter);
+        List<ClientRecord> list = clientRegister.get().list(clientFilter);
         //
         //
         assertThat(list.get(0).name).isEqualTo(client1.name);
@@ -257,11 +251,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
         assertThat(list.get(4).name).isEqualTo(client5.name);
         //
         //
-        clientRegister.get().deleteClient(client1.id);
-        clientRegister.get().deleteClient(client2.id);
-        clientRegister.get().deleteClient(client3.id);
-        clientRegister.get().deleteClient(client4.id);
-        clientRegister.get().deleteClient(client5.id);
+        clientRegister.get().remove(client1.id);
+        clientRegister.get().remove(client2.id);
+        clientRegister.get().remove(client3.id);
+        clientRegister.get().remove(client4.id);
+        clientRegister.get().remove(client5.id);
 
     }
 
@@ -282,7 +276,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientTestDao.get().insertClient(client5);
         //
         //
-        List<ClientRecord> list = clientRegister.get().getList(clientFilter);
+        List<ClientRecord> list = clientRegister.get().list(clientFilter);
         //
         //
         assertThat(list.get(0).name).isEqualTo(client1.name);
@@ -292,11 +286,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
         assertThat(list.get(4).name).isEqualTo(client5.name);
         //
         //
-        clientRegister.get().deleteClient(client1.id);
-        clientRegister.get().deleteClient(client2.id);
-        clientRegister.get().deleteClient(client3.id);
-        clientRegister.get().deleteClient(client4.id);
-        clientRegister.get().deleteClient(client5.id);
+        clientRegister.get().remove(client1.id);
+        clientRegister.get().remove(client2.id);
+        clientRegister.get().remove(client3.id);
+        clientRegister.get().remove(client4.id);
+        clientRegister.get().remove(client5.id);
     }
 
     @Test
@@ -328,7 +322,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientTestDao.get().insertAccount(clientAccount5);
         //
         //
-        List<ClientRecord> list = clientRegister.get().getList(clientFilter);
+        List<ClientRecord> list = clientRegister.get().list(clientFilter);
         //5,1,3,2.4
         //
         //
@@ -339,11 +333,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
         assertThat(list.get(4).commonMoney).isEqualTo(clientAccount4.money);
         //
         //
-        clientRegister.get().deleteClient(client1.id);
-        clientRegister.get().deleteClient(client2.id);
-        clientRegister.get().deleteClient(client3.id);
-        clientRegister.get().deleteClient(client4.id);
-        clientRegister.get().deleteClient(client5.id);
+        clientRegister.get().remove(client1.id);
+        clientRegister.get().remove(client2.id);
+        clientRegister.get().remove(client3.id);
+        clientRegister.get().remove(client4.id);
+        clientRegister.get().remove(client5.id);
     }
 
     @Test
@@ -375,7 +369,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientTestDao.get().insertAccount(clientAccount5);
         //
         //
-        List<ClientRecord> list = clientRegister.get().getList(clientFilter);
+        List<ClientRecord> list = clientRegister.get().list(clientFilter);
         //5,1,3,2.4
         //
         //
@@ -386,11 +380,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
         assertThat(list.get(4).commonMoney).isEqualTo(clientAccount1.money);
         //
         //
-        clientRegister.get().deleteClient(client1.id);
-        clientRegister.get().deleteClient(client2.id);
-        clientRegister.get().deleteClient(client3.id);
-        clientRegister.get().deleteClient(client4.id);
-        clientRegister.get().deleteClient(client5.id);
+        clientRegister.get().remove(client1.id);
+        clientRegister.get().remove(client2.id);
+        clientRegister.get().remove(client3.id);
+        clientRegister.get().remove(client4.id);
+        clientRegister.get().remove(client5.id);
 
     }
 
@@ -420,7 +414,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientTestDao.get().insertClient(client5);
         //
         //
-        List<ClientRecord> list = clientRegister.get().getList(clientFilter);
+        List<ClientRecord> list = clientRegister.get().list(clientFilter);
         //5,1,3,2.4
         //2350
         //2400
@@ -434,11 +428,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
         assertThat(list.get(4).age).isEqualTo(2018 - 2300);
         //
         //
-        clientRegister.get().deleteClient(client1.id);
-        clientRegister.get().deleteClient(client2.id);
-        clientRegister.get().deleteClient(client3.id);
-        clientRegister.get().deleteClient(client4.id);
-        clientRegister.get().deleteClient(client5.id);
+        clientRegister.get().remove(client1.id);
+        clientRegister.get().remove(client2.id);
+        clientRegister.get().remove(client3.id);
+        clientRegister.get().remove(client4.id);
+        clientRegister.get().remove(client5.id);
 
     }
 
@@ -468,7 +462,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientTestDao.get().insertClient(client5);
         //
         //
-        List<ClientRecord> list = clientRegister.get().getList(clientFilter);
+        List<ClientRecord> list = clientRegister.get().list(clientFilter);
         //5,1,3,2.4
         //2350
         //2400
@@ -482,11 +476,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
         assertThat(list.get(4).age).isEqualTo(2018 - 1200);
         //
         //
-        clientRegister.get().deleteClient(client1.id);
-        clientRegister.get().deleteClient(client2.id);
-        clientRegister.get().deleteClient(client3.id);
-        clientRegister.get().deleteClient(client4.id);
-        clientRegister.get().deleteClient(client5.id);
+        clientRegister.get().remove(client1.id);
+        clientRegister.get().remove(client2.id);
+        clientRegister.get().remove(client3.id);
+        clientRegister.get().remove(client4.id);
+        clientRegister.get().remove(client5.id);
 
     }
 
@@ -520,7 +514,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientTestDao.get().insertAccount(clientAccount5);
         //
         //
-        List<ClientRecord> list = clientRegister.get().getList(clientFilter);
+        List<ClientRecord> list = clientRegister.get().list(clientFilter);
         //5,1,3,2.4
         //
         //
@@ -531,11 +525,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
         assertThat(list.get(4).commonMoney).isEqualTo(clientAccount1.money);
         //
         //
-        clientRegister.get().deleteClient(client1.id);
-        clientRegister.get().deleteClient(client2.id);
-        clientRegister.get().deleteClient(client3.id);
-        clientRegister.get().deleteClient(client4.id);
-        clientRegister.get().deleteClient(client5.id);
+        clientRegister.get().remove(client1.id);
+        clientRegister.get().remove(client2.id);
+        clientRegister.get().remove(client3.id);
+        clientRegister.get().remove(client4.id);
+        clientRegister.get().remove(client5.id);
     }
 
     @Test
@@ -567,7 +561,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientTestDao.get().insertAccount(clientAccount5);
         //
         //
-        List<ClientRecord> list = clientRegister.get().getList(clientFilter);
+        List<ClientRecord> list = clientRegister.get().list(clientFilter);
         //5,1,3,2.4
         //
         //
@@ -578,11 +572,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
         assertThat(list.get(4).commonMoney).isEqualTo(clientAccount1.money);
         //
         //
-        clientRegister.get().deleteClient(client1.id);
-        clientRegister.get().deleteClient(client2.id);
-        clientRegister.get().deleteClient(client3.id);
-        clientRegister.get().deleteClient(client4.id);
-        clientRegister.get().deleteClient(client5.id);
+        clientRegister.get().remove(client1.id);
+        clientRegister.get().remove(client2.id);
+        clientRegister.get().remove(client3.id);
+        clientRegister.get().remove(client4.id);
+        clientRegister.get().remove(client5.id);
     }
 
     @Test
@@ -614,7 +608,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientTestDao.get().insertAccount(clientAccount5);
         //
         //
-        List<ClientRecord> list = clientRegister.get().getList(clientFilter);
+        List<ClientRecord> list = clientRegister.get().list(clientFilter);
         //5,1,3,2.4
         //
         //
@@ -625,11 +619,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
         assertThat(list.get(4).commonMoney).isEqualTo(clientAccount3.money);
         //
         //
-        clientRegister.get().deleteClient(client1.id);
-        clientRegister.get().deleteClient(client2.id);
-        clientRegister.get().deleteClient(client3.id);
-        clientRegister.get().deleteClient(client4.id);
-        clientRegister.get().deleteClient(client5.id);
+        clientRegister.get().remove(client1.id);
+        clientRegister.get().remove(client2.id);
+        clientRegister.get().remove(client3.id);
+        clientRegister.get().remove(client4.id);
+        clientRegister.get().remove(client5.id);
     }
 
     @Test
@@ -661,7 +655,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
         clientTestDao.get().insertAccount(clientAccount5);
         //
         //
-        List<ClientRecord> list = clientRegister.get().getList(clientFilter);
+        List<ClientRecord> list = clientRegister.get().list(clientFilter);
         //5,1,3,2.4
         //
         //
@@ -672,11 +666,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
         assertThat(list.get(4).commonMoney).isEqualTo(clientAccount1.money);
         //
         //
-        clientRegister.get().deleteClient(client1.id);
-        clientRegister.get().deleteClient(client2.id);
-        clientRegister.get().deleteClient(client3.id);
-        clientRegister.get().deleteClient(client4.id);
-        clientRegister.get().deleteClient(client5.id);
+        clientRegister.get().remove(client1.id);
+        clientRegister.get().remove(client2.id);
+        clientRegister.get().remove(client3.id);
+        clientRegister.get().remove(client4.id);
+        clientRegister.get().remove(client5.id);
     }
 
 

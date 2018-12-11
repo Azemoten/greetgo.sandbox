@@ -1,19 +1,13 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
-import {ClientRecord} from "../../model/clientRecord";
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {ClientService} from "../service/client.service";
-import {first} from "rxjs/operators";
 import {ClientListComponent} from "../client-list/client-list.component";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
-import {ClientSave} from "../../model/client-save";
+import {ClientDetails} from "../../model/client-details";
 import {Client} from "../../model/client";
-import {Charm} from "../../model/charm";
+import {Address} from "cluster";
 import {ClientAddr} from "../../model/client-addr";
-import {ClientPhone} from "../../model/client-phone";
-import {Gender} from "../../model/gender.enum";
-import {PhoneType} from "../../model/phone.enum";
-import {AddressType} from "../../model/address.enum";
 
 @Component({
   selector: 'app-edit-client',
@@ -32,66 +26,79 @@ export class EditClientComponent implements OnInit {
   }
 
   editForm: FormGroup;
-  clientSave: ClientSave;
-  clientToSave: ClientSave;
-  client: Client;
-  clientPhone: ClientPhone[];
-  clientAddr: ClientAddr[];
+  clientDetails: ClientDetails;
+  client: Client = new Client();
+  addr1 : ClientAddr = new ClientAddr();
+  addr2 : ClientAddr = new ClientAddr();
+  clientId: number;
+
 
   ngOnInit() {
-    let clientId = this.data;
+    this.clientId = this.data;
 
-    if (clientId) {
-      this.clientService.getClientById(clientId).subscribe(
-        data => {
-          this.clientSave = data.body;
-        }
-      );
-    }
+    let ad = [];
+    ad.push(
+        this.formBuilder.group({
+          type: [this.client.name, Validators.required],
+          street: [this.client.name],
+          house: [this.client.name],
+          flat: [this.client.name]
+        })
+    );
+    ad.push(
+      this.formBuilder.group({
+        type: [this.client.name, Validators.required],
+        street: [this.client.name],
+        house: [this.client.name],
+        flat: [this.client.name]
+      })
+    );
+
     this.editForm = this.formBuilder.group({
       client: this.formBuilder.group({
-        id: [''],
-        name: ['', Validators.required],
-        surname: [''],
-        patronymic: [''],
-        charm: [''],
-        gender: [''],
-        birthDate: ['']
+        id: [this.client.id],
+        name: [this.client.name, Validators.required],
+        surname: [this.client.surname],
+        patronymic: [this.client.patronymic],
+        charm: [this.client.charm],
+        gender: [this.client.gender],
+        birthDate: [this.client.birthDate],
       }),
-      addrs: this.formBuilder.array([this.createAddr('REG'),
-        this.createAddr('FACT')]),
-      phones: this.formBuilder.array([this.createPhone('HOME'),
-        this.createPhone('MOBILE'), this.createPhone('WORK')])
+
+      addrs: this.formBuilder.array(ad),
+      phones: this.formBuilder.array([this.createPhone("FACT"),this.createPhone("REG"),this.createPhone("REG")])
     });
-    this.clientService.getClientById(clientId).toPromise().then(
-      data=>{
-        this.editForm.setValue(data)
-      }
-    );
-    // this.clientService.getClientById(clientId)
-    //   .subscribe(data => {
-    //     this.editForm.setValue(data);
-    //
-    //   });
+
+
+    if (this.clientId) {
+      this.clientService.getClientById(this.clientId).toPromise().then(
+         data => {
+           this.client = data.body.client
+           // this.editForm.get("client").setValue(data.body.client);
+           // this.editForm.get("addrs").controls().get("0").setValue()
+        });
+    }
+
+
 
   }
 
   onSubmit() {
-    this.clientToSave.client=this.editForm.value.client;
-    this.clientToSave.phones=this.editForm.value.phones;
-    this.clientToSave.addrs=this.editForm.value.addrs;
-
-    this.clientService.updateClient(this.clientToSave)
-    .pipe(first())
-    .subscribe(
-      data => {
-        this.router.navigate(['list-client']);
-      },
-      error => {
-        alert(error);
-      }
-    );
-
+    if(this.clientId){
+    this.clientService.update(this.editForm.value).toPromise().then(res => {
+      console.log("response", res)
+    }).catch(err => {
+      console.error(err);
+    });
+    } else {
+      this.clientService.create(this.editForm.value).toPromise().then(
+        res=>{
+          console.log("response", res)
+        }
+      ). catch( err =>{
+        console.error(err);
+      })
+    }
 
     this.close();
   }
@@ -104,7 +111,7 @@ export class EditClientComponent implements OnInit {
 
   createPhone(type: string) {
     return this.formBuilder.group({
-      number: ['', Validators.required],
+      number: ['asd', Validators.required],
       type: [type, Validators.required]
     });
   }
@@ -116,14 +123,6 @@ export class EditClientComponent implements OnInit {
       house: [''],
       flat: ['']
     });
-  }
-
-  get addrs(): FormArray{
-    return <FormArray>this.editForm.get('addrs');
-  }
-
-  get phones(): FormArray{
-    return <FormArray>this.editForm.get('phones');
   }
 
 }

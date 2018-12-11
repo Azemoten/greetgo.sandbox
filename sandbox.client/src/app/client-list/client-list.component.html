@@ -39,7 +39,7 @@
           <tbody>
 
           <tr *ngFor="let client of clients">
-            <td>{{client.name}} {{client.surname}} {{client.patronymic}}</td>
+            <td class="col-md-3">{{client.name}} {{client.surname}} {{client.patronymic}}</td>
             <td>{{client.charmName}}</td>
             <td>{{client.age}}</td>
             <td>{{client.commonMoney}}</td>
@@ -72,6 +72,9 @@
           <!--<li><a href="#">5</a></li>-->
           <!--<li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>-->
         <!--</ul>-->
+        <ul *ngFor="let i of page">
+          <li (click)="change(i)">{{i}}</li>
+        </ul>
 
       </div>
 

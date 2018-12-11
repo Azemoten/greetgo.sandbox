@@ -84,13 +84,13 @@ public class SqlProvider {
         return sql.toString();
     }
 
-    public static String createClient(Client client){
+    public static String create(Client client){
         SQL sql = new SQL();
         sql.insert_into("client");
         sql.values("name, surname, gender, birth_date, charm", "#{name}, #{surname}, #{gender}::gender, #{birthDate}, #{charm}");
         if(Objects.nonNull(client.patronymic)){
             sql.values("patronymic", "#{patronymic}");
         }
-        return sql.toString();
+        return sql.toString()+"RETURNING id";
     }
 }

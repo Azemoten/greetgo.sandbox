@@ -101,8 +101,8 @@ public class RandomEntity {
         return clientAccount;
     }
 
-//    public static ClientSave clientSave(Charm charm) {
-//        ClientSave clientSave = new ClientSave();
+//    public static ClientDetail clientSave(Charm charm) {
+//        ClientDetail clientSave = new ClientDetail();
 //        Client client = client(charm);
 //        clientSave.client = client;
 //        List<ClientAddr> addresses = clientAddr(clientSave.client.id);

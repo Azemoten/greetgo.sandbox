@@ -6,17 +6,17 @@ import java.util.List;
 
 public interface ClientRegister {
 
-    List<ClientRecord> getList(ClientFilter clientFilter);
+    List<ClientRecord> list(ClientFilter clientFilter);
 
     List<Charm> listCharms();
 
     Integer numPage(ClientFilter clientFilter);
 
-    void deleteClient(Integer id);
+    void remove(Integer id);
 
-    void createClient(ClientSave clientSave);
+    void create(ClientDetail clientDetail);
 
-    ClientSave getClientForEdit(int id);
+    ClientDetail clientDetails(int id);
 
-    void updateClient(ClientSave clientSave);
+    void update(ClientDetail clientDetail);
 }

@@ -15,7 +15,9 @@ export class ClientListComponent implements OnInit {
 
   clients: ClientRecord[] = [];
   clicked = false;
-  b: any;
+  clientFilter: ClientFilter;
+  page: number[];
+
 
   orders = [{'name': ['name', 'Имя']}, {'name': ['surname', 'Фамилия']}, {'name': ['tname', 'Отчество']}];
   selectedOrder = this.orders[0].name;
@@ -30,6 +32,7 @@ export class ClientListComponent implements OnInit {
 
   ngOnInit() {
     this.loadClients();
+    this.page = this.createList(10);
   }
 
   loadClients() {
@@ -89,6 +92,18 @@ export class ClientListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.loadClients();
     });
+  }
+
+  createList(page: number) {
+    let list = [];
+    for (var i = 0; i < page; i++) {
+      list.push(i)
+    }
+    return list;
+  }
+
+  click(i: number) {
+    console.log(i);
   }
 
   // addClient() {

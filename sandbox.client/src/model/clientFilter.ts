@@ -6,9 +6,4 @@ export class ClientFilter {
   public order: string;
   public page: number;
 
-
-  public toJson(a: any) {
-    return {sort: a.sort, order: a.ord, name: a.name, surname: a.surname, patronymic: a.patronymic,
-    page: a.page};
-  }
 }
