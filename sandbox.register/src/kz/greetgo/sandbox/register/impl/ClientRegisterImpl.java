@@ -26,7 +26,13 @@ public class ClientRegisterImpl implements ClientRegister {
 
     @Override
     public Integer numPage(ClientFilter clientFilter) {
-        return clientDao.get().numPage(clientFilter);
+        int clientNumber = clientDao.get().countClient(clientFilter);
+        int pages = 0;
+        while(clientNumber>5){
+            clientNumber-=5;
+            pages++;
+        }
+        return pages;
     }
 
     @Override
@@ -63,14 +69,14 @@ public class ClientRegisterImpl implements ClientRegister {
         Client client = clientDetail.client;
         clientDao.get().updateClient(client);
         for (int i = 0; i< clientDetail.addrs.size(); i++) {
-            ClientAddr clientAddr = clientDetail.addrs.get(0);
+            ClientAddr clientAddr = clientDetail.addrs.get(i);
             clientAddr.client=client.id;
-            clientDao.get().updateAddr(clientAddr);
+            clientDao.get().upsertAddr(clientAddr);
         }
         for (int i = 0; i< clientDetail.phones.size(); i++) {
-            ClientPhone clientPhone = clientDetail.phones.get(0);
+            ClientPhone clientPhone = clientDetail.phones.get(i);
             clientPhone.client=client.id;
-            clientDao.get().updatePhone(clientPhone);
+            clientDao.get().upsertPhone(clientPhone);
         }
 
     }

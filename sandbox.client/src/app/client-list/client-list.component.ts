@@ -15,12 +15,14 @@ export class ClientListComponent implements OnInit {
 
   clients: ClientRecord[] = [];
   clicked = false;
-  clientFilter: ClientFilter;
+  clientFilter: ClientFilter = new ClientFilter();
   page: number[];
-
-
-  orders = [{'name': ['name', 'Имя']}, {'name': ['surname', 'Фамилия']}, {'name': ['tname', 'Отчество']}];
-  selectedOrder = this.orders[0].name;
+  currentPage: number = 0;
+  orderName: boolean = false;
+  orderAge: boolean = false;
+  orderMinMoney: boolean = false;
+  orderMaxMoney: boolean = false;
+  orderCommonMoney: boolean = false;
 
   @HostBinding('class.is-open')
   isOpen = false;
@@ -32,31 +34,74 @@ export class ClientListComponent implements OnInit {
 
   ngOnInit() {
     this.loadClients();
-    this.page = this.createList(10);
+    this.getNumberOfPage()
   }
 
   loadClients() {
-    this.clientService.getClients(new ClientFilter()).toPromise().then(
+    this.clientService.getClients(this.clientFilter).toPromise().then(
       data => {
         this.clients = data.body;
       });
   }
 
-  sortBy(str: string) {
-    if (this.clicked == false) {
-      this.loadSorted(str, 'desc');
-      this.clicked = true;
+  sortByName() {
+    this.clientFilter.sort = "name";
+    if (this.orderName) {
+      this.orderName = false;
     } else {
-      this.loadSorted(str, 'asc');
-      this.clicked = false;
+      this.orderName = true;
     }
+    this.clientFilter.order = this.orderName;
+    this.getNumberOfPage();
+    this.paging(this.currentPage)
   }
 
-  loadSorted(sort: string, ord: string): void {
-    this.clientService.getClients(new ClientFilter()).toPromise().then(
-      data => {
-        this.clients = data.body;
-      });
+  sortByAge() {
+    this.clientFilter.sort = "age";
+    if (this.orderAge) {
+      this.orderAge = false;
+    } else {
+      this.orderAge = true;
+    }
+    this.clientFilter.order = this.orderAge;
+    this.getNumberOfPage();
+    this.paging(this.currentPage)
+  }
+
+  sortByMinMoney() {
+    this.clientFilter.sort = "minMoney";
+    if (this.orderMinMoney) {
+      this.orderMinMoney = false;
+    } else {
+      this.orderMinMoney = true;
+    }
+    this.clientFilter.order = this.orderMinMoney;
+    this.getNumberOfPage();
+    this.paging(this.currentPage)
+  }
+
+  sortByMaxMoney() {
+    this.clientFilter.sort = "maxMoney";
+    if (this.orderMaxMoney) {
+      this.orderMaxMoney = false;
+    } else {
+      this.orderMaxMoney = true;
+    }
+    this.clientFilter.order = this.orderMaxMoney;
+    this.getNumberOfPage();
+    this.paging(this.currentPage)
+  }
+
+  sortByCommonMoney() {
+    this.clientFilter.sort = "commonMoney";
+    if (this.orderCommonMoney) {
+      this.orderCommonMoney = false;
+    } else {
+      this.orderCommonMoney = true;
+    }
+    this.clientFilter.order = this.orderCommonMoney;
+    this.getNumberOfPage();
+    this.paging(this.currentPage)
   }
 
   deleteClient(id: number): void {
@@ -72,14 +117,22 @@ export class ClientListComponent implements OnInit {
 
   //TODO перименить по человечкски
   //TODO done
-  filterBy(like: string) {
-    this.clientService.getClients(new ClientFilter()).toPromise().then(
-      data => {
-        this.clients = data.body;
-      });
-    if (!like) {
-      this.loadClients();
-    }
+  filterByName(like: any) {
+    this.clientFilter.name = like.target.value;
+    this.getNumberOfPage();
+    this.paging(this.currentPage)
+  }
+
+  filterBySurname(like: any) {
+    this.clientFilter.surname = like.target.value;
+    this.getNumberOfPage();
+    this.paging(this.currentPage)
+  }
+
+  filterByPatronymic(like: any) {
+    this.clientFilter.patronymic = like.target.value;
+    this.getNumberOfPage();
+    this.paging(this.currentPage)
   }
 
 
@@ -96,23 +149,26 @@ export class ClientListComponent implements OnInit {
 
   createList(page: number) {
     let list = [];
-    for (var i = 0; i < page; i++) {
+    for (var i = 0; i < page + 1; i++) {
       list.push(i)
     }
     return list;
   }
 
-  click(i: number) {
-    console.log(i);
+  getNumberOfPage() {
+    this.clientService.numberOfPage(this.clientFilter).toPromise().then(
+      data => {
+        this.page = this.createList(data.body);
+      }
+    )
   }
 
-  // addClient() {
-  //   const dialogRef = this.dialog.open(AddClientComponent, {});
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     this.loadClients();
-  //   });
-  // }
 
+  paging(page: number) {
+    this.currentPage = page;
+    this.clientFilter.page = this.currentPage;
+    this.loadClients();
+  }
 
 }
 

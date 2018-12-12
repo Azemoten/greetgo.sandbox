@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  urlPrefix: 'http://localhost:1313/sandbox/api/person',
+  urlPrefix: 'http://localhost:1313/sandbox/api',
 };
 
 /*

@@ -10,7 +10,7 @@ public interface ClientDao {
     @SelectProvider(type = SqlProvider.class, method = "getListClient")
     List<ClientRecord> listClients(ClientFilter clientFilter);
 
-    @Select("select * from charm")
+    @Select("select * from charm order by id limit 5")
     List<Charm> listCharms();
 
     @Delete("update client set actual=false where id=#{id}")
@@ -27,15 +27,15 @@ public interface ClientDao {
     void insertAddress(ClientAddr clientAddr);
 
     @SelectProvider(type = SqlProvider.class, method = "numPage")
-    Integer numPage(ClientFilter clientFilter);
+    Integer countClient(ClientFilter clientFilter);
 
     @Select("select id, surname, name, patronymic, gender, birth_date birthDate, charm from client where actual=true and id=#{id}")
     Client getClient(int id);
 
-    @Select("select * from client_addr where client=#{id}")
+    @Select("select * from client_addr where client=#{id} order by type")
     List<ClientAddr> getAddresses(int id);
 
-    @Select("select * from client_phone where client=#{id}")
+    @Select("select * from client_phone where client=#{id} order by type")
     List<ClientPhone> getPhones(int id);
 
     @Update("UPDATE client\n" +
@@ -49,9 +49,12 @@ public interface ClientDao {
             " WHERE client=#{client} and type=#{type}::address\n")
     void updateAddr(ClientAddr clientAddr);
 
-    @Update("UPDATE client_phone\n" +
-            "   SET \"number\"=#{number}\n" +
-            " WHERE client=#{client} and type=#{type}::phone\n")
-    void updatePhone(ClientPhone clientPhone);
+    @Update("insert into client_addr(client, type, street, house, flat) values(#{client}, #{type}::address, #{street}, #{house}, #{flat}) \n" +
+            "on conflict(client, type) do update set (client, type, street, house, flat ) = (#{client}, #{type}::address, #{street}, #{house}, #{flat}) ")
+    void upsertAddr(ClientAddr clientAddr);
+
+    @Update("insert into client_phone(client, number, type) values(#{client}, #{number}, #{type}::phone) \n" +
+            "on conflict(client, type) do update set (client, number, type) = (#{client}, #{number}, #{type}::phone)")
+    void upsertPhone(ClientPhone clientPhone);
 }
 

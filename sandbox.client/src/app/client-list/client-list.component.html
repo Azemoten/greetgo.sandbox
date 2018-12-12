@@ -6,12 +6,15 @@
       <h2>Детали клиента</h2>
       <div class="table-responsive">
 
-          <select class="form-control fl" id="exampleFormControlSelect1" style="width:80px;">
-            <option>Имя</option>
-            <option>Фамилия</option>
-            <option>Отчество</option>
-          </select>
-          <input (click)="filterBy()" type="text" class="form-control fl" placeholder="Фильтр" style="width:110px;">
+          <div class="col-md-12">
+            <div class="col-md-3">
+            <h4>Фильтр:</h4>
+            </div>
+          </div>
+          <input (keyup)="filterByName($event)" type="text" class="form-control fl" placeholder="По имени" style="width:110px; margin-right: 10px;">
+        <input (keyup)="filterBySurname($event)" type="text" class="form-control fl" placeholder="По фамилии" style="width:110px; margin-right: 10px;">
+        <input (keyup)="filterByPatronymic($event)" type="text" class="form-control fl" placeholder="По отчеству" style="width:110px; margin-right: 10px;">
+
 
         <table id="mytable" class="table table-bordred table-striped table-sortable">
 
@@ -19,15 +22,19 @@
 
             <tr>
             <th class="table-sortable">ФИО
-              <button *ngIf="clicked" class="fa fa-angle-down trans" (click)="sortBy('name')">
+              <button [ngClass]="{'fa-angle-down': orderName, 'fa-angle-up': orderName==false}" class="fa fa-angle-down trans" (click)="sortByName()">
               </button>
-              <button *ngIf="!clicked" class="fa fa-angle-up trans" (click)="sortBy('name')"></button>
             </th>
             <th>Характер</th>
-            <th>Возраст</th>
-            <th>Общий остаток счетов</th>
-            <th>Максимальный остаток</th>
-            <th>Минимальный остаток</th>
+            <th>Возраст <button [ngClass]="{'fa-angle-down': orderAge, 'fa-angle-up': orderAge==false}" class="fa fa-angle-down trans" (click)="sortByAge()">
+            </button>
+            </th>
+            <th>Общий остаток счетов<button [ngClass]="{'fa-angle-down': orderCommonMoney, 'fa-angle-up': orderCommonMoney==false}" class="fa fa-angle-down trans" (click)="sortByCommonMoney()">
+            </button></th>
+            <th>Максимальный остаток<button [ngClass]="{'fa-angle-down': orderMaxMoney, 'fa-angle-up': orderMaxMoney==false}" class="fa fa-angle-down trans" (click)="sortByMaxMoney()">
+            </button></th>
+            <th>Минимальный остаток<button [ngClass]="{'fa-angle-down': orderMinMoney, 'fa-angle-up': orderMinMoney==false}" class="fa fa-angle-down trans" (click)="sortByMinMoney()">
+            </button></th>
             <th><button class="btn btn-xs" (click)="editClient(0)" data-title="Edit"
                         data-toggle="modal" data-target="#edit"><span class="glyphicon glyphicon-plus green"></span>
             </button></th>
@@ -63,17 +70,11 @@
         </table>
 
         <div class="clearfix"></div>
-        <!--<ul class="pagination pull-right">-->
-          <!--<li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>-->
-          <!--<li class="active"><a href="#">1</a></li>-->
-          <!--<li><a href="#">2</a></li>-->
-          <!--<li><a href="#">3</a></li>-->
-          <!--<li><a href="#">4</a></li>-->
-          <!--<li><a href="#">5</a></li>-->
-          <!--<li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>-->
-        <!--</ul>-->
-        <ul *ngFor="let i of page">
-          <li (click)="change(i)">{{i}}</li>
+        <ul class="pagination pull-right">
+          <li [ngClass]="{'disabled': currentPage==0}"><a href="#" (click)="paging(currentPage-1)"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+          <li></li>
+          <li *ngFor="let i of page" [ngClass]="{'active' : i==currentPage}"><a href="#" (click)="paging(i)">{{i+1}}</a></li>
+          <li [ngClass]="{'disabled': currentPage==page[page.length-1]}"><a href="#" (click)="paging(currentPage+1)"><span  class="glyphicon glyphicon-chevron-right"></span></a></li>
         </ul>
 
       </div>

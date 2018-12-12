@@ -15,7 +15,7 @@ import kz.greetgo.sandbox.controller.util.Controller;
 import java.util.List;
 
 @Bean
-@ControllerPrefix("/person")
+@ControllerPrefix("/client")
 public class ClientController implements Controller {
 
     public BeanGetter<ClientRegister> clientRegister;

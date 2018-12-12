@@ -69,7 +69,7 @@ public class SqlProvider {
 
     public static String numPage(ClientFilter clientFilter) {
         SQL sql = new SQL();
-        sql.select("count(*)/5");
+        sql.select("count(*)");
         sql.from("client c");
         sql.where("c.actual = true");
         if (Objects.nonNull(clientFilter.name)) {

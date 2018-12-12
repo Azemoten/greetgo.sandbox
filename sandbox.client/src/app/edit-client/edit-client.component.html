@@ -3,87 +3,94 @@
 
   <form [formGroup]="editForm">
     <div class="" style="padding-top:10px;">
-      <div formGroupName="client" class="form-group">
+      <div class="col-sm-12">
+        <div formGroupName="client" class="form-group">
 
-        <div class="col-sm-4">
-          <label> Имя: </label>
-          <input type="text" class="form-control" formControlName="name">
-        </div>
-        <div class="col-sm-4">
-          <label>Фамилия</label>
-          <input type="text" class="form-control" formControlName="surname">
-        </div>
-        <div class="col-sm-4">
-          <label>Отчество:</label>
-          <input type="text" class="form-control" formControlName="patronymic">
-        </div>
-        <div class="col-sm-4">
-          <label> Дата рожения</label>
-          <input type="date" class="form-control" formControlName="birthDate">
-        </div>
-        <div class="col-sm-4">
-          <label> Характер :</label>
-          <select class="form-control" formControlName="charm">
-            <option value="1">Характер 1</option>
-            <option value="2">Характер 2</option>
-          </select>
-        </div>
-        <div class="col-sm-4">
-          <label>Пол :</label>
-          <select class="form-control" formControlName="gender">
-            <option value="MALE">Мужской</option>
-            <option value="FEMALE">Женский</option>
-          </select>
+          <div class="col-sm-4">
+            <label> Имя: </label>
+            <input type="text" class="form-control" formControlName="name">
+          </div>
+          <div class="col-sm-4">
+            <label>Фамилия</label>
+            <input type="text" class="form-control" formControlName="surname">
+          </div>
+          <div class="col-sm-4">
+            <label>Отчество:</label>
+            <input type="text" class="form-control" formControlName="patronymic">
+          </div>
+          <div class="col-sm-4">
+            <label> Дата рожения</label>
+            <input type="date" class="form-control" formControlName="birthDate">
+          </div>
+          <div class="col-sm-4">
+            <label> Характер :</label>
+            <select class="form-control" formControlName="charm">
+              <option *ngFor="let charm of charms" value="{{charm.id}}">{{charm.name}}</option>
+            </select>
+          </div>
+          <div class="col-sm-4">
+            <label>Пол :</label>
+            <select class="form-control" formControlName="gender">
+              <option value="MALE">Мужской</option>
+              <option value="FEMALE">Женский</option>
+            </select>
+          </div>
         </div>
       </div>
-      <h3>Адрес проживания</h3>
-      <div formArrayName="addrs">
-        <div class="form-group" [formGroupName]="0">
-          <label> Адресс регистрации</label><br>
-          <input type="hidden" formControlName="type" value="REG">
-          <label>Улица: </label>
-          <input type="text" formControlName="street">
-          <label>Дом: </label>
-          <input type="text" formControlName="house">
+      <br>
+      <div class="col-sm-12">
+        <div formArrayName="addrs">
+          <h3>Адрес проживания</h3>
+          <div class="form-group col-sm-6" [formGroupName]="0">
+            <label> Адресс регистрации</label><br>
+            <input class="form-control" type="hidden" formControlName="type" value="REG">
+            <label>Улица: </label>
+            <input class="form-control" type="text" formControlName="street">
+            <label>Дом: </label>
+            <input class="form-control" type="text" formControlName="house">
 
-          <label>Квартира:</label>
-          <input type="text" formControlName="flat">
-        </div>
+            <label>Квартира:</label>
+            <input class="form-control" type="text" formControlName="flat">
+          </div>
 
-        <div class="form-group" [formGroupName]="1">
-          <input type="hidden" value="FACT" formControlName="type">
-          <label>Адресс фактического проживания</label><br>
-          <label>Улица: </label>
-          <input type="text" formControlName="street">
-          <label>Дом: </label>
-          <input type="text" formControlName="house">
+          <div class="form-group col-sm-6" [formGroupName]="1">
+            <input class="form-control" type="hidden" value="FACT" formControlName="type">
+            <label>Адресс фактического проживания</label><br>
+            <label>Улица: </label>
+            <input class="form-control" type="text" formControlName="street">
+            <label>Дом: </label>
+            <input class="form-control" type="text" formControlName="house">
 
-          <label>Квартира:</label>
-          <input type="text" formControlName="flat">
-        </div>
-      </div>
-      <div formArrayName="phones">
-        <div [formGroupName]="0">
-          <label>Рабочий Телефон</label>
-          <input type="text" formControlName="number">
-        </div>
-
-        <div [formGroupName]="1">
-          <label>Мобильный Телефон</label>
-          <input type="text" formControlName="number">
-        </div>
-
-        <div [formGroupName]="2">
-          <label>Домашний Телефон</label>
-          <input type="text" formControlName="number">
+            <label>Квартира:</label>
+            <input class="form-control" type="text" formControlName="flat">
+          </div>
         </div>
       </div>
+      <div class="col-sm-12">
+        <div formArrayName="phones">
+          <div class="col-sm-4" [formGroupName]="0">
+            <label>Рабочий Телефон</label>
+            <input class="form-control" type="text" formControlName="number">
+          </div>
 
-      <div class="absolute">
-        <button class="btn btn-success bs" [disabled]="" (click)="onSubmit()">Сохранить</button>
-        <input value="Отменить" type="button" class="btn btn-default" (click)="close()">
+          <div class="col-sm-4" [formGroupName]="1">
+            <label>Мобильный Телефон</label>
+            <input class="form-control" type="text" formControlName="number">
+          </div>
+
+          <div class="col-sm-4" [formGroupName]="2">
+            <label>Домашний Телефон</label>
+            <input class="form-control" type="text" formControlName="number">
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-botoom:-70px; margin-right: 50px;">
+        <div class="span4 pull-right">
+          <button class="btn btn-success bs" [disabled]="" (click)="onSubmit()">Сохранить</button>
+          <input value="Отменить" type="button" class="btn btn-default" (click)="close()">
+        </div>
       </div>
     </div>
   </form>
-{{editForm.value | json}}
 </div>

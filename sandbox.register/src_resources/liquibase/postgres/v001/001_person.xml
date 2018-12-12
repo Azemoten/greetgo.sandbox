@@ -120,7 +120,8 @@
       create table client_phone(
       client integer references client(id),
       number varchar(100),
-      type phone
+      type phone,
+      PRIMARY KEY(client, type)
       );
     </sql>
   </changeSet>

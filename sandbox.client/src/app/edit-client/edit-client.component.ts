@@ -1,13 +1,11 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {ClientService} from "../service/client.service";
 import {ClientListComponent} from "../client-list/client-list.component";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
-import {ClientDetails} from "../../model/client-details";
 import {Client} from "../../model/client";
-import {Address} from "cluster";
-import {ClientAddr} from "../../model/client-addr";
+import {Charm} from "../../model/charm";
 
 @Component({
   selector: 'app-edit-client',
@@ -25,35 +23,15 @@ export class EditClientComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
+  charms: Charm[];
   editForm: FormGroup;
-  clientDetails: ClientDetails;
   client: Client = new Client();
-  addr1 : ClientAddr = new ClientAddr();
-  addr2 : ClientAddr = new ClientAddr();
   clientId: number;
 
 
   ngOnInit() {
     this.clientId = this.data;
-
-    let ad = [];
-    ad.push(
-        this.formBuilder.group({
-          type: [this.client.name, Validators.required],
-          street: [this.client.name],
-          house: [this.client.name],
-          flat: [this.client.name]
-        })
-    );
-    ad.push(
-      this.formBuilder.group({
-        type: [this.client.name, Validators.required],
-        street: [this.client.name],
-        house: [this.client.name],
-        flat: [this.client.name]
-      })
-    );
-
+    this.loadCharms();
     this.editForm = this.formBuilder.group({
       client: this.formBuilder.group({
         id: [this.client.id],
@@ -64,38 +42,46 @@ export class EditClientComponent implements OnInit {
         gender: [this.client.gender],
         birthDate: [this.client.birthDate],
       }),
-
-      addrs: this.formBuilder.array(ad),
-      phones: this.formBuilder.array([this.createPhone("FACT"),this.createPhone("REG"),this.createPhone("REG")])
+      addrs: this.formBuilder.array([this.createAddr('FACT'), this.createAddr('REG')]),
+      phones: this.formBuilder.array([this.createPhone('HOME'), this.createPhone('WORK'), this.createPhone('MOBILE')])
     });
 
 
     if (this.clientId) {
       this.clientService.getClientById(this.clientId).toPromise().then(
-         data => {
-           this.client = data.body.client
-           // this.editForm.get("client").setValue(data.body.client);
-           // this.editForm.get("addrs").controls().get("0").setValue()
+        data => {
+          this.editForm.get("client").setValue(data.body.client);
+          for (var i = 0; i < 2; i++) {
+            if(data.body.addrs[i]!=null) {
+              this.editForm.get(['addrs', i, 'street']).setValue(data.body.addrs[i].street)
+              this.editForm.get(['addrs', i, 'house']).setValue(data.body.addrs[i].house)
+              this.editForm.get(['addrs', i, 'flat']).setValue(data.body.addrs[i].flat)
+            }
+            }
+          for (var i = 0; i < 3; i++) {
+            if(data.body.phones[i]!=null) {
+              this.editForm.get(['phones', i, 'type']).setValue(data.body.phones[i].type)
+              this.editForm.get(['phones', i, 'number']).setValue(data.body.phones[i].number)
+              console.log(this.editForm)
+            }
+          }
         });
     }
-
-
-
   }
 
   onSubmit() {
-    if(this.clientId){
-    this.clientService.update(this.editForm.value).toPromise().then(res => {
-      console.log("response", res)
-    }).catch(err => {
-      console.error(err);
-    });
+    if (this.clientId) {
+      this.clientService.update(this.editForm.value).toPromise().then(res => {
+        console.log("response", res)
+      }).catch(err => {
+        console.error(err);
+      });
     } else {
       this.clientService.create(this.editForm.value).toPromise().then(
-        res=>{
+        res => {
           console.log("response", res)
         }
-      ). catch( err =>{
+      ).catch(err => {
         console.error(err);
       })
     }
@@ -109,10 +95,19 @@ export class EditClientComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  loadCharms() {
+    this.clientService.listCharms().toPromise().then(
+      data => {
+        this.charms = data.body;
+        console.log(data.body);
+      }
+    )
+  }
+
   createPhone(type: string) {
     return this.formBuilder.group({
-      number: ['asd', Validators.required],
-      type: [type, Validators.required]
+      type: [type, Validators.required],
+      number: ['', Validators.required]
     });
   }
 
