@@ -83,14 +83,15 @@
             <input class="form-control" type="text" formControlName="number">
           </div>
         </div>
-      </div>
-
-      <div class="row" style="margin-botoom:-70px; margin-right: 50px;">
-        <div class="span4 pull-right">
-          <button class="btn btn-success bs" [disabled]="" (click)="onSubmit()">Сохранить</button>
-          <input value="Отменить" type="button" class="btn btn-default" (click)="close()">
+        <div class="row" style="margin-top:100px; margin-bottom: 100px; margin-right: 50px;">
+          <div class="span4 pull-right">
+            <button class="btn btn-success bs" (click)="onSubmit()">Сохранить</button>
+            <input value="Отменить" type="button" class="btn btn-default" (click)="close()">
+          </div>
         </div>
       </div>
+
+
     </div>
   </form>
 </div>

@@ -70,17 +70,17 @@ export class EditClientComponent implements OnInit {
   }
 
   onSubmit() {
+    if(this.editForm.invalid){
+      return;
+    }
     if (this.clientId) {
-      this.clientService.update(this.editForm.value).toPromise().then(res => {
-        console.log("response", res)
-      }).catch(err => {
+      this.clientService.update(this.editForm.value).toPromise().then(
+        () => {}).catch(err => {
         console.error(err);
       });
     } else {
       this.clientService.create(this.editForm.value).toPromise().then(
-        res => {
-          console.log("response", res)
-        }
+        () => {}
       ).catch(err => {
         console.error(err);
       })
@@ -119,5 +119,7 @@ export class EditClientComponent implements OnInit {
       flat: ['']
     });
   }
-
+  get errors(){
+    return this.editForm.controls;
+  }
 }

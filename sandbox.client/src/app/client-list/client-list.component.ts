@@ -44,6 +44,25 @@ export class ClientListComponent implements OnInit {
       });
   }
 
+  editClient(id: number): void {
+    const dialogRef = this.dialog.open(EditClientComponent, {
+      data: id
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.paging(this.currentPage);
+    });
+  }
+
+
+  deleteClient(id: number): void {
+    const dialogDel = this.dialogDelete.open(ConfirmationComponent, {
+      data: id
+    });
+    dialogDel.afterClosed().subscribe(() => {
+      this.paging(this.currentPage);
+    })
+  }
+
   sortByName() {
     this.clientFilter.sort = "name";
     if (this.orderName) {
@@ -104,15 +123,6 @@ export class ClientListComponent implements OnInit {
     this.paging(this.currentPage)
   }
 
-  deleteClient(id: number): void {
-    const dialogDel = this.dialogDelete.open(ConfirmationComponent, {
-      data: id
-    });
-    dialogDel.afterClosed().subscribe(() => {
-      this.loadClients();
-    })
-
-  }
 
 
   //TODO перименить по человечкски
@@ -138,14 +148,6 @@ export class ClientListComponent implements OnInit {
 
   //TODO Убраьть локалСторедж!
   //TODO done
-  editClient(id: number): void {
-    const dialogRef = this.dialog.open(EditClientComponent, {
-      data: id
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      this.loadClients();
-    });
-  }
 
   createList(page: number) {
     let list = [];
@@ -165,7 +167,11 @@ export class ClientListComponent implements OnInit {
 
 
   paging(page: number) {
+    this.getNumberOfPage();
     this.currentPage = page;
+    if(this.page[this.page.length-1]<this.currentPage){
+      this.currentPage = this.page[this.page.length-1]
+    }
     this.clientFilter.page = this.currentPage;
     this.loadClients();
   }
