@@ -55,7 +55,7 @@
 
             <td>
               <button class="btn btn-xs bs" (click)="editClient(client.id)" data-title="Edit"
-                      data-toggle="modal" data-target="#edit"><span class="	glyphicon glyphicon-option-vertical"></span>
+                      data-toggle="modal" data-target="#edit"><span class="glyphicon glyphicon-option-vertical"></span>
               </button>
 
               <button class="btn btn-xs bs" (click)="deleteClient(client.id)" data-title="Delete"
@@ -71,10 +71,10 @@
 
         <div class="clearfix"></div>
         <ul class="pagination pull-right">
-          <li [ngClass]="{'disabled': currentPage==0}"><a href="#" (click)="paging(currentPage-1)"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+          <li [ngClass]="{'disabled': currentPage==0, 'not-active': currentPage==0}"><a href="#" (click)="paging(currentPage-1)"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
           <li></li>
           <li *ngFor="let i of page" [ngClass]="{'active' : i==currentPage}"><a href="#" (click)="paging(i)">{{i+1}}</a></li>
-          <li [ngClass]="{'disabled': currentPage==page[page.length-1]}"><a href="#" (click)="paging(currentPage+1)"><span  class="glyphicon glyphicon-chevron-right"></span></a></li>
+          <li [ngClass]="{'disabled': currentPage==lastPage, 'not-active': currentPage==lastPage}"><a href="#" (click)="paging(currentPage+1)"><span  class="glyphicon glyphicon-chevron-right"></span></a></li>
         </ul>
 
       </div>

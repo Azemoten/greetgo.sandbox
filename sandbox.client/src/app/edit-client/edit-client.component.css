@@ -1,9 +1,19 @@
-div.absolute {
-  position: absolute;
-  right: 15px;
-  margin-top: 20px;
+
+h1{
+  margin: 0 0 0 0;
 }
 
 .bs {
   margin-right: 10px;
+}
+
+.c{
+  color:red;
+  border: 10px;
+}
+.not-active {
+  pointer-events: none;
+  cursor: default;
+  text-decoration: none;
+  color: red;
 }

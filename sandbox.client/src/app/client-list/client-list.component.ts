@@ -18,6 +18,7 @@ export class ClientListComponent implements OnInit {
   clientFilter: ClientFilter = new ClientFilter();
   page: number[];
   currentPage: number = 0;
+  lastPage: number;
   orderName: boolean = false;
   orderAge: boolean = false;
   orderMinMoney: boolean = false;
@@ -124,7 +125,6 @@ export class ClientListComponent implements OnInit {
   }
 
 
-
   //TODO перименить по человечкски
   //TODO done
   filterByName(like: any) {
@@ -154,6 +154,7 @@ export class ClientListComponent implements OnInit {
     for (var i = 0; i < page + 1; i++) {
       list.push(i)
     }
+    this.lastPage = list[list.length - 1];
     return list;
   }
 
@@ -169,8 +170,8 @@ export class ClientListComponent implements OnInit {
   paging(page: number) {
     this.getNumberOfPage();
     this.currentPage = page;
-    if(this.page[this.page.length-1]<this.currentPage){
-      this.currentPage = this.page[this.page.length-1]
+    if (this.page[this.page.length - 1] < this.currentPage) {
+      this.currentPage = this.page[this.page.length - 1]
     }
     this.clientFilter.page = this.currentPage;
     this.loadClients();

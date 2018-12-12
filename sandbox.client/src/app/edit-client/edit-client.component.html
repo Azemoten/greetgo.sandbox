@@ -1,4 +1,4 @@
-<div class="col-md-12" style="height:600px;">
+<div class="col-md-12" style="height:720px;">
   <h1>Сохранение клиента</h1>
 
   <form [formGroup]="editForm">
@@ -7,29 +7,30 @@
         <div formGroupName="client" class="form-group">
 
           <div class="col-sm-4">
-            <label> Имя: </label>
-            <input type="text" class="form-control" formControlName="name">
+            <label>Имя: <a class="not-active" *ngIf="submitted &&  name.invalid">*Обязательное поле</a>
+            </label>
+            <input type="text" class="form-control" formControlName="name"><br>
           </div>
           <div class="col-sm-4">
-            <label>Фамилия</label>
-            <input type="text" class="form-control" formControlName="surname">
+            <label>Фамилия: <a class="not-active" *ngIf="submitted &&  surname.invalid">*Обязательное поле</a></label>
+            <input type="text" class="form-control" formControlName="surname"><br>
           </div>
           <div class="col-sm-4">
-            <label>Отчество:</label>
-            <input type="text" class="form-control" formControlName="patronymic">
+            <label>Отчество: </label>
+            <input type="text" class="form-control" formControlName="patronymic"><br>
           </div>
           <div class="col-sm-4">
-            <label> Дата рожения</label>
-            <input type="date" class="form-control" formControlName="birthDate">
+            <label> Дата рожения: <a class="not-active" *ngIf="submitted &&  birthDate.invalid">*Укажите дату рождения</a></label>
+            <input type="date" class="form-control" formControlName="birthDate"><br>
           </div>
           <div class="col-sm-4">
-            <label> Характер :</label>
+            <label> Характер: <a class="not-active" *ngIf="submitted &&  charm.invalid">*Выберите характер</a></label>
             <select class="form-control" formControlName="charm">
               <option *ngFor="let charm of charms" value="{{charm.id}}">{{charm.name}}</option>
-            </select>
+            </select><br>
           </div>
           <div class="col-sm-4">
-            <label>Пол :</label>
+            <label>Пол: <a class="not-active" *ngIf="submitted && gender.invalid">*Укажите пол</a></label>
             <select class="form-control" formControlName="gender">
               <option value="MALE">Мужской</option>
               <option value="FEMALE">Женский</option>
@@ -40,14 +41,18 @@
       <br>
       <div class="col-sm-12">
         <div formArrayName="addrs">
-          <h3>Адрес проживания</h3>
+          <div class="col-sm-12">
+            <div class="col-sm-4"><h4 class="pull-left">Адресс
+              <a class="not-active" *ngIf="submitted &&  addrs.invalid">*Укажите адресс регистрации</a>
+            </h4></div>
+          </div>
           <div class="form-group col-sm-6" [formGroupName]="0">
             <label> Адресс регистрации</label><br>
             <input class="form-control" type="hidden" formControlName="type" value="REG">
             <label>Улица: </label>
-            <input class="form-control" type="text" formControlName="street">
+            <input class="form-control" type="text" formControlName="street"><br>
             <label>Дом: </label>
-            <input class="form-control" type="text" formControlName="house">
+            <input class="form-control" type="text" formControlName="house"><br>
 
             <label>Квартира:</label>
             <input class="form-control" type="text" formControlName="flat">
@@ -57,9 +62,9 @@
             <input class="form-control" type="hidden" value="FACT" formControlName="type">
             <label>Адресс фактического проживания</label><br>
             <label>Улица: </label>
-            <input class="form-control" type="text" formControlName="street">
+            <input class="form-control" type="text" formControlName="street"><br>
             <label>Дом: </label>
-            <input class="form-control" type="text" formControlName="house">
+            <input class="form-control" type="text" formControlName="house"><br>
 
             <label>Квартира:</label>
             <input class="form-control" type="text" formControlName="flat">
@@ -67,6 +72,11 @@
         </div>
       </div>
       <div class="col-sm-12">
+
+        <div class="col-sm-12">
+          <div class="col-sm-4"><h4 class="pull-left">Телефоны
+            <a class="not-active" *ngIf="submitted && !isAtLeastOnePhone()">*Укажите хотя бы один номер</a></h4></div>
+        </div>
         <div formArrayName="phones">
           <div class="col-sm-4" [formGroupName]="0">
             <label>Рабочий Телефон</label>
@@ -83,7 +93,7 @@
             <input class="form-control" type="text" formControlName="number">
           </div>
         </div>
-        <div class="row" style="margin-top:100px; margin-bottom: 100px; margin-right: 50px;">
+        <div class="row" style="margin-top:115px; margin-bottom: 20px; margin-right: 20px;">
           <div class="span4 pull-right">
             <button class="btn btn-success bs" (click)="onSubmit()">Сохранить</button>
             <input value="Отменить" type="button" class="btn btn-default" (click)="close()">

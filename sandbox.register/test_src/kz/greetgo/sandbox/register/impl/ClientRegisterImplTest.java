@@ -180,6 +180,10 @@ public class ClientRegisterImplTest extends ParentTestNg {
         assertThat(list).isNotNull();
         assertThat(list).hasSize(1);
         assertThat(list.get(0).id).isEqualTo(client.id);
+        //
+        //
+        //
+        clientRegister.get().remove(client.id);
 
     }
 
@@ -202,6 +206,11 @@ public class ClientRegisterImplTest extends ParentTestNg {
         assertThat(list).isNotNull();
         assertThat(list).hasSize(1);
         assertThat(list.get(0).id).isEqualTo(client.id);
+        //
+        //
+        //
+        clientRegister.get().remove(client.id);
+
     }
 
     @Test
@@ -222,6 +231,10 @@ public class ClientRegisterImplTest extends ParentTestNg {
         assertThat(list).isNotNull();
         assertThat(list).hasSize(1);
         assertThat(list.get(0).id).isEqualTo(client.id);
+        //
+        //
+        //
+        clientRegister.get().remove(client.id);
     }
 
     @Test
