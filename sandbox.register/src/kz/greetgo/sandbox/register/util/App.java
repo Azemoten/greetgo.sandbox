@@ -3,6 +3,7 @@ package kz.greetgo.sandbox.register.util;
 import java.io.File;
 
 public class App {
+
   public static String appDir() {
     return System.getProperty("user.home") + "/sandbox.d";
   }

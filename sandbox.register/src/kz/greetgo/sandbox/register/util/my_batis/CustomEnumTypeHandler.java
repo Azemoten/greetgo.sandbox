@@ -20,7 +20,8 @@ public class CustomEnumTypeHandler<E extends Enum<E>> extends BaseTypeHandler<E>
   }
 
   @Override
-  public void setNonNullParameter(PreparedStatement ps, int i, E parameter, JdbcType jdbcType) throws SQLException {
+  public void setNonNullParameter(PreparedStatement ps, int i, E parameter, JdbcType jdbcType)
+      throws SQLException {
     if (jdbcType == null) {
       ps.setString(i, parameter.name());
     } else {
@@ -34,7 +35,9 @@ public class CustomEnumTypeHandler<E extends Enum<E>> extends BaseTypeHandler<E>
   }
 
   private static <E extends Enum<E>> E valueOf(Class<E> type, String str) {
-    if (str == null) return null;
+    if (str == null) {
+      return null;
+    }
     try {
       return Enum.valueOf(type, str);
     } catch (IllegalArgumentException e) {

@@ -13,13 +13,15 @@ import java.util.Locale;
 public class DbLoggingProxyFactory {
 
   public interface SqlViewer {
+
     void gotConnection(String connectionId, long callNanos);
 
     void connectionSetAutoCommit(String connectionId, boolean autoCommit);
 
     void connectionClose(String connectionId);
 
-    void connectionPrepareStatement(String connectionId, long callNanos, String sql, Object... anotherArgs);
+    void connectionPrepareStatement(String connectionId, long callNanos, String sql,
+                                    Object... anotherArgs);
 
     void statementClose(String connectionId);
 
@@ -40,6 +42,7 @@ public class DbLoggingProxyFactory {
   }
 
   public abstract static class AbstractSqlViewer implements SqlViewer {
+
     protected abstract void logTrace(String message);
 
     @Override
@@ -58,7 +61,8 @@ public class DbLoggingProxyFactory {
     }
 
     @Override
-    public void connectionPrepareStatement(String connectionId, long callNanos, String sql, Object... anotherArgs) {
+    public void connectionPrepareStatement(String connectionId, long callNanos, String sql,
+                                           Object... anotherArgs) {
       logTrace(connectionId + callNanos(callNanos) + " prepareStatement " + sql);
     }
 
@@ -68,7 +72,8 @@ public class DbLoggingProxyFactory {
     }
 
     @Override
-    public void statementSetParameter(String connectionId, String methodName, int index, Object arg) {
+    public void statementSetParameter(String connectionId, String methodName, int index,
+                                      Object arg) {
       logTrace(connectionId + " statement " + methodName + " " + index + " " + arg);
     }
 
@@ -79,14 +84,15 @@ public class DbLoggingProxyFactory {
   }
 
   private interface HasExtractOriginalConnection {
+
     Connection extractOriginalConnection_g4h5h34b4h3g2j();
   }
 
   public static DataSource create(DataSource pool, SqlViewer sqlViewer) {
     return (DataSource) Proxy.newProxyInstance(
-      pool.getClass().getClassLoader(),
-      new Class[]{DataSource.class},
-      new PoolInvocationHandler(pool, sqlViewer));
+        pool.getClass().getClassLoader(),
+        new Class[]{DataSource.class},
+        new PoolInvocationHandler(pool, sqlViewer));
   }
 
   private static class PoolInvocationHandler implements InvocationHandler {
@@ -97,7 +103,9 @@ public class DbLoggingProxyFactory {
     public PoolInvocationHandler(DataSource original, SqlViewer sqlViewer) {
       this.original = original;
       this.sqlViewer = sqlViewer;
-      if (sqlViewer == null) throw new NullPointerException("sqlViewer == null");
+      if (sqlViewer == null) {
+        throw new NullPointerException("sqlViewer == null");
+      }
     }
 
     @Override
@@ -118,11 +126,10 @@ public class DbLoggingProxyFactory {
         Connection connection = (Connection) method.invoke(original, args);
         long time2 = System.nanoTime();
         return Proxy.newProxyInstance(
-          original.getClass().getClassLoader(),
-          new Class[]{Connection.class, HasExtractOriginalConnection.class},
-          new ConnectionHandler(connection, time2 - time1));
+            original.getClass().getClassLoader(),
+            new Class[]{Connection.class, HasExtractOriginalConnection.class},
+            new ConnectionHandler(connection, time2 - time1));
       }
-
 
       return method.invoke(original, args);
     }
@@ -156,7 +163,6 @@ public class DbLoggingProxyFactory {
             return "LOGGING PROXY FOR [" + originalConnection.toString() + "]";
           }
 
-
           if (methodName.equals("extractOriginalConnection_g4h5h34b4h3g2j")) {
             return originalConnection;
           }
@@ -166,7 +172,8 @@ public class DbLoggingProxyFactory {
           if (methodName.equals("equals")) {
             Object arg0 = args[0];
             if (arg0 instanceof HasExtractOriginalConnection) {
-              Connection that = ((HasExtractOriginalConnection) arg0).extractOriginalConnection_g4h5h34b4h3g2j();
+              Connection that = ((HasExtractOriginalConnection) arg0)
+                  .extractOriginalConnection_g4h5h34b4h3g2j();
               return originalConnection.equals(that);
             }
             return false;
@@ -183,8 +190,8 @@ public class DbLoggingProxyFactory {
             long time2 = System.nanoTime();
             sqlViewer.connectionPrepareStatement(connectionId, time2 - time1, (String) args[0]);
             return Proxy.newProxyInstance(original.getClass().getClassLoader(),
-              new Class[]{PreparedStatement.class},
-              new StatementHandler(ret));
+                                          new Class[]{PreparedStatement.class},
+                                          new StatementHandler(ret));
           }
 
 
@@ -194,10 +201,12 @@ public class DbLoggingProxyFactory {
             long time1 = System.nanoTime();
             Object ret = method.invoke(originalConnection, args);
             long time2 = System.nanoTime();
-            sqlViewer.connectionPrepareStatement(connectionId, time2 - time1, (String) args[0], args[1], args[2]);
+            sqlViewer
+                .connectionPrepareStatement(connectionId, time2 - time1, (String) args[0], args[1],
+                                            args[2]);
             return Proxy.newProxyInstance(original.getClass().getClassLoader(),
-              new Class[]{PreparedStatement.class},
-              new StatementHandler(ret));
+                                          new Class[]{PreparedStatement.class},
+                                          new StatementHandler(ret));
           }
 
         }
@@ -227,9 +236,9 @@ public class DbLoggingProxyFactory {
             }
 
             if (methodName.startsWith("execute")
-              || methodName.equals("getUpdateCount")
-              || methodName.equals("getResultSet")
-              ) {
+                || methodName.equals("getUpdateCount")
+                || methodName.equals("getResultSet")
+                ) {
               long time1 = System.nanoTime();
               Object ret = method.invoke(originalStatement, args);
               long time2 = System.nanoTime();
@@ -263,7 +272,9 @@ public class DbLoggingProxyFactory {
   @SuppressWarnings("StringConcatenationInLoop")
   public static String extractConnectionId(Connection connection) {
     String str = "" + System.identityHashCode(connection);
-    while (str.length() < 10) str = "0" + str;
+    while (str.length() < 10) {
+      str = "0" + str;
+    }
     return "CON-" + str;
   }
 }

@@ -72,7 +72,6 @@
         <div class="clearfix"></div>
         <ul class="pagination pull-right">
           <li [ngClass]="{'disabled': currentPage==0, 'not-active': currentPage==0}"><a href="#" (click)="paging(currentPage-1)"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-          <li></li>
           <li *ngFor="let i of page" [ngClass]="{'active' : i==currentPage}"><a href="#" (click)="paging(i)">{{i+1}}</a></li>
           <li [ngClass]="{'disabled': currentPage==lastPage, 'not-active': currentPage==lastPage}"><a href="#" (click)="paging(currentPage+1)"><span  class="glyphicon glyphicon-chevron-right"></span></a></li>
         </ul>

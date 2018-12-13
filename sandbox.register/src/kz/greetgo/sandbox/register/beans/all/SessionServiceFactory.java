@@ -21,25 +21,25 @@ public class SessionServiceFactory {
   public SessionService createSessionService() {
 
     Crypto crypto = newCryptoBuilder()
-      .inDb(DbType.Postgres, jdbcSandbox.get())
-      .setTableName("all_params")
-      .setValueFieldName("value_blob")
-      .setIdFieldName("name")
-      .setPrivateKeyIdValue("session.primary.key")
-      .setPublicKeyIdValue("session.public.key")
-      .build();
+        .inDb(DbType.Postgres, jdbcSandbox.get())
+        .setTableName("all_params")
+        .setValueFieldName("value_blob")
+        .setIdFieldName("name")
+        .setPrivateKeyIdValue("session.primary.key")
+        .setPublicKeyIdValue("session.public.key")
+        .build();
 
     SessionStorage sessionStorage = newSessionStorageBuilder()
-      .setJdbc(DbType.Postgres, jdbcSandbox.get())
-      .setTableName("session_storage")
-      .build();
+        .setJdbc(DbType.Postgres, jdbcSandbox.get())
+        .setTableName("session_storage")
+        .build();
 
     return newSessionServiceBuilder()
-      .setSaltGeneratorOnCrypto(crypto, 17)
-      .setSessionIdLength(17)
-      .setTokenLength(17)
-      .setStorage(sessionStorage)
-      .build();
+        .setSaltGeneratorOnCrypto(crypto, 17)
+        .setSessionIdLength(17)
+        .setTokenLength(17)
+        .setStorage(sessionStorage)
+        .build();
   }
 
 }

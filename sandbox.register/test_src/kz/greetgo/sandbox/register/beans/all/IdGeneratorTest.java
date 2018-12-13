@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 public class IdGeneratorTest {
+
   @Test
   public void newId() {
     IdGenerator idGenerator = new IdGenerator();

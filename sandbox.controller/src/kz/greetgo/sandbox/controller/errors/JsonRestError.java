@@ -4,6 +4,7 @@ package kz.greetgo.sandbox.controller.errors;
  * Ошибка запроса по REST которая ещё отправляет объект через JSON.
  */
 public class JsonRestError extends RestError {
+
   public final Object sendingAsJsonObject;
 
   public JsonRestError(Object sendingAsJsonObject) {

@@ -18,48 +18,48 @@ import java.util.List;
 @ControllerPrefix("/client")
 public class ClientController implements Controller {
 
-    public BeanGetter<ClientRegister> clientRegister;
+  public BeanGetter<ClientRegister> clientRegister;
 
 
-    @PublicAccess
-    @ToJson
-    @OnGet("/list")
-    public List<ClientRecord> list(@ParamsTo ClientFilter clientFilter) {
-        return clientRegister.get().list(clientFilter);
-    }
+  @PublicAccess
+  @ToJson
+  @OnGet("/list")
+  public List<ClientRecord> list(@ParamsTo ClientFilter clientFilter) {
+    return clientRegister.get().list(clientFilter);
+  }
 
-    @PublicAccess
-    @ToJson
-    @OnGet("/list/Charms")
-    public List<Charm> listCharms() {
-        return clientRegister.get().listCharms();
-    }
+  @PublicAccess
+  @ToJson
+  @OnGet("/list/Charms")
+  public List<Charm> listCharms() {
+    return clientRegister.get().listCharms();
+  }
 
-    @PublicAccess
-    @ToJson
-    @OnDelete("/remove/{clientId}")
-    public void remove(@ParPath("clientId") Integer id) {
-        clientRegister.get().remove(id);
-    }
+  @PublicAccess
+  @ToJson
+  @OnDelete("/remove/{clientId}")
+  public void remove(@ParPath("clientId") Integer id) {
+    clientRegister.get().remove(id);
+  }
 
-    @PublicAccess
-    @ToJson
-    @OnPost("/create")
-    public void create(@Par("clientDetail") @Json ClientDetail clientDetail) {
-        clientRegister.get().create(clientDetail);
-    }
+  @PublicAccess
+  @ToJson
+  @OnPost("/create")
+  public void create(@Par("clientDetail") @Json ClientDetail clientDetail) {
+    clientRegister.get().create(clientDetail);
+  }
 
-    @PublicAccess
-    @OnPost("/update")
-    public void update(@Json @Par("clientDetail") ClientDetail clientDetail) {
-        clientRegister.get().update(clientDetail);
-    }
+  @PublicAccess
+  @OnPost("/update")
+  public void update(@Json @Par("clientDetail") ClientDetail clientDetail) {
+    clientRegister.get().update(clientDetail);
+  }
 
 
-    @ToJson
-    @PublicAccess
-    @OnGet("/clientDetails/{clientId}")
-    public ClientDetail clientDetails(@ParPath("clientId") int clientId) {
-        return clientRegister.get().clientDetails(clientId);
-    }
+  @ToJson
+  @PublicAccess
+  @OnGet("/clientDetails/{clientId}")
+  public ClientDetail clientDetails(@ParPath("clientId") int clientId) {
+    return clientRegister.get().clientDetails(clientId);
+  }
 }

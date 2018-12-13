@@ -29,13 +29,16 @@ public class LocalTransactionFactory implements TransactionFactory {
   }
 
   @Override
-  public Transaction newTransaction(DataSource dataSource, TransactionIsolationLevel level, boolean autoCommit) {
+  public Transaction newTransaction(DataSource dataSource, TransactionIsolationLevel level,
+                                    boolean autoCommit) {
     return new Transaction() {
       Connection connection = null;
 
       @Override
       public Connection getConnection() throws SQLException {
-        if (connection == null) connection = transactionManager.getConnection(dataSource);
+        if (connection == null) {
+          connection = transactionManager.getConnection(dataSource);
+        }
         return connection;
       }
 

@@ -94,18 +94,21 @@ public class GenerateInputFiles {
     }
 
     return String.valueOf(cc, 0, 1) + '-' +
-      String.valueOf(cc, 1, 3) + '-' +
-      String.valueOf(cc, 4, 2) + '-' +
-      String.valueOf(cc, 6, 2) + '-' +
-      rndStr(10);
+        String.valueOf(cc, 1, 3) + '-' +
+        String.valueOf(cc, 4, 2) + '-' +
+        String.valueOf(cc, 6, 2) + '-' +
+        rndStr(10);
   }
 
   private static String rndAccountNumber() {
-    return RND.intStr(5) + "KZ" + RND.intStr(3) + "-" + RND.intStr(5) + "-" + RND.intStr(5) + "-" + RND.intStr(7);
+    return RND.intStr(5) + "KZ" + RND.intStr(3) + "-" + RND.intStr(5) + "-" + RND.intStr(5) + "-"
+        + RND.intStr(7);
   }
 
   public static String formatBD(BigDecimal a) {
-    if (a == null) return "";
+    if (a == null) {
+      return "";
+    }
     DecimalFormat df = new DecimalFormat();
     df.setMaximumFractionDigits(2);
 
@@ -117,7 +120,9 @@ public class GenerateInputFiles {
     dfs.setDecimalSeparator('.');
     df.setDecimalFormatSymbols(dfs);
     String ret = df.format(a.setScale(2, RoundingMode.HALF_UP));
-    if (ret.startsWith("-")) return ret;
+    if (ret.startsWith("-")) {
+      return ret;
+    }
     return "+" + ret;
   }
 
@@ -170,6 +175,7 @@ public class GenerateInputFiles {
   final List<String> commonClientIdList = new ArrayList<>();
 
   private static class SelectorRnd<T> {
+
     private Object[] values;
 
     public SelectorRnd(T[] values, Function<T, Float> priority) {
@@ -216,11 +222,14 @@ public class GenerateInputFiles {
   }
 
   final SelectorRnd<RowType> rowTypeRnd = new SelectorRnd<>(RowType.values(), RowType::getPriority);
-  final SelectorRnd<ErrorType> errorTypeRnd = new SelectorRnd<>(ErrorType.values(), ErrorType::getPriority);
+  final SelectorRnd<ErrorType> errorTypeRnd = new SelectorRnd<>(ErrorType.values(),
+                                                                ErrorType::getPriority);
 
   private static String spaces(int count) {
     char ret[] = new char[count];
-    for (int i = 0; i < count; i++) ret[i] = ' ';
+    for (int i = 0; i < count; i++) {
+      ret[i] = ' ';
+    }
     return String.valueOf(ret);
   }
 
@@ -324,12 +333,12 @@ public class GenerateInputFiles {
         if (showInfo.get()) {
           showInfo.set(false);
           System.out.println("Сформировано записей в текущем файле CIA: "
-            + currentFileRecords + ", всего записей: " + i);
+                                 + currentFileRecords + ", всего записей: " + i);
         }
       }
 
       System.out.println("ИТОГО: Сформировано записей в текущем файле CIA: "
-        + currentFileRecords + ", всего записей: " + i);
+                             + currentFileRecords + ", всего записей: " + i);
     }
 
     finishPrinter("</cia>", ".xml");
@@ -360,12 +369,12 @@ public class GenerateInputFiles {
         if (showInfo.get()) {
           showInfo.set(false);
           System.out.println("Сформировано записей в текущем файле FRS: "
-            + currentFileRecords + ", всего записей: " + i);
+                                 + currentFileRecords + ", всего записей: " + i);
         }
       }
 
       System.out.println("ИТОГО: Сформировано записей в текущем файле FRS: "
-        + currentFileRecords + ", всего записей: " + i);
+                             + currentFileRecords + ", всего записей: " + i);
     }
 
     finishPrinter(null, ".json_row.txt");
@@ -405,6 +414,7 @@ public class GenerateInputFiles {
   static final int DEG_CHARS_LENGTH = DEG_CHARS.length;
 
   static class Phone {
+
     String number;
 
     static Phone next() {
@@ -438,12 +448,15 @@ public class GenerateInputFiles {
     }
 
     String tag(PhoneType type) {
-      if (type == null || number == null) return null;
+      if (type == null || number == null) {
+        return null;
+      }
       return "<" + type.name() + ">" + number + "</" + type.name() + ">";
     }
   }
 
   static class Address {
+
     String street, house, flat;
 
     static Address next() {
@@ -455,14 +468,17 @@ public class GenerateInputFiles {
     }
 
     String toTag(String tagName) {
-      return "<" + tagName + " street=\"" + street + "\" house=\"" + house + "\" flat=\"" + flat + "\"/>";
+      return "<" + tagName + " street=\"" + street + "\" house=\"" + house + "\" flat=\"" + flat
+          + "\"/>";
     }
   }
 
   private void finishPrinter(String lastLine, String extension) {
     PrintStream pr = printer;
     if (pr != null) {
-      if (lastLine != null) pr.println(lastLine);
+      if (lastLine != null) {
+        pr.println(lastLine);
+      }
       pr.close();
       printer = null;
 
@@ -477,7 +493,9 @@ public class GenerateInputFiles {
 
     ErrorType errorType = null;
 
-    if (rowType == RowType.ERROR) errorType = errorTypeRnd.next();
+    if (rowType == RowType.ERROR) {
+      errorType = errorTypeRnd.next();
+    }
 
     if (errorType != ErrorType.NO_SURNAME) {
 
@@ -540,9 +558,9 @@ public class GenerateInputFiles {
     }
 
     tags.add("    <address>\n" +
-      "      " + Address.next().toTag("fact") + "\n" +
-      "      " + Address.next().toTag("register") + "\n" +
-      "    </address>"
+                 "      " + Address.next().toTag("fact") + "\n" +
+                 "      " + Address.next().toTag("register") + "\n" +
+                 "    </address>"
     );
 
     if (errorType != ErrorType.NO_CHARM) {
@@ -554,7 +572,8 @@ public class GenerateInputFiles {
     {
       int phoneCount = 2 + random.nextInt(5);
       for (int i = 0; i < phoneCount; i++) {
-        tags.add("    " + Phone.next().tag(PhoneType.values()[random.nextInt(PhoneType.values().length)]));
+        tags.add("    " + Phone.next()
+            .tag(PhoneType.values()[random.nextInt(PhoneType.values().length)]));
       }
     }
 
@@ -666,6 +685,7 @@ public class GenerateInputFiles {
   static GregorianCalendar finishedAtCal = null;
 
   static class Account {
+
     String clientId, number;
     Date registeredAt;
 
@@ -674,6 +694,7 @@ public class GenerateInputFiles {
     double ceil;
 
     class Transaction {
+
       Date finishedAt;
       String type;
       BigDecimal money;
@@ -859,10 +880,12 @@ public class GenerateInputFiles {
 
   private void archive() throws Exception {
     File[] files = new File(DIR).listFiles(file ->
-      file.getName().startsWith("from")
-        && !file.getName().endsWith(".bz2"));
+                                               file.getName().startsWith("from")
+                                                   && !file.getName().endsWith(".bz2"));
 
-    if (files == null) return;
+    if (files == null) {
+      return;
+    }
 
     ConcurrentLinkedQueue<File> fileQueue = new ConcurrentLinkedQueue<>();
     Collections.addAll(fileQueue, files);
@@ -882,7 +905,9 @@ public class GenerateInputFiles {
     try {
       archiveQueueEx(fileQueue);
     } catch (Exception e) {
-      if (e instanceof RuntimeException) throw (RuntimeException) e;
+      if (e instanceof RuntimeException) {
+        throw (RuntimeException) e;
+      }
       throw new RuntimeException(e);
     }
   }
@@ -890,7 +915,9 @@ public class GenerateInputFiles {
   private void archiveQueueEx(ConcurrentLinkedQueue<File> fileQueue) throws Exception {
     while (true) {
       File file = fileQueue.poll();
-      if (file == null) return;
+      if (file == null) {
+        return;
+      }
       archiveFile(file);
     }
   }
@@ -898,14 +925,17 @@ public class GenerateInputFiles {
   private void archiveFile(File file) throws Exception {
     File dest = new File(file.getPath() + ".tar.bz2");
     System.out.println("Start archiving file " + file.getName()
-      + " with size " + file.length() + " -> " + dest.getName());
+                           + " with size " + file.length() + " -> " + dest.getName());
 
     ProcessBuilder builder = new ProcessBuilder();
     builder.command("tar", "-cvjSf", dest.getPath(), file.getPath());
     builder.inheritIO();
     Process process = builder.start();
     int exitStatus = process.waitFor();
-    if (exitStatus != 0) throw new RuntimeException("Error archiving file " + file + " with exit status " + exitStatus);
+    if (exitStatus != 0) {
+      throw new RuntimeException(
+          "Error archiving file " + file + " with exit status " + exitStatus);
+    }
 
     file.delete();
   }

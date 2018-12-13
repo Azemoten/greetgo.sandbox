@@ -25,12 +25,16 @@ public abstract class AbstractMybatisDaoImplFactory implements BeanFactory {
   public Object createBean(Class<?> beanClass) {
     {
       Object ret = cache.get(beanClass);
-      if (ret != null) return ret;
+      if (ret != null) {
+        return ret;
+      }
     }
     synchronized (this) {
       {
         Object ret = cache.get(beanClass);
-        if (ret != null) return ret;
+        if (ret != null) {
+          return ret;
+        }
       }
       {
         Object ret = createBean0(beanClass);
@@ -50,9 +54,9 @@ public abstract class AbstractMybatisDaoImplFactory implements BeanFactory {
     }
 
     return Proxy.newProxyInstance(
-      getClass().getClassLoader(),
-      new Class<?>[]{beanClass},
-      new ImplInvocationHandler(beanClass)
+        getClass().getClassLoader(),
+        new Class<?>[]{beanClass},
+        new ImplInvocationHandler(beanClass)
     );
   }
 
@@ -60,6 +64,7 @@ public abstract class AbstractMybatisDaoImplFactory implements BeanFactory {
 
 
   private class ImplInvocationHandler implements InvocationHandler {
+
     final Class<?> mapperInterface;
 
     public ImplInvocationHandler(Class<?> mapperInterface) {
@@ -89,15 +94,20 @@ public abstract class AbstractMybatisDaoImplFactory implements BeanFactory {
     private MapperMethod cachedMapperMethod(Method method) {
       {
         MapperMethod mapperMethod = methodCache.get(method);
-        if (mapperMethod != null) return mapperMethod;
+        if (mapperMethod != null) {
+          return mapperMethod;
+        }
       }
       synchronized (this) {
         {
           MapperMethod mapperMethod = methodCache.get(method);
-          if (mapperMethod != null) return mapperMethod;
+          if (mapperMethod != null) {
+            return mapperMethod;
+          }
         }
         {
-          MapperMethod mapperMethod = new MapperMethod(mapperInterface, method, getSqlSession().getConfiguration());
+          MapperMethod mapperMethod = new MapperMethod(mapperInterface, method,
+                                                       getSqlSession().getConfiguration());
           methodCache.put(method, mapperMethod);
           return mapperMethod;
         }

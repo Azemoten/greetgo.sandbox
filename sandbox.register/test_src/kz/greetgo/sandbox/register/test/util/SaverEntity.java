@@ -8,15 +8,16 @@ import kz.greetgo.sandbox.register.test.dao.ClientDaoTest;
 
 @Bean
 public class SaverEntity {
-    public BeanGetter<ClientDaoTest> clientDaoTest;
+
+  public BeanGetter<ClientDaoTest> clientDaoTest;
 
 
-    public void save(Client client) {
-        clientDaoTest.get().insertClient(client);
-    }
+  public void save(Client client) {
+    clientDaoTest.get().insertClient(client);
+  }
 
-    public void save(Charm charm) {
-        clientDaoTest.get().insertCharm(charm);
-    }
+  public void save(Charm charm) {
+    clientDaoTest.get().insertCharm(charm);
+  }
 
 }

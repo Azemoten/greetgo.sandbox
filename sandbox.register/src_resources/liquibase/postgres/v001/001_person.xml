@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
   <changeSet author="pompei" id="create-table-user_params">
     <sql endDelimiter=";;"><![CDATA[
@@ -62,11 +62,11 @@
 
   <changeSet author="pompei" id="create-table-charm">
     <sql endDelimiter=";;">create table charm(
-    id serial PRIMARY KEY,
-    name varchar(100),
-    description varchar(255),
-    energy float
-    )
+      id serial PRIMARY KEY,
+      name varchar(100),
+      description varchar(255),
+      energy float
+      )
     </sql>
   </changeSet>
   <changeSet author="pompei" id="create-type-gender">

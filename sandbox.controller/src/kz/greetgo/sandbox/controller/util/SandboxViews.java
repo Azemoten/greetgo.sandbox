@@ -36,7 +36,8 @@ public abstract class SandboxViews implements Views {
    * @param object сюда подаётся объект, который вернул метод контроллера
    * @param tunnel это тунель запроса (через него можно управлять процессом запроса)
    * @param method ссылка на метод контроллера, который был только-что вызван
-   * @return эта строка будет отправлена в качестве тела ответа на запрос, зашифрованной в кодировке UTF-8.
+   * @return эта строка будет отправлена в качестве тела ответа на запрос, зашифрованной в кодировке
+   * UTF-8.
    * @throws Exception нужно чтобы не ставить надоедливые try/catch-блоки
    */
   @Override
@@ -45,7 +46,9 @@ public abstract class SandboxViews implements Views {
   }
 
   private String convertToJson(Object object) throws Exception {
-    if (object == null) return null;
+    if (object == null) {
+      return null;
+    }
     return objectMapper.writer().writeValueAsString(object);
   }
 
@@ -55,7 +58,8 @@ public abstract class SandboxViews implements Views {
    * @param object сюда подаётся объект, который вернул метод контроллера
    * @param tunnel это тунель запроса (через него можно управлять процессом запроса)
    * @param method ссылка на метод контроллера, который был только-что вызван
-   * @return эта строка будет отправлена в качестве тела ответа на запрос, зашифрованной в кодировке UTF-8.
+   * @return эта строка будет отправлена в качестве тела ответа на запрос, зашифрованной в кодировке
+   * UTF-8.
    * @throws Exception нужно чтобы не ставить надоедливые try/catch-блоки
    */
   @Override
@@ -68,13 +72,14 @@ public abstract class SandboxViews implements Views {
 
 
   /**
-   * Этот метод вызывается, каждый раз при обработке запроса. Метод контроллера ещё не вызван, и его нужно вызвать
-   * из этого метода. А можно и не вызвать, например потому-что нет прав или ещё по какой причине.
+   * Этот метод вызывается, каждый раз при обработке запроса. Метод контроллера ещё не вызван, и его
+   * нужно вызвать из этого метода. А можно и не вызвать, например потому-что нет прав или ещё по
+   * какой причине.
    *
-   * @param methodInvoker исполнитель метода контроллера - вспомогательный объект, в котором подготовлено всё
-   *                      необходимое для вызова метода контроллера,
-   *                      и для изучения вызываемого метода контроллера. Например можно посмотреть какие аннотации есть
-   *                      у метода и провести дополнительные манипуляции.
+   * @param methodInvoker исполнитель метода контроллера - вспомогательный объект, в котором
+   * подготовлено всё необходимое для вызова метода контроллера, и для изучения вызываемого метода
+   * контроллера. Например можно посмотреть какие аннотации есть у метода и провести дополнительные
+   * манипуляции.
    * @throws Exception нужно чтобы не ставить надоедливые try/catch-блоки
    */
   @Override
@@ -113,8 +118,8 @@ public abstract class SandboxViews implements Views {
   }
 
   /**
-   * Этот метод вызывается всегда перед вызовом метода контроллера, но уже после проверки безопасности.
-   * Если проверка безопасности не прошла, то этот метод не вызывается
+   * Этот метод вызывается всегда перед вызовом метода контроллера, но уже после проверки
+   * безопасности. Если проверка безопасности не прошла, то этот метод не вызывается
    *
    * @throws Exception нужно чтобы не ставить надоедливые try/catch-блоки
    */
@@ -149,10 +154,10 @@ public abstract class SandboxViews implements Views {
 
     if (
 
-      methodInvoker.getMethodAnnotation(PublicAccess.class) == null
-        && authRegister.get().getSession() == null
+        methodInvoker.getMethodAnnotation(PublicAccess.class) == null
+            && authRegister.get().getSession() == null
 
-      ) {
+        ) {
 
       throw new SecurityError();
 
@@ -160,31 +165,39 @@ public abstract class SandboxViews implements Views {
   }
 
   /**
-   * Этот метод вызывается, когда необходимо заполнить параметр метода контроллера
-   * помеченный аннотацией {@link ParSession}
+   * Этот метод вызывается, когда необходимо заполнить параметр метода контроллера помеченный
+   * аннотацией {@link ParSession}
    *
    * @param context информация о параметре: что за параметр, его тип и пр.
-   * @param tunnel  тунель запроса - дан для того, чтобы можно было получить какие-нибудь данные для параметра
+   * @param tunnel тунель запроса - дан для того, чтобы можно было получить какие-нибудь данные для
+   * параметра
    * @return значение этого параметра: оно будет подставлено в этот параметр
    */
   @Override
-  public Object getSessionParameter(SessionParameterGetter.ParameterContext context, RequestTunnel tunnel) {
+  public Object getSessionParameter(SessionParameterGetter.ParameterContext context,
+                                    RequestTunnel tunnel) {
     if ("personId".equals(context.parameterName())) {
-      if (context.expectedReturnType() != String.class) throw new SecurityError("personId must be a string");
+      if (context.expectedReturnType() != String.class) {
+        throw new SecurityError("personId must be a string");
+      }
 
       SessionHolder sessionHolder = authRegister.get().getSession();
       return sessionHolder == null ? null : sessionHolder.personId;
     }
 
     if ("mode".equals(context.parameterName())) {
-      if (context.expectedReturnType() != String.class) throw new SecurityError("personId must be a string");
+      if (context.expectedReturnType() != String.class) {
+        throw new SecurityError("personId must be a string");
+      }
 
       SessionHolder sessionHolder = authRegister.get().getSession();
       return sessionHolder == null ? null : sessionHolder.mode;
     }
 
     if ("sessionId".equals(context.parameterName())) {
-      if (context.expectedReturnType() != String.class) throw new SecurityError("personId must be a string");
+      if (context.expectedReturnType() != String.class) {
+        throw new SecurityError("personId must be a string");
+      }
       return tunnel.cookies().name(G_SESSION).value();
     }
 
@@ -201,12 +214,14 @@ public abstract class SandboxViews implements Views {
     assert invokedResult.error() == null;
     //возвращённое методом контроллера значение
     Object returnedValue = invokedResult.returnedValue();
-    if (returnedValue == null) return;
+    if (returnedValue == null) {
+      return;
+    }
 
     //обрабатываем только строки. Не понятно как обрабатывать другие типы.
     if (!(returnedValue instanceof String)) {
       throw new IllegalArgumentException("Cannot view " + returnedValue.getClass()
-        + " with value " + returnedValue);
+                                             + " with value " + returnedValue);
     }
 
     //предполагаем, что возвращённое значение - это локальный путь к jsp-файлу, например: jsp/hello.jsp
@@ -232,7 +247,8 @@ public abstract class SandboxViews implements Views {
    * @param invokedResult результаты вызова метода контроллера
    * @throws Exception нужно чтобы не ставить надоедливые try/catch-блоки
    */
-  private void performError(MethodInvoker methodInvoker, MethodInvokedResult invokedResult) throws Exception {
+  private void performError(MethodInvoker methodInvoker, MethodInvokedResult invokedResult)
+      throws Exception {
     Throwable error = invokedResult.error();
     assert error != null;
 
@@ -245,8 +261,10 @@ public abstract class SandboxViews implements Views {
       JsonRestError restError = (JsonRestError) error;
       tunnel.setResponseStatus(restError.statusCode);
       String json = convertToJson(restError.sendingAsJsonObject);
-      if (json != null) try (final PrintWriter writer = tunnel.getResponseWriter()) {
-        writer.print(json);
+      if (json != null) {
+        try (final PrintWriter writer = tunnel.getResponseWriter()) {
+          writer.print(json);
+        }
       }
       return;
     }

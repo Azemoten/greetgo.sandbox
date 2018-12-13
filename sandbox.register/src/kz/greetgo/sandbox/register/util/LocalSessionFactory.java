@@ -22,15 +22,20 @@ import org.apache.log4j.Logger;
 
 import javax.sql.DataSource;
 
-public abstract class LocalSessionFactory implements BeanReplacer, HasAfterInject, DataSourceGetter {
+public abstract class LocalSessionFactory implements BeanReplacer, HasAfterInject,
+    DataSourceGetter {
+
   private final TransactionManager transactionManager = new GreetgoTransactionManager();
-  private final TransactionFactory transactionFactory = new LocalTransactionFactory(transactionManager);
+  private final TransactionFactory transactionFactory = new LocalTransactionFactory(
+      transactionManager);
   private final DbProxyFactory dbProxyFactory = new DbProxyFactory(transactionManager);
 
   @Override
   public Object replaceBean(Object originalBean, Class<?> returnClass) {
 
-    if (!returnClass.isInterface()) return originalBean;
+    if (!returnClass.isInterface()) {
+      return originalBean;
+    }
 
     return dbProxyFactory.createProxyFor(originalBean, returnClass);
   }
@@ -59,18 +64,22 @@ public abstract class LocalSessionFactory implements BeanReplacer, HasAfterInjec
   public void afterInject() throws Exception {
     dataSource = createDataSource();
 
-    dataSource = DbLoggingProxyFactory.create(dataSource, new DbLoggingProxyFactory.AbstractSqlViewer() {
-      final Logger logger = Logger.getLogger("DIRECT_SQL");
+    dataSource = DbLoggingProxyFactory
+        .create(dataSource, new DbLoggingProxyFactory.AbstractSqlViewer() {
+          final Logger logger = Logger.getLogger("DIRECT_SQL");
 
-      @Override
-      protected void logTrace(String message) {
-        if (logger.isTraceEnabled()) logger.trace(message);
-      }
-    });
+          @Override
+          protected void logTrace(String message) {
+            if (logger.isTraceEnabled()) {
+              logger.trace(message);
+            }
+          }
+        });
 
     jdbcSandbox = new JdbcSandbox(dataSource, transactionManager);
 
-    Environment environment = new Environment(databaseEnvironmentId(), transactionFactory, dataSource);
+    Environment environment = new Environment(databaseEnvironmentId(), transactionFactory,
+                                              dataSource);
 
     Configuration configuration = new Configuration(environment);
     configuration.setJdbcTypeForNull(JdbcType.NULL);

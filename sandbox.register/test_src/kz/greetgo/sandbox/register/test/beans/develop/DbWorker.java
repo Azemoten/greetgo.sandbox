@@ -28,6 +28,7 @@ import static kz.greetgo.sandbox.register.test.util.DbUrlUtils.changeUrlDbName;
 
 @Bean
 public class DbWorker {
+
   final Logger logger = Logger.getLogger(getClass());
 
   public BeanGetter<DbConfig> postgresDbConfig;
@@ -76,9 +77,12 @@ public class DbWorker {
         } catch (PSQLException e) {
           ServerErrorMessage sem = e.getServerErrorMessage();
           if ("CreateRole".equals(sem.getRoutine())) {
-            throw new RuntimeException("Невозможно создать пользователя " + username + ". Возможно кто-то" +
-              " приконектился к базе данных под этим пользователем и поэтому он не удаляется." +
-              " Попробуйте разорвать коннект с БД или перезапустить БД. После повторите операцию снова", e);
+            throw new RuntimeException(
+                "Невозможно создать пользователя " + username + ". Возможно кто-то" +
+                    " приконектился к базе данных под этим пользователем и поэтому он не удаляется."
+                    +
+                    " Попробуйте разорвать коннект с БД или перезапустить БД. После повторите операцию снова",
+                e);
           }
 
           throw e;
@@ -121,7 +125,8 @@ public class DbWorker {
 
       String name = "sandbox";
 
-      out.println("url=" + changeUrlDbName(pgAdminUrl(), System.getProperty("user.name") + "_" + name));
+      out.println(
+          "url=" + changeUrlDbName(pgAdminUrl(), System.getProperty("user.name") + "_" + name));
       out.println("username=" + System.getProperty("user.name") + "_" + name);
       out.println("password=111");
 

@@ -46,10 +46,10 @@ public class AuthController implements Controller {
     SessionIdentity identity = authRegister.get().login(username, password);
 
     cookies.forName(G_SESSION)
-      .path("/")
-      .httpOnly(true)
-      .maxAge(-1)
-      .saveValue(identity.id);
+        .path("/")
+        .httpOnly(true)
+        .maxAge(-1)
+        .saveValue(identity.id);
 
     return identity.token;
   }
@@ -67,10 +67,9 @@ public class AuthController implements Controller {
     authRegister.get().deleteSession(sessionId);
 
     cookies.forName(G_SESSION)
-      .path("/")
-      .remove();
+        .path("/")
+        .remove();
   }
-
 
 
 }

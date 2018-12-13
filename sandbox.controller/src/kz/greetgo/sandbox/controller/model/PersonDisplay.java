@@ -5,6 +5,7 @@ import java.util.List;
 import kz.greetgo.sandbox.controller.model.UserCan;
 
 public class PersonDisplay {
+
   public String fio;
   public String username;
   public String role;

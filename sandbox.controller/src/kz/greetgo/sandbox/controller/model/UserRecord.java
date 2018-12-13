@@ -1,8 +1,8 @@
 package kz.greetgo.sandbox.controller.model;
 
 
-
 public class UserRecord {
+
   public String id;
   public String fio;
   public String accountName;

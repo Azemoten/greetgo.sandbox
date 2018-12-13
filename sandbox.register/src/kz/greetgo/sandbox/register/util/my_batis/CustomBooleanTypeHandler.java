@@ -12,30 +12,31 @@ public class CustomBooleanTypeHandler extends BaseTypeHandler<Boolean> {
 
   @Override
   public void setNonNullParameter(PreparedStatement ps, int i, Boolean parameter, JdbcType jdbcType)
-    throws SQLException {
-    if (parameter == null)
+      throws SQLException {
+    if (parameter == null) {
       ps.setNull(i, jdbcType.TYPE_CODE);
-    else
+    } else {
       ps.setInt(i, parameter ? 1 : 0);
+    }
   }
 
   @Override
   public Boolean getNullableResult(ResultSet rs, String columnName)
-    throws SQLException {
+      throws SQLException {
     String strVal = rs.getString(columnName);
     return strVal == null ? null : !"0".equals(strVal);
   }
 
   @Override
   public Boolean getNullableResult(ResultSet rs, int columnIndex)
-    throws SQLException {
+      throws SQLException {
     String strVal = rs.getString(columnIndex);
     return strVal == null ? null : !"0".equals(strVal);
   }
 
   @Override
   public Boolean getNullableResult(CallableStatement cs, int columnIndex)
-    throws SQLException {
+      throws SQLException {
     String strVal = cs.getString(columnIndex);
     return strVal == null ? null : !"0".equals(strVal);
   }

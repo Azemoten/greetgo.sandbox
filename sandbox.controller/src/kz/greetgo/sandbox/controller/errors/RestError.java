@@ -9,6 +9,7 @@ package kz.greetgo.sandbox.controller.errors;
  * </p>
  */
 public class RestError extends RuntimeException {
+
   public final int statusCode;
 
   public RestError(int statusCode, String message) {

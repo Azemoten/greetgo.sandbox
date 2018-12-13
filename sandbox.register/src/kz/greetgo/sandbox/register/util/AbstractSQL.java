@@ -179,7 +179,9 @@ abstract class AbstractSQL<T> {
         String name = e.getKey();
         String sql = e.getValue().toString();
 
-        if (needComma) sb.append("\n, ");
+        if (needComma) {
+          sb.append("\n, ");
+        }
         needComma = true;
 
         sb.append(name).append(" as (");
@@ -202,6 +204,7 @@ abstract class AbstractSQL<T> {
   }
 
   private static class SafeAppendable {
+
     private final Appendable a;
     private boolean empty = true;
 
@@ -212,7 +215,9 @@ abstract class AbstractSQL<T> {
 
     public SafeAppendable append(CharSequence s) {
       try {
-        if (empty && s.length() > 0) empty = false;
+        if (empty && s.length() > 0) {
+          empty = false;
+        }
         a.append(s);
       } catch (IOException e) {
         throw new RuntimeException(e);
@@ -255,7 +260,9 @@ abstract class AbstractSQL<T> {
     private void sqlClause(SafeAppendable builder, String keyword, List<String> parts, String open,
                            String close, String conjunction) {
       if (!parts.isEmpty()) {
-        if (!builder.isEmpty()) builder.append("\n");
+        if (!builder.isEmpty()) {
+          builder.append("\n");
+        }
         builder.append(keyword);
         builder.append(" ");
         builder.append(open);
@@ -263,7 +270,7 @@ abstract class AbstractSQL<T> {
         for (int i = 0, n = parts.size(); i < n; i++) {
           String part = parts.get(i);
           if (i > 0 && !part.equals(AND) && !part.equals(OR) && !last.equals(AND)
-            && !last.equals(OR)) {
+              && !last.equals(OR)) {
             builder.append(conjunction);
           }
           builder.append(part);
@@ -276,7 +283,9 @@ abstract class AbstractSQL<T> {
     private void sqlClause(SafeAppendable builder, String keyword, String part, String open,
                            String close, String conjunction) {
       if (part != null) {
-        if (!builder.isEmpty()) builder.append("\n");
+        if (!builder.isEmpty()) {
+          builder.append("\n");
+        }
         builder.append(keyword);
         builder.append(" ");
         builder.append(open);
@@ -385,7 +394,7 @@ abstract class AbstractSQL<T> {
         } else if (c == '"') {
           inDoubleQuote = true;
         } else if (c == ':' && i + 1 < length && query.charAt(i - 1) != ':' &&
-          Character.isJavaIdentifierStart(query.charAt(i + 1))) {
+            Character.isJavaIdentifierStart(query.charAt(i + 1))) {
           int j = i + 2;
           while (j < length && Character.isJavaIdentifierPart(query.charAt(j))) {
             j++;
@@ -455,7 +464,8 @@ abstract class AbstractSQL<T> {
     }
   }
 
-  private void setTimestamp(String name, Timestamp value, PreparedStatement ps) throws SQLException {
+  private void setTimestamp(String name, Timestamp value, PreparedStatement ps)
+      throws SQLException {
     List<Integer> indexes = getIndexes(name);
     for (Integer index : indexes) {
       ps.setTimestamp(index, value);
@@ -465,10 +475,11 @@ abstract class AbstractSQL<T> {
   private void setDate(String name, Date value, PreparedStatement ps) throws SQLException {
     List<Integer> indexes = getIndexes(name);
     for (Integer index : indexes) {
-      if (value instanceof java.sql.Date)
+      if (value instanceof java.sql.Date) {
         ps.setDate(index, (java.sql.Date) value);
-      else
+      } else {
         ps.setTimestamp(index, new Timestamp(value.getTime()));
+      }
     }
   }
 
@@ -502,8 +513,9 @@ abstract class AbstractSQL<T> {
         setDate(key, (Date) value, ps);
       } else if (value instanceof Enum) {
         setEnum(key, (Enum) value, ps);
-      } else
+      } else {
         setObject(key, value, ps);
+      }
     }
     return ps;
   }

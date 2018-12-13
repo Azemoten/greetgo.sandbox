@@ -15,12 +15,12 @@ import kz.greetgo.sandbox.controller.util.Controller;
 @ControllerPrefix("/setting")
 public class SettingController implements Controller {
 
-    public BeanGetter<ClientRegister> clientRegister;
+  public BeanGetter<ClientRegister> clientRegister;
 
-    @PublicAccess
-    @ToJson
-    @OnGet("/numPage")
-    public Integer numPage(@ParamsTo ClientFilter clientFilter) {
-        return clientRegister.get().numPage(clientFilter);
-    }
+  @PublicAccess
+  @ToJson
+  @OnGet("/numPage")
+  public Integer numPage(@ParamsTo ClientFilter clientFilter) {
+    return clientRegister.get().numPage(clientFilter);
+  }
 }

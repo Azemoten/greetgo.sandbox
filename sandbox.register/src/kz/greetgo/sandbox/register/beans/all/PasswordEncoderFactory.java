@@ -7,6 +7,7 @@ import static kz.greetgo.security.SecurityBuilders.newPasswordEncoderBuilder;
 
 @Bean
 public class PasswordEncoderFactory {
+
   @Bean
   public PasswordEncoder createPasswordEncoder() {
     return newPasswordEncoderBuilder().setSalt("RND_SALT").build();

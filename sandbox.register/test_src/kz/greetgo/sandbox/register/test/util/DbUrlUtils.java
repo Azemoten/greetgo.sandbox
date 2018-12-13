@@ -1,6 +1,7 @@
 package kz.greetgo.sandbox.register.test.util;
 
 public class DbUrlUtils {
+
   public static String changeUrlDbName(String url, String dbName) {
     int idx = url.lastIndexOf('/');
     return url.substring(0, idx + 1) + dbName;

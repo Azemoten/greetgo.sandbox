@@ -4,6 +4,7 @@ import java.io.File;
 
 @SuppressWarnings("unused")
 public class Modules {
+
   public static File parentDir() {
     if (new File("sandbox.client").isDirectory()) {
       return new File(".");
@@ -27,17 +28,19 @@ public class Modules {
     {
       File dir = new File(moduleName);
       if (dir.isDirectory()
-        && new File("build.gradle").isFile()
-        && new File("settings.gradle").isFile()
-        && new File("README.md").isFile()
-        ) {
+          && new File("build.gradle").isFile()
+          && new File("settings.gradle").isFile()
+          && new File("README.md").isFile()
+          ) {
         return dir;
       }
     }
 
     {
       File dir = new File("../" + moduleName);
-      if (dir.isDirectory()) return dir;
+      if (dir.isDirectory()) {
+        return dir;
+      }
     }
 
     throw new IllegalArgumentException("Cannot find directory " + moduleName);

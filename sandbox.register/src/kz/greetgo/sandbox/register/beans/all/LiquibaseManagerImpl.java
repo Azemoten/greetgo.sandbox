@@ -24,9 +24,9 @@ public class LiquibaseManagerImpl implements LiquibaseManager {
     Class.forName("org.postgresql.Driver");
 
     try (Connection connection = DriverManager.getConnection(
-      dbConfig.get().url(),
-      dbConfig.get().username(),
-      dbConfig.get().password()
+        dbConfig.get().url(),
+        dbConfig.get().username(),
+        dbConfig.get().password()
     )) {
       Database database = new PostgresDatabase();
 
@@ -34,8 +34,8 @@ public class LiquibaseManagerImpl implements LiquibaseManager {
 
       {
         new Liquibase(
-          "liquibase/postgres/changelog-master.xml",
-          new ClassLoaderResourceAccessor(), database
+            "liquibase/postgres/changelog-master.xml",
+            new ClassLoaderResourceAccessor(), database
         ).update("");
       }
     }

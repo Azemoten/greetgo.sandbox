@@ -10,6 +10,7 @@ import java.util.List;
 
 @Bean
 public class PersonRegisterImpl implements PersonRegister {
+
   public BeanGetter<PersonDao> personDao;
 
   @Override

@@ -20,10 +20,10 @@ public class IdGenerator {
   public String newId() {
 
     int[] indexes = random
-      .ints(ALL_LENGTH)
-      .map(i -> i < 0 ? -i : i)
-      .map(i -> i % ALL_LENGTH)
-      .toArray();
+        .ints(ALL_LENGTH)
+        .map(i -> i < 0 ? -i : i)
+        .map(i -> i % ALL_LENGTH)
+        .toArray();
 
     char id[] = new char[ID_LEN];
     for (int i = 0; i < ID_LEN; i++) {

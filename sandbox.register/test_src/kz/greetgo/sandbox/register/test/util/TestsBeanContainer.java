@@ -7,6 +7,7 @@ import kz.greetgo.sandbox.register.test.beans.develop.DbWorker;
 
 @Include(BeanConfigTests.class)
 public interface TestsBeanContainer extends BeanContainer {
+
   DbWorker dbWorker();
 
   DbLoader dbLoader();
