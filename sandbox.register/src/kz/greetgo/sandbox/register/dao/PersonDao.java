@@ -27,12 +27,3 @@ public interface PersonDao {
       "     order by surname, name")
   List<PersonRecord> list();
 }
-class A{
-
-  public static void main(String[] args) {
-    Date date = new Date();
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(date);
-    System.out.println(cal.get(Calendar.YEAR));
-  }
-}

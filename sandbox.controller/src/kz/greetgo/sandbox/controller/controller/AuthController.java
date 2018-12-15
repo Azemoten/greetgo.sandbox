@@ -54,6 +54,7 @@ public class AuthController implements Controller {
     return identity.token;
   }
 
+  @PublicAccess
   @ToJson
   @OnGet("/displayPerson")
   public PersonDisplay displayPerson(@ParSession("personId") String personId) {

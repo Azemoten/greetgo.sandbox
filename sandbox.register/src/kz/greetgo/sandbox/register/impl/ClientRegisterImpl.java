@@ -27,11 +27,8 @@ public class ClientRegisterImpl implements ClientRegister {
   @Override
   public Integer numPage(ClientFilter clientFilter) {
     int clientNumber = clientDao.get().countClient(clientFilter);
-    int pages = 0;
-    while (clientNumber > 5) {
-      clientNumber -= 5;
-      pages++;
-    }
+    int pages = (clientNumber/5)-1;
+    if(clientNumber%5!=0) pages++;
     return pages;
   }
 

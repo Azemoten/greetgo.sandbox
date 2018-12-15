@@ -3,6 +3,9 @@ dependencies {
 
     compile "kz.greetgo.db:greetgo.db:$greetgoDbVersion"
     compile "kz.greetgo.conf:greetgo.conf:$greetgoConfVersion"
+    compile 'kz.greetgo:greetgo.msoffice:0.4.24'
+    compile group: 'com.itextpdf', name: 'itextpdf', version: '5.0.6'
+
     testCompile "kz.greetgo.conf:greetgo.sys_params:$greetgoConfVersion"
 
     compile "org.postgresql:postgresql:$postgresJdbcVersion"

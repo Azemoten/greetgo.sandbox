@@ -56,6 +56,7 @@ public class DbLoader {
            new SimpleDateFormat("yyyy-MM-dd").parse("1900-01-01"));
     client(109, "cxv", 666.2, "mmm", "", Gender.MALE,
            new SimpleDateFormat("yyyy-MM-dd").parse("1900-01-01"));
+    user("Wel some boy", "2010-05-03", "qwe");
 
     logger.info("Finish loading clients");
   }

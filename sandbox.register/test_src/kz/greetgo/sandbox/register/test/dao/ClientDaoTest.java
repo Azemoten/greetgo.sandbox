@@ -17,6 +17,11 @@ public interface ClientDaoTest {
       "#{birthDate}, #{charm})")
   void insertClient(Client client);
 
+  @Insert("insert into client(surname, name, patronymic, gender, birth_date, charm)" +
+      " values(#{surname}, #{name}, #{patronymic}, #{gender}::gender, " +
+      "#{birthDate}, #{charm})")
+  void insertForReport(Client client);
+
 
   @Select("select count(*) from client where actual=true")
   int getNumOfClients();

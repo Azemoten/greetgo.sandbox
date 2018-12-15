@@ -51,6 +51,7 @@ public class ClientRegisterImplTest extends ParentTestNg {
     int pageAfter = clientRegister.get().numPage(clientFilter2);
     //
     //
+
     assertThat(pageBeforeSorting).isNotEqualTo(pageAfter);
   }
 

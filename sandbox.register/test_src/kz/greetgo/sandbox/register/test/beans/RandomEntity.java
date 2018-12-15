@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.sandbox.controller.model.*;
+import kz.greetgo.sandbox.controller.report.ReportRow;
 import kz.greetgo.util.RND;
 
 import java.util.ArrayList;
@@ -124,4 +125,27 @@ public class RandomEntity {
     cal.setTime(date);
     return cal.get(Calendar.YEAR);
   }
+
+  public List<ReportRow> reportRows() {
+    List<ReportRow> reportRows = new ArrayList<>();
+    ReportRow row1 = new ReportRow();
+    row1.age=RND.plusInt(1000);
+    ReportRow row2 = new ReportRow();
+    ReportRow row3 = new ReportRow();
+    ReportRow row4 = new ReportRow();
+    ReportRow row5 = new ReportRow();
+    return reportRows;
+  }
+
+  public Client client(Charm charm, int id) {
+    Client client = new Client();
+    client.surname = RND.str(10);
+    client.name = RND.str(10);
+    client.patronymic = RND.str(10);
+    client.gender = Gender.FEMALE;
+    client.birthDate = new GregorianCalendar(2014, 4, 12).getTime();
+    client.charm = charm.id;
+    return client;
+  }
+
 }
