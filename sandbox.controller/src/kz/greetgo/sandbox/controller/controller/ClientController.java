@@ -74,35 +74,5 @@ public class ClientController implements Controller {
     return clientRegister.get().clientDetails(clientId);
   }
 
-  @PublicAccess
-  @OnGet("/report/{type}")
-  public void report(@ParPath("type") String type, RequestTunnel requestTunnel, @ParamsTo ClientFilter clientFilter) throws Exception {
-    ReportView reportView = null;
-    String fileName = "";
-    if (type.equals("pdf")) {
-      fileName = "Report.pdf";
-    } else if (type.equals("xlsx")) {
-      fileName = "Report.xlsx";
-    }
 
-
-    requestTunnel.setResponseHeader("Content-Disposition", "attachment; filename=" + fileName);
-    OutputStream out = requestTunnel.getResponseOutputStream();
-
-
-    try (PrintStream printStream = new PrintStream(out, false, "utf-8")) {
-      if (Objects.equals(type, "pdf")) {
-        reportView = new ReportViewPDF(printStream);
-      }
-      if (Objects.equals(type, "xlsx")) {
-        reportView = new ReportViewExcel(printStream);
-      }
-      reportRegister.get().genReport(reportView, clientFilter);
-
-      printStream.flush();
-      requestTunnel.flushBuffer();
-    }
-
-
-  }
 }

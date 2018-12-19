@@ -181,7 +181,7 @@ export class ClientListComponent implements OnInit {
     this.loadClients();
   }
 
-  download(type: string) {
+  createLinkForDownload(type: string) {
     let addToEndFilters = "";
     if (this.clientFilter.name) {
       addToEndFilters += "&name=" + this.clientFilter.name;
@@ -195,12 +195,12 @@ export class ClientListComponent implements OnInit {
     if (this.clientFilter.sort) {
       addToEndFilters += "&sort=" + this.clientFilter.sort +"&order="+this.clientFilter.order;
     }
-    let href = "http://localhost:1313/sandbox/api/client/report/"+type+"?"+addToEndFilters;
+    let href = "http://localhost:1313/sandbox/api/report/"+type+"?"+addToEndFilters;
     return href;
   }
   changeLinkAfterFilter(){
-    this.pdfLinkForDownload = this.download("pdf");
-    this.xlsxLinkForDownload = this.download("xlsx");
+    this.pdfLinkForDownload = this.createLinkForDownload("pdf");
+    this.xlsxLinkForDownload = this.createLinkForDownload("xlsx");
   }
 }
 
