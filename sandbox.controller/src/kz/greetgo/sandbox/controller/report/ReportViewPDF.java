@@ -18,7 +18,7 @@ import kz.greetgo.sandbox.controller.register.ReportView;
 public class ReportViewPDF implements ReportView {
 
   private static final String RESULT = "build/my_report/result3.pdf";
-  private static Document document = new Document();
+  private Document document = new Document();
   private final OutputStream outputStream;
 
   public ReportViewPDF(OutputStream outputStream) {

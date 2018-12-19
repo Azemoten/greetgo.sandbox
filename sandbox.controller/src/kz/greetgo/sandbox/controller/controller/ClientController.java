@@ -3,6 +3,8 @@ package kz.greetgo.sandbox.controller.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Objects;
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
@@ -11,6 +13,7 @@ import kz.greetgo.mvc.annotations.on_methods.ControllerPrefix;
 import kz.greetgo.mvc.annotations.on_methods.OnDelete;
 import kz.greetgo.mvc.annotations.on_methods.OnGet;
 import kz.greetgo.mvc.annotations.on_methods.OnPost;
+import kz.greetgo.mvc.interfaces.RequestTunnel;
 import kz.greetgo.sandbox.controller.model.*;
 import kz.greetgo.sandbox.controller.register.ClientRegister;
 import kz.greetgo.sandbox.controller.register.ReportRegister;
@@ -73,19 +76,33 @@ public class ClientController implements Controller {
 
   @PublicAccess
   @OnGet("/report/{type}")
-  public void report(@ParPath("type") String type) throws Exception {
+  public void report(@ParPath("type") String type, RequestTunnel requestTunnel) {
     ReportView reportView = null;
-    OutputStream outputStream;
-    if(Objects.equals(type, "pdf")) {
-      outputStream = new FileOutputStream(new File("build/my_report/result.pdf"));
-      reportView = new ReportViewPDF(outputStream);
+    String fileName = "";
+    if (type.equals("pdf")) {
+      fileName = "Report.pdf";
+    } else if (type.equals("xlsx")) {
+      fileName = "Report.xlsx";
     }
-    if(Objects.equals(type, "xlsx")){
+    requestTunnel.setResponseHeader("Content-Disposition", "attachment; filename=" + fileName);
+    OutputStream out = requestTunnel.getResponseOutputStream();
+    try(PrintStream printStream = new PrintStream(out, false, "utf-8")){
+      if (Objects.equals(type, "pdf")) {
+        reportView = new ReportViewPDF(printStream);
+      }
+      if (Objects.equals(type, "xlsx")) {
+        reportView = new ReportViewExcel(printStream);
+      }
+      reportRegister.get().genReport(reportView);
 
-      outputStream = new FileOutputStream(new File("build/my_report/result.xlsx"));
-      reportView = new ReportViewExcel(outputStream);
+      printStream.flush();
+      requestTunnel.flushBuffer();
+    } catch (UnsupportedEncodingException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
     }
-    
-    reportRegister.get().genReport(reportView);
+
+
   }
 }
