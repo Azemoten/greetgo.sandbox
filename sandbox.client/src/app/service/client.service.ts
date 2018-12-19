@@ -42,7 +42,8 @@ export class ClientService {
     return this.http.get('/client/list/Charms');
   }
 
-  numberOfPage(clientFilter: ClientFilter){
+  numberOfPage(clientFilter: ClientFilter) {
     return this.http.get('/setting/numPage', clientFilter.toJson(clientFilter))
   }
+
 }

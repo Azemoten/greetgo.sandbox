@@ -51,7 +51,7 @@ public class ReportViewPDF implements ReportView {
   @Override
   public void addRow(ReportRow row) throws DocumentException {
     PdfPTable values = new PdfPTable(6);
-    values.addCell(new PdfPCell(new Phrase(row.fio)));
+    values.addCell(new PdfPCell(new Phrase(row.name+row.surname+row.patronymic)));
     values.addCell(new PdfPCell(new Phrase(row.charmName)));
     values.addCell(new PdfPCell(new Phrase(Integer.toString(row.age))));
     values.addCell(new PdfPCell(new Phrase(Double.toString(row.commonMoney))));

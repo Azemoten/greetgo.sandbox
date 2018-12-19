@@ -4,6 +4,7 @@ import java.util.Date;
 import kz.greetgo.db.Jdbc;
 import kz.greetgo.depinject.core.Bean;
 import kz.greetgo.depinject.core.BeanGetter;
+import kz.greetgo.sandbox.controller.model.ClientFilter;
 import kz.greetgo.sandbox.controller.register.ReportRegister;
 import kz.greetgo.sandbox.controller.report.ReportFootData;
 import kz.greetgo.sandbox.controller.register.ReportView;
@@ -13,12 +14,12 @@ public class ReportRegisterImpl implements ReportRegister {
 
   public BeanGetter<Jdbc> jdbc;
   private ReportView view;
-  public void genReport(ReportView reportView) throws Exception {
+  public void genReport(ReportView reportView, ClientFilter clientFilter) throws Exception {
     view = reportView;
 
     view.start();
 
-    jdbc.get().execute(new ReportJdbc(view));
+    jdbc.get().execute(new ReportJdbc(view, clientFilter));
 
     ReportFootData reportFootData = new ReportFootData();
     reportFootData.generatedBy = "Almas";

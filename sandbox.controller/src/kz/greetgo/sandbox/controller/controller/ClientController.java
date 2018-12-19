@@ -76,7 +76,7 @@ public class ClientController implements Controller {
 
   @PublicAccess
   @OnGet("/report/{type}")
-  public void report(@ParPath("type") String type, RequestTunnel requestTunnel) {
+  public void report(@ParPath("type") String type, RequestTunnel requestTunnel, @ParamsTo ClientFilter clientFilter) throws Exception {
     ReportView reportView = null;
     String fileName = "";
     if (type.equals("pdf")) {
@@ -84,23 +84,23 @@ public class ClientController implements Controller {
     } else if (type.equals("xlsx")) {
       fileName = "Report.xlsx";
     }
+
+
     requestTunnel.setResponseHeader("Content-Disposition", "attachment; filename=" + fileName);
     OutputStream out = requestTunnel.getResponseOutputStream();
-    try(PrintStream printStream = new PrintStream(out, false, "utf-8")){
+
+
+    try (PrintStream printStream = new PrintStream(out, false, "utf-8")) {
       if (Objects.equals(type, "pdf")) {
         reportView = new ReportViewPDF(printStream);
       }
       if (Objects.equals(type, "xlsx")) {
         reportView = new ReportViewExcel(printStream);
       }
-      reportRegister.get().genReport(reportView);
+      reportRegister.get().genReport(reportView, clientFilter);
 
       printStream.flush();
       requestTunnel.flushBuffer();
-    } catch (UnsupportedEncodingException e) {
-      e.printStackTrace();
-    } catch (Exception e) {
-      e.printStackTrace();
     }
 
 

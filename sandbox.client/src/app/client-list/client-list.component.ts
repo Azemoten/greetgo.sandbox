@@ -24,6 +24,8 @@ export class ClientListComponent implements OnInit {
   orderMinMoney: boolean = false;
   orderMaxMoney: boolean = false;
   orderCommonMoney: boolean = false;
+  pdfLinkForDownload: string;
+  xlsxLinkForDownload: string;
 
   @HostBinding('class.is-open')
   isOpen = false;
@@ -35,7 +37,8 @@ export class ClientListComponent implements OnInit {
 
   ngOnInit() {
     this.loadClients();
-    this.getNumberOfPage()
+    this.getNumberOfPage();
+    this.changeLinkAfterFilter();
   }
 
   loadClients() {
@@ -174,8 +177,30 @@ export class ClientListComponent implements OnInit {
       this.currentPage = this.page[this.page.length - 1]
     }
     this.clientFilter.page = this.currentPage;
+    this.changeLinkAfterFilter();
     this.loadClients();
   }
 
+  download(type: string) {
+    let addToEndFilters = "";
+    if (this.clientFilter.name) {
+      addToEndFilters += "&name=" + this.clientFilter.name;
+    }
+    if (this.clientFilter.patronymic) {
+      addToEndFilters += "&patronymic=" + this.clientFilter.patronymic;
+    }
+    if (this.clientFilter.surname) {
+      addToEndFilters += "&surname=" + this.clientFilter.surname;
+    }
+    if (this.clientFilter.sort) {
+      addToEndFilters += "&sort=" + this.clientFilter.sort +"&order="+this.clientFilter.order;
+    }
+    let href = "http://localhost:1313/sandbox/api/client/report/"+type+"?"+addToEndFilters;
+    return href;
+  }
+  changeLinkAfterFilter(){
+    this.pdfLinkForDownload = this.download("pdf");
+    this.xlsxLinkForDownload = this.download("xlsx");
+  }
 }
 

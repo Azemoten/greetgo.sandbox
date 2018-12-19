@@ -38,7 +38,7 @@ public class ReportViewExcel implements ReportView {
   @Override
   public void addRow(ReportRow row) throws DocumentException {
     sheet.row().start();
-    sheet.cellStr(1, row.fio);
+    sheet.cellStr(1, row.name+row.surname+row.patronymic);
     sheet.cellStr(2, row.charmName);
     sheet.cellStr(3, Integer.toString(row.age));
     sheet.cellStr(4, Double.toString(row.commonMoney));
