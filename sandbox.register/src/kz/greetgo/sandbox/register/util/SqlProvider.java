@@ -5,6 +5,7 @@ import kz.greetgo.sandbox.controller.model.Client;
 import kz.greetgo.sandbox.controller.model.ClientFilter;
 
 import java.util.Objects;
+import liquibase.sql.Sql;
 
 public class SqlProvider {
 
@@ -33,7 +34,8 @@ public class SqlProvider {
     sql.offset("#{page}*5");
     return sql.toString();
   }
-  public static String getClientForJDBC(ClientFilter clientFilter){
+
+  public static String getClientForJDBC(ClientFilter clientFilter) {
     SQL sql = new SQL();
     sql.select(
         "c.name, c.surname, c.patronymic, coalesce((current_date-c.birth_date)/365, 0) age ");
@@ -44,13 +46,13 @@ public class SqlProvider {
     sql.leftjoin("client_account c_acc on c.id=c_acc.client ");
     sql.where("c.actual = true ");
     if (Objects.nonNull(clientFilter.name)) {
-      sql.where("LOWER(c.name) like '%' || LOWER('"+clientFilter.name+"') || '%'");
+      sql.where("LOWER(c.name) like '%' || LOWER('" + clientFilter.name + "') || '%'");
     }
     if (Objects.nonNull(clientFilter.surname)) {
-      sql.where("LOWER(c.surname) like '%' || LOWER('"+clientFilter.surname+"') || '%'");
+      sql.where("LOWER(c.surname) like '%' || LOWER('" + clientFilter.surname + "') || '%'");
     }
     if (Objects.nonNull(clientFilter.patronymic)) {
-      sql.where("LOWER(c.patronymic) like '%' || LOWER('"+clientFilter.patronymic+"') || '%'");
+      sql.where("LOWER(c.patronymic) like '%' || LOWER('" + clientFilter.patronymic + "') || '%'");
     }
     sql.group_by("c.id, ch.name ");
     endQuery(clientFilter, sql);
@@ -84,43 +86,70 @@ public class SqlProvider {
     }
     return sql.toString() + "RETURNING id";
   }
-  public static void endQuery(ClientFilter clientFilter, SQL sql){
+
+  public static void endQuery(ClientFilter clientFilter, SQL sql) {
     if (Objects.equals(clientFilter.sort, "name")) {
-      if (clientFilter.order == false) {
+      if (!clientFilter.order) {
         sql.order_by("name asc");
       } else {
         sql.order_by("name desc");
       }
     } else if (Objects.equals(clientFilter.sort, "id")) {
-      if (clientFilter.order == false) {
+      if (!clientFilter.order) {
         sql.order_by("id asc");
       } else {
         sql.order_by("id desc");
       }
     } else if (Objects.equals(clientFilter.sort, "commonMoney")) {
-      if (clientFilter.order == false) {
+      if (!clientFilter.order) {
         sql.order_by("commonMoney asc");
       } else {
         sql.order_by("commonMoney desc");
       }
     } else if (Objects.equals(clientFilter.sort, "maxMoney")) {
-      if (clientFilter.order == false) {
+      if (!clientFilter.order) {
         sql.order_by("maxMoney asc");
       } else {
         sql.order_by("maxMoney desc");
       }
     } else if (Objects.equals(clientFilter.sort, "minMoney")) {
-      if (clientFilter.order == false) {
+      if (!clientFilter.order) {
         sql.order_by("minMoney asc");
       } else {
         sql.order_by("minMoney desc");
       }
     } else if (Objects.equals(clientFilter.sort, "age")) {
-      if (clientFilter.order == false) {
+      if (!clientFilter.order) {
         sql.order_by("age asc");
       } else {
         sql.order_by("age desc");
       }
     }
+  }
+
+  //"insert into client_addr(client, type, street, house, flat) values(#{client}, #{type}::address, #{street}, #{house}, #{flat}) \n"
+  //          +
+  //          "on conflict(client, type) do update set (client, type, street, house, flat ) = (#{client}, #{type}::address, #{street}, #{house}, #{flat}) "
+  public static String sqlUpsertClient(String patronymic) {
+    SQL sql = new SQL();
+    sql.insert_into("migration_client")
+        .values("cia_id, name, surname, gender, birth, charm", "?, ?, ?, ?, ?, ?");
+    boolean nonNullPatronymic = Objects.nonNull(patronymic);
+    if (nonNullPatronymic) {
+      sql.values("patronymic", "?");
+    }
+    String result = sql.toString();
+    result += " on conflict(cia_id) do update set (name, surname, gender, birth, charm, migration_status" + (
+        nonNullPatronymic ? ", patronymic" : "") + ") "
+        + "= (?, ?, ?, ?, ?, 3" + (nonNullPatronymic ? ", ?" : "") + ")";
+
+    return result;
+  }
+
+}
+class A{
+
+  public static void main(String[] args) {
+    System.out.println(SqlProvider.sqlUpsertClient("asd"));
   }
 }

@@ -11,5 +11,5 @@ public class Client {
   public Gender gender;
   public Date birthDate;
   public Integer charm;
-
+  public String ciaId;
 }

@@ -14,6 +14,9 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.1.1'
 
     testCompile "kz.greetgo.depinject:greetgo.depinject.testng:$depinjectVersion"
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.8'
+
 //  testCompile 'io.rest-assured:rest-assured:3.2.0'
 //
 //// https://mvnrepository.com/artifact/com.google.guava/guava

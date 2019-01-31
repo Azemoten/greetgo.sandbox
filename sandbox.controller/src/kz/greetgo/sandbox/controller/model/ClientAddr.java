@@ -7,5 +7,6 @@ public class ClientAddr {
   public String street;
   public String house;
   public String flat;
+  public String cia_id;
 
 }

@@ -160,4 +160,82 @@
     </sql>
   </changeSet>
 
+  <changeSet author="pompei" id="create-table-migration_charm">
+    <sql endDelimiter=";;">
+      create table migration_charm(
+      id serial primary key,
+      name varchar(100) not null,
+      status int default 0
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="pompei" id="create-table-migration_client">
+    <sql endDelimiter=";;">
+      create table migration_client(
+      cia_id varchar(200) not null,
+      name varchar(100) not null,
+      surname varchar(100) not null,
+      patronymic varchar(100),
+      gender varchar(10) not null,
+      birth date,
+      charm int references charm(id),
+      inserted_at timestamp default CURRENT_TIMESTAMP,
+      status int default 0
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="pompei" id="create-table-migration_transactions">
+    <sql endDelimiter=";;">
+      create table migration_transactions(
+      cia_id varchar(200) not null,
+      money float not null,
+      finished_at timestamp,
+      transaction_type int,
+      account_number varchar(200),
+      status int default 0
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="pompei" id="create-table-migration_account">
+    <sql endDelimiter=";;">
+      create table migration_account(
+      cia_id varchar(200) not null,
+      registered_at varchar(200) not null,
+      account_number varchar(200) not null,
+      status int default 0,
+      inserted_at timestamp default CURRENT_TIMESTAMP
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="pompei" id="create-table-migration_phone">
+    <sql endDelimiter=";;">
+      create table migration_phone(
+      cia_id varchar(200) not null,
+      number varchar(200) not null,
+      type varchar(10) not null,
+      status int default 0,
+      actual smallint not null default 1
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="pompei" id="create-table-migration_address">
+    <sql endDelimiter=";;">
+      create table migration_address(
+      cia_id varchar(200) not null,
+      type varchar(10) not null,
+      street varchar(200) not null,
+      house varchar(200) not null,
+      flat varchar(200) not null,
+      status int default 0,
+      actual smallint not null default 1
+      );
+    </sql>
+  </changeSet>
+
+
 </databaseChangeLog>

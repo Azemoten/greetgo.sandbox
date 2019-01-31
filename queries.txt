@@ -1,0 +1,100 @@
+//Insert charm of received client
+insert into charm(name, description, energy) select 'Chetkii', 'Short Desc', 4.6
+where not exists (select * from charm where name ='Chetkii' and description='Short Desc')
+// For Charm
+create table migration_charm(
+id serial primary key,
+name varchar(100) not null,
+status int default 0
+)
+//
+create table migration_client(
+cia_id varchar(200) not null,
+name varchar(100) not null,
+surname varchar(100) not null,
+patronymic varchar(100),
+gender varchar(10) not null,
+birth date,
+charm int references charm(id),
+status int default 0
+)
+//
+create table migration_transactions(
+      cia_id varchar(200) not null,
+      money float not null,
+      finished_at timestamp,
+      transaction_type int,
+      account_number varchar(200),
+      status int default 0
+      );
+//
+create table migration_account(
+      cia_id varchar(200) not null,
+      registered_at varchar(200) not null,
+      account_number varchar(200) not null,
+      status int default 0,
+      );
+//
+create table migration_phone(
+cia_id varchar(200) not null,
+number varchar(200) not null,
+type varchar(10) not null,
+status int default 0,
+actual smallint not null default 1
+)
+//
+create table migration_address(
+cia_id varchar(200) not null,
+type varchar(10) not null,
+street varchar(200) not null,
+house varchar(200) not null,
+flat varchar(200) not null,
+status int default 0,
+actual smallint not null default 1
+);
+//
+update migration_phone set actual=false
+delete from migration_phone where type in('MOBILE', 'WORK')
+//
+update migration_address set actual=false
+//
+select exists(select 1 from migration_phone where cia_id=12)
+//
+with s as (
+    select id
+    from migration_charm
+    where name = 'WWW'
+), i as (
+    insert into migration_charm (id, name)
+    select nextval('charm_id_seq'), 'WWW'
+    where not exists (select 1 from s)
+    returning id
+)
+select id
+from i
+union all
+select id
+from s
+limit 1
+//
+INSERT INTO migration_client
+ (id, cia_id, name, surname, gender, birth, patronymic)
+VALUES ((select nextval('client_id_seq')), 'asddd', 'asd', 'asd', 'asd', '2000-02-03', 'qwe')
+on conflict(cia_id) do update set (name, surname, gender, birth, status, patronymic)
+= ('asd', 'a12121sd', 'asd', '2000-05-05', 3, 'asd')
+//TRANSACTION type
+with s as (
+    select id
+    from migration_transaction_type
+    where name = 'xcv'
+), i as (
+    insert into migration_transaction_type (id, name)
+    select nextval('transaction_type_id_seq'), 'xcv'
+    where not exists (select 1 from s)
+    returning id
+)
+select id
+from i
+union all
+select id
+from s//

@@ -17,7 +17,7 @@ public class ReportJdbc implements ConnectionCallback<Void> {
 
   public ReportJdbc(ReportView view, ClientFilter clientFilter) {
     this.view = view;
-    this.sql = SqlProvider.getClientForJDBC(clientFilter).toString();
+    this.sql = SqlProvider.getClientForJDBC(clientFilter);
   }
 
   @Override

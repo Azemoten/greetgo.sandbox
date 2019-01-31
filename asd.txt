@@ -1,0 +1,28 @@
+{"finished_at":"2011-02-21T15:45:49.537","account_number":"84466KZ333-27891-50080-1292286","money":"+0","transaction_type":"Отмывание на ботинках","type":"transaction"}
+{"type":"transaction","account_number":"84466KZ333-27891-50080-1292286","finished_at":"2011-02-21T15:45:45.537","transaction_type":"Списывание с регионального бюджета г.Алматы","money":"+170_019.32"}
+{"type":"transaction","money":"+457_256.53","account_number":"84466KZ333-27891-50080-1292286","finished_at":"2011-02-21T15:45:57.537","transaction_type":"Списывание с федерального бюджета"}
+{"transaction_type":"Перевод на подставной счёт","type":"transaction","account_number":"84466KZ333-27891-50080-1292286","money":"-170_019.32","finished_at":"2011-02-21T15:45:47.537"}
+{"type":"transaction","finished_at":"2011-02-21T15:45:59.537","transaction_type":"Списывание с федерального бюджета","money":"+706_356.16","account_number":"84466KZ333-27891-50080-1292286"}
+{"finished_at":"2011-02-21T15:46:01.537","account_number":"84466KZ333-27891-50080-1292286","money":"-1_155_612.69","type":"transaction","transaction_type":"null"}
+{"account_number":"84466KZ333-27891-50080-1292286","registered_at":"2001-02-21T15:45:45.532","type":"new_account","client_id":"2-T9E-FQ-IC-vomCQG1s9s"}
+{"transaction_type":"Отмывание на ботинках","account_number":"84466KZ333-27891-50080-1292286","money":"+0","finished_at":"2011-02-21T15:45:51.537","type":"transaction"}
+{"account_number":"84466KZ333-27891-50080-1292286","type":"transaction","transaction_type":"Списывание с регионального бюджета г.Караганда","money":"+97_445.01","finished_at":"2011-02-21T15:45:53.537"}
+{"account_number":"84466KZ333-27891-50080-1292286","finished_at":"2011-02-21T15:45:55.537","type":"transaction","money":"-97_445.01","transaction_type":"Отмывание на компьютерной технике"}
+{"account_number":"91626KZ768-57037-47154-2614462","transaction_type":"Отмывание на компьютерной технике","money":"+0","finished_at":"2011-02-21T15:46:03.537","type":"transaction"}
+{"client_id":"2-FCH-PF-JH-rXWY2DkYrV","registered_at":"2001-02-21T15:45:47.532","type":"new_account","account_number":"91626KZ768-57037-47154-2614462"}
+{"money":"+8_039.62","transaction_type":"null","account_number":"91626KZ768-57037-47154-2614462","type":"transaction","finished_at":"2011-02-21T15:46:08.537"}
+{"transaction_type":"Списывание с регионального бюджета Алматинской области","money":"+887.41","finished_at":"2011-02-21T15:46:06.537","type":"transaction","account_number":"91626KZ768-57037-47154-2614462"}
+{"finished_at":"2011-02-21T15:46:07.537","transaction_type":"Отмывание на ботинках","money":"-485.08","type":"transaction","account_number":"91626KZ768-57037-47154-2614462"}
+{"finished_at":"2011-02-21T15:46:05.537","type":"transaction","account_number":"91626KZ768-57037-47154-2614462","transaction_type":"Отмывание на ботинках","money":"-63.8"}
+{"account_number":"91626KZ768-57037-47154-2614462","transaction_type":"Списывание с регионального бюджета Карагандинского области","money":"+621.85","finished_at":"2011-02-21T15:46:04.537","type":"transaction"}
+{"transaction_type":"Отмывание на ботинках","finished_at":"2011-02-21T15:46:02.537","type":"transaction","money":"+0","account_number":"91626KZ768-57037-47154-2614462"}
+{"money":"-1_651.92","transaction_type":"Отмывание на ботинках","finished_at":"2011-02-21T15:46:12.537","account_number":"75389KZ461-33624-58038-8171997","type":"transaction"}
+{"finished_at":"2011-02-21T15:46:14.537","account_number":"75389KZ461-33624-58038-8171997","money":"-4_616.45","type":"transaction","transaction_type":"null"}
+{"client_id":"6-JMX-64-6U-EeqJS9mYxU","type":"new_account","account_number":"75389KZ461-33624-58038-8171997","registered_at":"2001-02-21T15:45:49.532"}
+{"money":"+9_268.37","transaction_type":"Списывание с федерального бюджета","finished_at":"2011-02-21T15:46:10.537","account_number":"75389KZ461-33624-58038-8171997","type":"transaction"}
+{"type":"transaction","transaction_type":"Списывание с федерального бюджета","finished_at":"2011-02-21T15:46:16.537","money":"+710.27","account_number":"66812KZ630-17953-15797-0195910"}
+{"transaction_type":"Списывание с регионального бюджета г.Караганда","account_number":"66812KZ630-17953-15797-0195910","finished_at":"2011-02-21T15:46:15.537","type":"transaction","money":"+674.57"}
+{"finished_at":"2011-02-21T15:46:19.537","type":"transaction","money":"-40.86","account_number":"66812KZ630-17953-15797-0195910","transaction_type":"Перевод на подставной счёт"}
+{"type":"new_account","account_number":"66812KZ630-17953-15797-0195910","client_id":"5-DAE-JK-EQ-6JrN8BKZFY","registered_at":"2001-02-21T15:45:51.532"}
+{"type":"transaction","account_number":"66812KZ630-17953-15797-0195910","finished_at":"2011-02-21T15:46:23.537","transaction_type":"null","money":"+2_781.47"}
+{"account_number":"66812KZ630-17953-15797-0195910","type":"transaction","finished_at":"2011-02-21T15:46:18.537","transaction_type":"Отмывание на компьютерной технике","money":"-772.41"}

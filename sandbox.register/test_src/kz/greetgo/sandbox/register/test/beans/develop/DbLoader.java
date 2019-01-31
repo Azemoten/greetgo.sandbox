@@ -38,23 +38,23 @@ public class DbLoader {
     logger.info("Start loading clients...");
 
     charm("Chetkii", "Short desc", 3.4);
-    client(100, "APush", 800.0, "AA", "", Gender.FEMALE,
+    client(1, "APush", 800.0, "AA", "", Gender.FEMALE,
            new SimpleDateFormat("yyyy-MM-dd").parse("2011-01-01"));
-    client(102, "ABPush", 800.0, "BB", "", Gender.FEMALE,
+    client(2, "ABPush", 800.0, "BB", "", Gender.FEMALE,
            new SimpleDateFormat("yyyy-MM-dd").parse("2000-01-01"));
-    client(103, "PushPush", 800.0, "CC", "", Gender.FEMALE,
+    client(3, "PushPush", 800.0, "CC", "", Gender.FEMALE,
            new SimpleDateFormat("yyyy-MM-dd").parse("2003-01-01"));
-    client(104, "QPushC", 800.0, "DD", "", Gender.MALE,
+    client(4, "QPushC", 800.0, "DD", "", Gender.MALE,
            new SimpleDateFormat("yyyy-MM-dd").parse("2002-01-01"));
-    client(105, "WWW", 700.0, "WEE", "", Gender.MALE,
+    client(5, "WWW", 700.0, "WEE", "", Gender.MALE,
            new SimpleDateFormat("yyyy-MM-dd").parse("2001-01-01"));
-    client(106, "ASD as", 700.0, "qqq", "", Gender.MALE,
+    client(6, "ASD as", 700.0, "qqq", "", Gender.MALE,
            new SimpleDateFormat("yyyy-MM-dd").parse("2001-01-01"));
-    client(107, "qwer", 950.0, "rrr", "", Gender.MALE,
+    client(7, "qwer", 950.0, "rrr", "", Gender.MALE,
            new SimpleDateFormat("yyyy-MM-dd").parse("1900-01-01"));
-    client(108, "zczx ", 756.0, "hhh", "", Gender.MALE,
+    client(8, "zczx ", 756.0, "hhh", "", Gender.MALE,
            new SimpleDateFormat("yyyy-MM-dd").parse("1900-01-01"));
-    client(109, "cxv", 666.2, "mmm", "", Gender.MALE,
+    client(9, "cxv", 666.2, "mmm", "", Gender.MALE,
            new SimpleDateFormat("yyyy-MM-dd").parse("1900-01-01"));
     user("Wel some boy", "2010-05-03", "qwe");
 
