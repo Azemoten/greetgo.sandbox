@@ -126,7 +126,7 @@ public class XmlReader {
         addr.house = attributes.getValue("house");
         addr.flat = attributes.getValue("flat");
         addr.type = factOrRegisterType.get(qName);
-        addr.cia_id = ciaId;
+        addr.ciaId = ciaId;
         clientDetail.addrs.add(addr);
       } else if ("workPhone".equalsIgnoreCase(qName)) {
         workPhone = true;
@@ -190,9 +190,9 @@ public class XmlReader {
 
     private void insertAddress(List<ClientAddr> addrs) {
       for (ClientAddr addr : clientDetail.addrs) {
-        //cia_id, type, street, house, flat
+        //ciaId, type, street, house, flat
         try (PreparedStatement ps = conn.prepareStatement(sqlInsertAddress)) {
-          ps.setString(1, addr.cia_id);
+          ps.setString(1, addr.ciaId);
           ps.setString(2, String.valueOf(addr.type));
           ps.setString(3, addr.house);
           ps.setString(4, addr.flat);
@@ -252,7 +252,7 @@ public class XmlReader {
     private void upsertClient() {
       try (PreparedStatement ps = conn
           .prepareStatement(sqlUpsertClient(clientDetail.client.patronymic))) {
-        //cia_id, name, surname, gender, birth, charm"
+        //ciaId, name, surname, gender, birth, charm"
         ps.setString(1, clientDetail.client.ciaId);
         ps.setString(2, clientDetail.client.name);
         ps.setString(3, clientDetail.client.surname);

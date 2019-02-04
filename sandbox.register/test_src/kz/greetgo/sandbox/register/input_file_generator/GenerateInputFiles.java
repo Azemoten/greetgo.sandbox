@@ -708,7 +708,7 @@ public class GenerateInputFiles {
         pairs.add("'money':'" + formatBD(money) + "'");
         pairs.add("'finished_at':'" + sdf.format(finishedAt) + "'");
         pairs.add("'transaction_type':'" + type + "'");
-        pairs.add("'account_number':'" + number + "'");
+        pairs.add("'accountNumber':'" + number + "'");
 
         Collections.shuffle(pairs);
 
@@ -769,7 +769,7 @@ public class GenerateInputFiles {
       List<String> pairs = new ArrayList<>();
       pairs.add("'type':'new_account'");
       pairs.add("'client_id':'" + clientId + "'");
-      pairs.add("'account_number':'" + number + "'");
+      pairs.add("'accountNumber':'" + number + "'");
       pairs.add("'registered_at':'" + sdf.format(registeredAt) + "'");
 
       Collections.shuffle(pairs);

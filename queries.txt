@@ -16,7 +16,8 @@ patronymic varchar(100),
 gender varchar(10) not null,
 birth date,
 charm int references charm(id),
-status int default 0
+status int default 0,
+actual smallint
 )
 //
 create table migration_transactions(
@@ -30,6 +31,7 @@ create table migration_transactions(
 //
 create table migration_account(
       cia_id varchar(200) not null,
+      money double,
       registered_at varchar(200) not null,
       account_number varchar(200) not null,
       status int default 0,

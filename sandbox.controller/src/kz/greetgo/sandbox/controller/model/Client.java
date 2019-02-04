@@ -12,4 +12,6 @@ public class Client {
   public Date birthDate;
   public Integer charm;
   public String ciaId;
+  public Date insertedAt;
+  public int status;
 }

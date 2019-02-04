@@ -133,13 +133,13 @@ public class SqlProvider {
   public static String sqlUpsertClient(String patronymic) {
     SQL sql = new SQL();
     sql.insert_into("migration_client")
-        .values("cia_id, name, surname, gender, birth, charm", "?, ?, ?, ?, ?, ?");
+        .values("ciaId, name, surname, gender, birth, charm", "?, ?, ?, ?, ?, ?");
     boolean nonNullPatronymic = Objects.nonNull(patronymic);
     if (nonNullPatronymic) {
       sql.values("patronymic", "?");
     }
     String result = sql.toString();
-    result += " on conflict(cia_id) do update set (name, surname, gender, birth, charm, migration_status" + (
+    result += " on conflict(ciaId) do update set (name, surname, gender, birth, charm, migration_status" + (
         nonNullPatronymic ? ", patronymic" : "") + ") "
         + "= (?, ?, ?, ?, ?, 3" + (nonNullPatronymic ? ", ?" : "") + ")";
 

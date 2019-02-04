@@ -181,7 +181,8 @@
       birth date,
       charm int references charm(id),
       inserted_at timestamp default CURRENT_TIMESTAMP,
-      status int default 0
+      status int default 0,
+      actual smallint default 1
       );
     </sql>
   </changeSet>
@@ -203,10 +204,10 @@
     <sql endDelimiter=";;">
       create table migration_account(
       cia_id varchar(200) not null,
+      money float,
       registered_at varchar(200) not null,
       account_number varchar(200) not null,
-      status int default 0,
-      inserted_at timestamp default CURRENT_TIMESTAMP
+      status int default 0
       );
     </sql>
   </changeSet>
