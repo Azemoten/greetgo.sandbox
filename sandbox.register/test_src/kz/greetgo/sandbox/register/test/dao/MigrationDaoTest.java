@@ -6,14 +6,15 @@ import kz.greetgo.sandbox.controller.model.ClientAccountTransaction;
 import kz.greetgo.sandbox.controller.model.ClientAddr;
 import kz.greetgo.sandbox.controller.model.ClientDetail;
 import kz.greetgo.sandbox.controller.model.ClientPhone;
+import kz.greetgo.sandbox.register.test.util.SqlMigrationProvider;
+import kz.greetgo.sandbox.register.util.SqlProvider;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
 
 public interface MigrationDaoTest {
-  @Insert("INSERT INTO public.migration_client(\n"
-      + "cia_id, name, surname, patronymic, gender, birth, charm, inserted_at)\n"
-      + "    VALUES (#{ciaId}, #{name}, #{surname}, #{patronymic}, #{gender}, #{birthDate}, #{charm}, #{insertedAt})\n")
+  @SelectProvider(type = SqlMigrationProvider.class, method = "createClient")
   void insertMigrationClient(Client client);
 
   @Insert("INSERT INTO public.migration_address(\n"

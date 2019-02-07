@@ -67,4 +67,11 @@ public class RandomMigrationEntity {
 
     return transaction;
   }
+
+  public Client createClientForMigrate() {
+    Client client = createClient();
+    client.status = 2;
+
+    return client;
+  }
 }

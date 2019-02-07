@@ -9,32 +9,35 @@ status int default 0
 )
 //
 create table migration_client(
+id int not null,
 cia_id varchar(200) not null,
 name varchar(100) not null,
 surname varchar(100) not null,
 patronymic varchar(100),
 gender varchar(10) not null,
-birth date,
-charm int references charm(id),
+birth date not null,
+charm int not null,
 status int default 0,
-actual smallint
+actual smallint default 1,
+inserted_at timestamp default current_timestamp
 )
 //
 create table migration_transactions(
       cia_id varchar(200) not null,
       money float not null,
-      finished_at timestamp,
-      transaction_type int,
+      finished_at varchar(200) not null,
+      transaction_type varchar(100),
       account_number varchar(200),
-      status int default 0
+      status int default 0,
+      inserted_at timestamp default current_timestamp
       );
 //
 create table migration_account(
       cia_id varchar(200) not null,
-      money double,
       registered_at varchar(200) not null,
       account_number varchar(200) not null,
       status int default 0,
+      inserted_at timestamp default current_timestamp
       );
 //
 create table migration_phone(

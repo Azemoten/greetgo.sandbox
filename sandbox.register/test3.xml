@@ -1,0 +1,54 @@
+<cia>
+  <client > <!-- 1 -->
+    <address>
+      <fact street="e3ГСMиХYЗфySУкWёЖрw1" house="9З" flat="Iц"/>
+      <register street="ИOф2ЧКЯЩмz8кeПаL4rВы" house="LG" flat="шч"/>
+    </address>
+    <charm value="LqN60эeEев"/>
+    <workPhone>+7-980-562-79-14</workPhone>
+    <homePhone>+7-615-009-67-78</homePhone>
+    <gender value="FEMALE"/>
+    <surname value="ИюётЖПSiV8"/>
+    <birth value="2010-05-05"/>
+    <name value="asd"/>
+  </client>
+  <client id="6-IHP-4P-IT-3nQMG0tQqB"> <!-- 1 -->
+    <address>
+      <fact street="e3ГСMиХYЗфySУкWёЖрw1" house="9З" flat="Iц"/>
+      <register street="ИOф2ЧКЯЩмz8кeПаL4rВы" house="LG" flat="шч"/>
+    </address>
+    <charm value="LqN60эeEев"/>
+    <workPhone>+7-980-562-79-14</workPhone>
+    <homePhone>+7-615-009-67-78</homePhone>
+    <gender value="FEMALE"/>
+    <surname value="ИюётЖПSiV8"/>
+    <birth value="2010-05-05"/>
+    <name value="asd"/>
+  </client>
+  <client id="6-IHP-4P-IT-3nQMG0tQqB"> <!-- 1 -->
+    <address>
+      <fact street="e3ГСMиХYЗфySУкWёЖрw1" house="9З" flat="Iц"/>
+      <register street="ИOф2ЧКЯЩмz8кeПаL4rВы" house="LG" flat="шч"/>
+    </address>
+    <charm value="LqN60эeEев"/>
+    <workPhone>+7-980-562-79-14</workPhone>
+    <homePhone>+7-615-009-67-78</homePhone>
+    <gender value="FEMALE"/>
+    <surname value="ИюётЖПSiV8"/>
+    <birth value="2010-05-05"/>
+    <name value="asd"/>
+  </client>
+  <client id="6-IHP-4P-IT-3nQMG0tQqB"> <!-- 1 -->
+    <address>
+      <fact street="e3ГСMиХYЗфySУкWёЖрw1" house="9З" flat="Iц"/>
+      <register street="ИOф2ЧКЯЩмz8кeПаL4rВы" house="LG" flat="шч"/>
+    </address>
+    <charm value="LqN60эeEев"/>
+    <workPhone>+7-980-562-79-14</workPhone>
+    <homePhone>+7-615-009-67-78</homePhone>
+    <gender value="FEMALE"/>
+    <surname value="ИюётЖПSiV8"/>
+    <birth value="2010-05-05"/>
+    <name value="asd"/>
+  </client>
+</cia>

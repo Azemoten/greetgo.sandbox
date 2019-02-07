@@ -5,7 +5,6 @@ import kz.greetgo.sandbox.controller.model.Client;
 import kz.greetgo.sandbox.controller.model.ClientFilter;
 
 import java.util.Objects;
-import liquibase.sql.Sql;
 
 public class SqlProvider {
 
@@ -130,26 +129,23 @@ public class SqlProvider {
   //"insert into client_addr(client, type, street, house, flat) values(#{client}, #{type}::address, #{street}, #{house}, #{flat}) \n"
   //          +
   //          "on conflict(client, type) do update set (client, type, street, house, flat ) = (#{client}, #{type}::address, #{street}, #{house}, #{flat}) "
-  public static String sqlUpsertClient(String patronymic) {
+  public static String sqlInsertClient(String patronymic) {
+    String result = "";
     SQL sql = new SQL();
     sql.insert_into("migration_client")
-        .values("ciaId, name, surname, gender, birth, charm", "?, ?, ?, ?, ?, ?");
+        .values("id, cia_id, name, surname, gender, birth, charm, status", "(select nextval('client_id_seq')),?, ?, ?, ?, ?::date, ?, ?");
     boolean nonNullPatronymic = Objects.nonNull(patronymic);
     if (nonNullPatronymic) {
       sql.values("patronymic", "?");
     }
-    String result = sql.toString();
-    result += " on conflict(ciaId) do update set (name, surname, gender, birth, charm, migration_status" + (
-        nonNullPatronymic ? ", patronymic" : "") + ") "
-        + "= (?, ?, ?, ?, ?, 3" + (nonNullPatronymic ? ", ?" : "") + ")";
 
-    return result;
+    return sql.toString();
   }
 
 }
 class A{
 
   public static void main(String[] args) {
-    System.out.println(SqlProvider.sqlUpsertClient("asd"));
+    System.out.println(SqlProvider.sqlInsertClient(null));
   }
 }

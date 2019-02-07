@@ -2,21 +2,48 @@ package kz.greetgo.sandbox.register.impl;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
+import java.io.File;
+import java.io.IOException;
+import java.security.InvalidParameterException;
+import java.sql.Connection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import kz.greetgo.depinject.core.BeanGetter;
+import kz.greetgo.msoffice.docx.Run;
+import kz.greetgo.msoffice.docx.RunTab;
+import kz.greetgo.sandbox.controller.errors.NullCiaIdException;
 import kz.greetgo.sandbox.controller.model.Client;
 import kz.greetgo.sandbox.controller.model.ClientAccount;
 import kz.greetgo.sandbox.controller.model.ClientAccountTransaction;
 import kz.greetgo.sandbox.controller.model.ClientAddr;
 import kz.greetgo.sandbox.controller.model.ClientPhone;
+import kz.greetgo.sandbox.register.dao.ClientDao;
+import kz.greetgo.sandbox.register.migration.ConnectionToDB;
+import kz.greetgo.sandbox.register.migration.InMigrationWorker;
+import kz.greetgo.sandbox.register.migration.XMLHandler;
 import kz.greetgo.sandbox.register.test.beans.RandomMigrationEntity;
 import kz.greetgo.sandbox.register.test.dao.MigrationDaoTest;
 import kz.greetgo.sandbox.register.test.util.ParentTestNg;
 import org.testng.annotations.Test;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
 public class MigrationTest extends ParentTestNg {
 
   public BeanGetter<MigrationDaoTest> migrationTestDao;
   public BeanGetter<RandomMigrationEntity> randomEntity;
+//  public BeanGetter<ClientDao> clientDao;
+
+  SAXParserFactory factory = SAXParserFactory.newInstance();
+  SAXParser parser = factory.newSAXParser();
+  XMLReader xmlReader = parser.getXMLReader();
+  XMLHandler handler = new XMLHandler();
+
+
+  public MigrationTest() throws Exception {}
+
 
   //1 step
   @Test
@@ -90,7 +117,8 @@ public class MigrationTest extends ParentTestNg {
     migrationTestDao.get().insertMigrationTransaction(transaction);
     //
     //
-    ClientAccountTransaction testTransaction = migrationTestDao.get().selectTransaction(transaction.accountNumber);
+    ClientAccountTransaction testTransaction = migrationTestDao.get()
+        .selectTransaction(transaction.accountNumber);
     //
     //
     assertThat(testTransaction.account).isEqualTo(transaction.account);
@@ -102,11 +130,60 @@ public class MigrationTest extends ParentTestNg {
 
   //2step
   @Test
-  public void checkNullSurname(){
+  public void checkNullSurname() throws IOException, SAXException {
+    xmlReader.setContentHandler(handler);
+    xmlReader.parse(String.valueOf(new File("test4.xml")));
+    File testFile = new File("testLog.log");
+    assertThat(testFile.length()).isGreaterThan(0);
+  }
+
+  @Test
+  public void checkNullName() throws Exception {
+
+    xmlReader.setContentHandler(handler);
+    xmlReader.parse(String.valueOf(new File("test1.xml")));
+    File testFile = new File("testLog.log");
+    assertThat(testFile.length()).isGreaterThan(0);
 
   }
 
+  @Test
+  public void checkCorrectDate() throws IOException, SAXException {
+    xmlReader.setContentHandler(handler);
+    xmlReader.parse(String.valueOf(new File("test2.xml")));
 
+    File testFile = new File("testLog.log");
+    assertThat(testFile.length()).isGreaterThan(0);
+  }
 
+  @Test
+  public void chechNullciaId() throws IOException, SAXException {
+    xmlReader.setContentHandler(handler);
+    xmlReader.parse(String.valueOf(new File("test3.xml")));
+
+    File testFile = new File("testLog.log");
+    assertThat(testFile.length()).isGreaterThan(0);
+  }
+
+  @Test
+  public void insertClient() {
+    Client client = randomEntity.get().createClientForMigrate();
+
+    migrationTestDao.get().insertMigrationClient(client);
+
+//    inMigrationWorker.migrate();
+
+  }
+
+  @Test
+  public void updateClient() {
+
+  }
+
+  @Test
+  public void insertAccount() {}
+
+  @Test
+  public void updateAccount() {}
 
 }

@@ -12,8 +12,8 @@ public interface ClientDaoTest {
   void insertCharm(Charm charm);
 
 
-  @Insert("insert into client(id, surname, name, patronymic, gender, birth_date, charm)" +
-      " values(#{id}, #{surname}, #{name}, #{patronymic}, #{gender}::gender, " +
+  @Insert("insert into client(surname, name, patronymic, gender, birth_date, charm)" +
+      " values(#{surname}, #{name}, #{patronymic}, #{gender}::gender, " +
       "#{birthDate}, #{charm})")
   void insertClient(Client client);
 

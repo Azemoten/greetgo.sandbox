@@ -97,7 +97,8 @@
       gender gender NOT NULL,
       birth_date date,
       actual boolean DEFAULT true,
-      charm integer references charm(id)
+      charm integer references charm(id),
+      cia_id varchar(200)
       );
     </sql>
   </changeSet>
@@ -163,7 +164,7 @@
   <changeSet author="pompei" id="create-table-migration_charm">
     <sql endDelimiter=";;">
       create table migration_charm(
-      id serial primary key,
+      id serial not null,
       name varchar(100) not null,
       status int default 0
       );
@@ -173,29 +174,30 @@
   <changeSet author="pompei" id="create-table-migration_client">
     <sql endDelimiter=";;">
       create table migration_client(
+      id serial not null,
       cia_id varchar(200) not null,
       name varchar(100) not null,
       surname varchar(100) not null,
       patronymic varchar(100),
       gender varchar(10) not null,
-      birth date,
-      charm int references charm(id),
-      inserted_at timestamp default CURRENT_TIMESTAMP,
+      birth date not null,
+      charm int not null,
       status int default 0,
-      actual smallint default 1
-      );
+      actual smallint default 1,
+      inserted_at timestamp default CURRENT_TIMESTAMP
+      )
     </sql>
   </changeSet>
 
-  <changeSet author="pompei" id="create-table-migration_transactions">
+  <changeSet author="pompei" id="create-table-migration_transaction">
     <sql endDelimiter=";;">
-      create table migration_transactions(
-      cia_id varchar(200) not null,
+      create table migration_transaction(
       money float not null,
-      finished_at timestamp,
-      transaction_type int,
+      finished_at varchar(200),
+      transaction_type int not null,
       account_number varchar(200),
-      status int default 0
+      status int default 0,
+      inserted_at timestamp default current_timestamp
       );
     </sql>
   </changeSet>
@@ -207,7 +209,8 @@
       money float,
       registered_at varchar(200) not null,
       account_number varchar(200) not null,
-      status int default 0
+      status int default 0,
+      inserted_at timestamp default current_timestamp
       );
     </sql>
   </changeSet>
