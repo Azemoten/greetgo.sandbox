@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
@@ -28,6 +29,7 @@ import kz.greetgo.sandbox.controller.model.ClientDetail;
 import kz.greetgo.sandbox.controller.model.ClientPhone;
 import kz.greetgo.sandbox.controller.model.Gender;
 import kz.greetgo.sandbox.controller.model.PhoneType;
+import kz.greetgo.sandbox.register.util.SQL;
 import org.apache.ibatis.javassist.bytecode.stackmap.TypeData.ClassName;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -53,30 +55,20 @@ public class XMLHandler extends DefaultHandler {
   boolean invalidVal = false;
   boolean invalidAge = false;
   int clientStatus;
-  //insert into client_addr(client, type, street, house, flat) values(#{client}, #{type}::address, #{street}, #{house}, #{flat}) \n"
-  //          +
-  //          "on conflict(client, type) do update set (client, type, street, house, flat ) = (#{client}, #{type}::address, #{street}, #{house}, #{flat})
-  // ciaId, name, existSurname, patronymic, gender, birth, charm, status
+  int currentSize = 0;
+  int batchSize = 10000;
   Connection conn = new ConnectionToDB().getConnection();
-  String sqlInsertCharm = "with s as (\n"
-      + "    select id\n"
-      + "    from migration_charm\n"
-      + "    where name = ?\n"
-      + "), i as (\n"
-      + "    insert into migration_charm (id, name)\n"
-      + "    select nextval('charm_id_seq'), ?\n"
-      + "    where not exists (select 1 from s)\n"
-      + "    returning id\n"
-      + ")\n"
-      + "select id\n"
-      + "from i\n"
-      + "union all\n"
-      + "select id\n"
-      + "from s\n"
-      + "limit 1";
-  String sqlInsertPhone = "insert into migration_phone(cia_id, number, type) "
-      + "values(?, ?, ?)";
-  String sqlInsertAddress = "insert into migration_address(cia_id, type, street, house, flat) values(?, ?, ?, ?, ?)";
+
+  Statement stmt = conn.createStatement();
+
+  // ciaId, name, existSurname, patronymic, gender, birth, charm, status
+  //          "on conflict(client, type) do update set (client, type, street, house, flat ) = (#{client}, #{type}::address, #{street}, #{house}, #{flat})
+  //          +
+  //insert into client_addr(client, type, street, house, flat) values(#{client}, #{type}::address, #{street}, #{house}, #{flat}) \n"
+
+//  String sqlInsertPhone = "insert into migration_phone(cia_id, number, type) "
+//      + "values(?, ?, ?)";
+//  String sqlInsertAddress = "insert into migration_address(cia_id, type, street, house, flat) values(?, ?, ?, ?, ?)";
 
 
   Map<String, AddressType> factOrRegisterType = new HashMap<String, AddressType>() {{
@@ -85,6 +77,9 @@ public class XMLHandler extends DefaultHandler {
   }};
 
   public XMLHandler() throws Exception {
+
+    conn.setAutoCommit(false);
+
     fh = new FileHandler("testLog.log", false);
     realLog = new FileHandler("logs.log", true);
     logger.addHandler(fh);
@@ -198,8 +193,7 @@ public class XMLHandler extends DefaultHandler {
         if (invalidAge) {
           throw new DateTimeException("Errors");
         }
-        checkExistanceClientAndDeactualPhonesAndAddrsIfNeed();
-        insertCharmIfDTExist();
+        deactualData();
         insertClient();
         insertAddress();
         insertPhone();
@@ -213,6 +207,8 @@ public class XMLHandler extends DefaultHandler {
           logger.info("Id of user: " + ciaId);
         }
         logger.info(e + "");
+      } catch (SQLException e) {
+        e.printStackTrace();
       }
 
       clientDetail = new ClientDetail(new Client(), new ArrayList<ClientAddr>(),
@@ -221,92 +217,60 @@ public class XMLHandler extends DefaultHandler {
       ciaId = null;
       existClient = false;
       clientStatus = 0;
+
     }
   }
 
-  private void insertAddress() {
+  private void insertAddress() throws SQLException {
     for (ClientAddr addr : clientDetail.addrs) {
       //ciaId, type, street, house, flat
-      try (PreparedStatement ps = conn.prepareStatement(sqlInsertAddress)) {
-        ps.setString(1, addr.ciaId);
-        ps.setString(2, String.valueOf(addr.type));
-        ps.setString(3, addr.street);
-        ps.setString(4, addr.house);
-        ps.setString(5, addr.flat);
-        ps.executeUpdate();
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
+      SQL sql = new SQL();
+      sql.insert_into("migration_address");
+      sql.values("cia_id", "'" + addr.ciaId + "'");
+      sql.values("type", "'" + String.valueOf(addr.type) + "'");
+      sql.values("street", "'" + addr.street + "'");
+      sql.values("house", "'" + addr.house + "'");
+      sql.values("flat", "'" + addr.flat + "'");
+      stmt.addBatch(sql.toString());
+      executeBatch();
     }
   }
 
-  private void insertPhone() {
+  private void insertPhone() throws SQLException {
     for (ClientPhone phone : clientDetail.phones) {
-      try (PreparedStatement ps = conn.prepareStatement(sqlInsertPhone)) {
-        ps.setString(1, phone.ciaId);
-        ps.setString(2, phone.number);
-        ps.setString(3, String.valueOf(phone.type));
-        ps.executeUpdate();
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
+      SQL sql = new SQL();
+      sql.insert_into("migration_phone");
+      sql.values("cia_id", "'" + phone.ciaId + "'");
+      sql.values("number", "'" + phone.number + "'");
+      sql.values("type", "'" + String.valueOf(phone.type) + "'");
+      stmt.addBatch(sql.toString());
+      executeBatch();
     }
   }
 
-  private void checkExistanceClientAndDeactualPhonesAndAddrsIfNeed() {
-    try (PreparedStatement ps = conn.prepareStatement(
-        "select exists(select 1 from migration_client where cia_id=?)")) {
-      ps.setString(1, clientDetail.client.ciaId);
-      try (ResultSet rs = ps.executeQuery()) {
-        if (rs.next()) {
-          existClient = rs.getBoolean("exists");
-          if (existClient) {
-//            clientStatus = 3;
-            deactualData();
-          }
-        }
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
+  private void executeBatch() throws SQLException {
+    currentSize++;
+    if (currentSize == batchSize) {
+      stmt.executeBatch();
+      currentSize = 0;
     }
   }
 
-  private void insertCharmIfDTExist() {
-    try {
-      try (PreparedStatement ps = conn.prepareStatement(sqlInsertCharm)) {
-        ps.setString(1, charm);
-        ps.setString(2, charm);
-        try (ResultSet rs = ps.executeQuery()) {
-          if (rs.next()) {
-            clientDetail.client.charm = rs.getInt("id");
-          }
-        }
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
 
-  private void insertClient() {
-    try (PreparedStatement ps = conn
-        .prepareStatement(sqlInsertClient(clientDetail.client.patronymic))) {
-      //ciaId, name, existSurname, gender, birth, charm"
-      ps.setString(1, clientDetail.client.ciaId);
-      ps.setString(2, clientDetail.client.name);
-      ps.setString(3, clientDetail.client.surname);
-      ps.setString(4, String.valueOf(clientDetail.client.gender));
-      ps.setString(5, clientDetail.client.birthDate.toString());
-      ps.setInt(6, clientDetail.client.charm);
-      ps.setInt(7, clientStatus);
-      if (Objects.nonNull(clientDetail.client.patronymic)) {
-        ps.setString(8, clientDetail.client.patronymic);
-      }
-      ps.executeUpdate();
-
-    } catch (SQLException e) {
-      e.printStackTrace();
-      System.out.println("ID CLIENT " + ciaId);
+  private void insertClient() throws SQLException {
+    SQL sql = new SQL();
+    sql.insert_into("migration_client");
+    sql.values("cia_id", "'" + clientDetail.client.ciaId + "'");
+    sql.values("name", "'" + clientDetail.client.name + "'");
+    sql.values("surname", "'" + clientDetail.client.surname + "'");
+    sql.values("gender", "'" + String.valueOf(clientDetail.client.gender) + "'");
+    sql.values("birth", "'" + clientDetail.client.birthDate.toString() + "'");
+    sql.values("charm_text", "'" + charm + "'");
+    if (Objects.nonNull(clientDetail.client.patronymic)) {
+      sql.values("patronymic", "'" + clientDetail.client.patronymic + "'");
     }
+    stmt.addBatch(sql.toString());
+    executeBatch();
   }
 
   private void deactualData() throws SQLException {
@@ -315,19 +279,22 @@ public class XMLHandler extends DefaultHandler {
   }
 
   private void deactualAddrs() throws SQLException {
-    try (PreparedStatement ps = conn
-        .prepareStatement("update migration_address set actual=0\n where cia_id=?")) {
-      ps.setString(1, ciaId);
-      ps.executeUpdate();
-    }
+    StringBuilder sb = new StringBuilder();
+    sb.append("update migration_address set actual=0\n where cia_id='");
+    sb.append(ciaId);
+    sb.append("';");
+    stmt.addBatch(sb.toString());
+    executeBatch();
+
   }
 
   private void deactualPhones() throws SQLException {
-    try (PreparedStatement ps = conn
-        .prepareStatement("update migration_phone set actual=0\n where cia_id=?")) {
-      ps.setString(1, ciaId);
-      ps.executeUpdate();
-    }
+    StringBuilder sb = new StringBuilder();
+    sb.append("update migration_phone set actual=0\n where cia_id='");
+    sb.append(ciaId);
+    sb.append("';");
+    stmt.addBatch(sb.toString());
+    executeBatch();
   }
 
 
@@ -335,6 +302,8 @@ public class XMLHandler extends DefaultHandler {
   public void endDocument() throws SAXException {
     System.out.println(clientDetail.client.ciaId);
     try {
+      stmt.executeBatch();
+      conn.commit();
       conn.close();
     } catch (SQLException e) {
       e.printStackTrace();

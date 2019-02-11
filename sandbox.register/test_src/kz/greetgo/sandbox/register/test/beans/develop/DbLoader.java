@@ -83,11 +83,11 @@ public class DbLoader {
 
   private void charm(String name, String description, double energy) {
     Charm charm = new Charm();
-    charm.id = 1;
+//    charm.id = 1;
     charm.energy = energy;
     charm.description = description;
     charm.name = name;
-    clientDaoTest.get().insertCharm(charm);
+    clientDaoTest.get().insertCharmWithoutId(charm);
   }
 
   private void user(String fioStr, String birthDateStr, String accountName) throws Exception {

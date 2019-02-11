@@ -15,5 +15,9 @@ public class InMigration {
     }
   }
 
+  public static void main(String[] args) throws Exception {
+    new InMigration().execute();
+  }
+
 
 }

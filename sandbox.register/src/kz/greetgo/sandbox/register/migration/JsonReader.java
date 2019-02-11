@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.logging.FileHandler;
@@ -24,7 +23,6 @@ public class JsonReader {
   private static final Logger logger = Logger.getLogger(ClassName.class.getName());
   FileHandler testLog;
   FileHandler realLog;
-  //  Account account = new Account();
   boolean invalidVal;
   String registeredAt;
   Integer transaction_id;
@@ -38,19 +36,20 @@ public class JsonReader {
   String sqlInsertNewAccount = "INSERT INTO public.migration_account(\n"
       + "            cia_id, registered_at, account_number)\n"
       + "    VALUES (?, ?, ?);";
-  String sqlInsertTransaction = "INSERT INTO public.migration_transactions(\n"
+  String sqlInsertTransaction = "INSERT INTO public.migration_transaction(\n"
       + "money, finished_at, transaction_type, account_number \n"
       + ")\n"
       + "    VALUES (?, ?, ?, ? \n"
       + ")";
-  String sqlInsertSelectTransactId = "with s as ( \n"
-      + "select real_id from migration_transaction_type where name = 'te'),\n"
-      + " i as ( insert into migration_transaction_type (real_id, name) \n"
-      + " select nextval('client_account_transaction_id_seq'), 'te' \n"
-      + " where not exists (select 1 from s) returning real_id ) \n"
-      + " select real_id from i union all select real_id from s limit 1";
+  int batchSize = 5000;
+  int currentAccountSize = 0;
+  int currentTransactionSize = 0;
+  PreparedStatement accountStmt = conn.prepareStatement(sqlInsertNewAccount);
+  PreparedStatement transactionStmt = conn.prepareStatement(sqlInsertTransaction);
+
 
   public JsonReader(String fileName) throws Exception {
+
     testLog = new FileHandler("FrsTestLog.log", false);
     realLog = new FileHandler("FrsLog.log", true);
     logger.addHandler(testLog);
@@ -60,6 +59,7 @@ public class JsonReader {
     realLog.setFormatter(formatter);
     JsonFactory factory = new JsonFactory();
     JsonParser parser = factory.createParser(new File(fileName));
+    conn.setAutoCommit(false);
 
     while (!parser.isClosed()) {
       JsonToken token = parser.nextToken();
@@ -69,6 +69,10 @@ public class JsonReader {
       }
       processJSONValue(token, parser, "");
     }
+    accountStmt.executeBatch();
+    transactionStmt.executeBatch();
+    conn.commit();
+    conn.close();
   }
 
   private void processJSONValue(JsonToken token, JsonParser parser, String indent)
@@ -158,15 +162,13 @@ public class JsonReader {
           insertTransaction();
           break;
       }
+
     } catch (InvalidParameterException e) {
       logger.info("ID user" + ciaId);
       logger.info(" " + e);
     }
     clearProperties();
-    System.out.println("EXIT ");
-    //
 
-    //
   }
 
   private void clearProperties() {
@@ -183,34 +185,41 @@ public class JsonReader {
   }
 
   private void insertTransaction() throws SQLException {
-    //      + "            cia_id, money, finished_at, transaction_type, account_number \n"
-    try (PreparedStatement ps = conn.prepareStatement(sqlInsertTransaction)) {
-      ps.setDouble(1, money);
-      ps.setString(2, finishedAt);
-      ps.setInt(3, transaction_id);
-      ps.setString(4, accountNumber);
-      ps.executeUpdate();
-    }
+    //money, finished_at, transaction_type, account_number
+    transactionStmt.setDouble(1, money);
+    transactionStmt.setString(2, finishedAt);
+    transactionStmt.setString(3, transaction);
+    transactionStmt.setString(4, accountNumber);
+    transactionStmt.addBatch();
+    currentTransactionSize++;
+    executeBatch("transaction");
+
+
   }
 
   private void insertNewAccount() throws SQLException {
-    try (PreparedStatement ps = conn.prepareStatement(sqlInsertNewAccount)) {
-      ps.setString(1, ciaId);
-//      ps.setDouble(2, money);
-      ps.setString(2, registeredAt);
-      ps.setString(3, accountNumber);
-      ps.executeUpdate();
-    }
+    accountStmt.setString(1, ciaId);
+    accountStmt.setString(2, registeredAt);
+    accountStmt.setString(3, accountNumber);
+    accountStmt.addBatch();
+    currentAccountSize++;
+    executeBatch("account");
   }
 
-  private void insertTransactionType() throws SQLException {
-    try (PreparedStatement ps = conn.prepareStatement(sqlInsertSelectTransactId)) {
-      ps.setString(1, transaction);
-      ps.setString(2, transaction);
-      ResultSet rs = ps.executeQuery();
-      if (rs.next()) {
-        transaction_id = rs.getInt(1);
-      }
+  private void executeBatch(String statement) throws SQLException {
+    switch (statement) {
+      case "account":
+        if (currentAccountSize == batchSize) {
+          accountStmt.executeBatch();
+          currentAccountSize = 0;
+        }
+        break;
+      case "transaction":
+        if (currentTransactionSize == batchSize) {
+          transactionStmt.executeBatch();
+          currentTransactionSize = 0;
+        }
+        break;
     }
   }
 

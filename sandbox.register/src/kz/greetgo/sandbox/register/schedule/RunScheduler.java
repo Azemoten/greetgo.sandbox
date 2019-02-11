@@ -1,20 +1,17 @@
-package kz.greetgo.sandbox.debug.launchers;
+package kz.greetgo.sandbox.register.schedule;
 
 import java.util.List;
 import java.util.Map;
-import kz.greetgo.depinject.Depinject;
-import kz.greetgo.depinject.gen.DepinjectUtil;
-import kz.greetgo.sandbox.controller.util.Modules;
-import kz.greetgo.sandbox.debug.bean_containers.DebugBeanContainer;
-import kz.greetgo.sandbox.register.schedule.MigrationScheduledClass;
 import kz.greetgo.scheduling.ExecutionPool;
 import kz.greetgo.scheduling.Scheduler;
 import kz.greetgo.scheduling.Task;
 import kz.greetgo.scheduling.TaskCollector;
 import kz.greetgo.scheduling.ThrowableCatcher;
 
-public class LaunchDebugServer {
-  public static void main(String[] args) throws Exception {
+public class RunScheduler {
+
+  public static void main(String[] args) {
+
     TaskCollector taskCollector = new TaskCollector(
         System.getProperty("user.home") + "/sandbox.d/conf/");
     taskCollector.throwableCatcher = new ThrowableCatcher() {
@@ -35,16 +32,5 @@ public class LaunchDebugServer {
     Scheduler scheduler = new Scheduler(tasks, executionPoolMap);
 
     scheduler.startup();
-    new LaunchDebugServer().run();
-  }
-
-  private void run() throws Exception {
-    DepinjectUtil.implementAndUseBeanContainers(
-      "kz.greetgo.sandbox.debug",
-      Modules.standDir() + "/build/src_bean_containers");
-
-    DebugBeanContainer container = Depinject.newInstance(DebugBeanContainer.class);
-
-    container.server().start().join();
   }
 }

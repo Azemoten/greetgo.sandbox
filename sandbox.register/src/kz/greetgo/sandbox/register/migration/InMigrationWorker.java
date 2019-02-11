@@ -7,32 +7,14 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 
-public class InMigrationWorker {
+public class InMigrationWorker extends SqlWorker {
 
   private Connection con;
-  String charmSql = "insert into charm (id, name) \n"
-      + "select id, 'name'\n"
-      + "from migration_charm where status=2";
-  String clientSql =
-      "insert into client (surname, name, patronymic, gender, birth_date, charm, cia_id) \n"
-          + "select surname, name, patronymic, gender::gender, birth, charm, cia_id\n"
-          + "from migration_client where status=2";
-  String phoneSql = "insert into client_phone (client, number, type) \n"
-      + "select c.id, mp.number, mp.type::phone from migration_phone mp \n"
-      + "join client c on c.cia_id = mp.cia_id where mp.status = 2 and mp.actual = 1";
-  String addressSql = "insert into client_addr (client, type, street, house, flat)\n"
-      + "select c.id, ma.type::address, ma.street, ma.house, ma.flat\n"
-      + "from migration_address ma join client c on c.cia_id=ma.cia_id where status=2";
-  String accountSql = "insert into client_account (client, money, number, registered_at)\n"
-      + "select c.id, 0.0, ma.account_number, ma.registered_at::timestamp\n"
-      + "from client c join migration_account ma on ma.cia_id=c.cia_id\n"
-      + "where ma.status=2";
-  String transactionTypesSql = "insert into transaction_type (id, name)\n"
-      + "select real_id, name from migration_transaction_type";
-  String transactionSql = "";
+
+  //
 
   public InMigrationWorker(Connection con) {
-    this.con = con;
+    super(con);
   }
 
 
@@ -51,16 +33,15 @@ public class InMigrationWorker {
     //Migration clients
     //
     {//CiaIntegration
-      migrCharms();
       migrClientsWithBody();
     }
     {//FrsIntegration
       migrAccounts();
-      migrTransactionType();
+//      migrTransactionType();
       migrTransactions();
     }
     {
-      updateMigratedStatus();
+      finishMigration();
     }
 
     return true;
@@ -68,35 +49,12 @@ public class InMigrationWorker {
 
   }
 
-  private void updateMigratedStatus() {
-//    exec();
-//    exec();
-//    exec();
-//    exec();
-    // exec();
+  private void finishMigration() throws SQLException {
+    markClients();
+    markBodyOfClients();
+    markAccounts();
+    markTransactions();
 
-  }
-
-  private void migrClientsWithBody() throws SQLException {
-    exec(clientSql);
-    exec(phoneSql);
-    exec(addressSql);
-  }
-
-  private void migrCharms() throws SQLException {
-    exec(charmSql);
-  }
-
-  private void migrTransactionType() throws SQLException {
-    exec(transactionTypesSql);
-  }
-
-  private void migrTransactions() throws SQLException {
-    exec(transactionSql);
-  }
-
-  private void migrAccounts() throws SQLException {
-    exec(accountSql);
   }
 
   private boolean checkAnyDataToMigrateAndPrepareMigration() throws SQLException {
@@ -108,16 +66,22 @@ public class InMigrationWorker {
                               " where status=0 and inserted_at <=?", now);
       int countFrsTransactions = exec("update migration_transaction set status=2 "
                                           + "where status=0 and inserted_at<=?", now);
-      int countCharms = exec("update migration_charm set status = 2"
-                                 + " where status=0 and inserted_at<= ?", now);
       int countPhones = exec("update migration_phone set status =2"
                                  + " where status = 0 and inserted_at<= ?", now);
       int countAddrs = exec("update migration_address set status = 2 "
                                 + "where status = 0 and inserted_at<= ?", now);
-      if (countFrs + countСia + countFrsTransactions + countCharms + countPhones +
+      if (countFrs + countСia + countFrsTransactions + countPhones +
           countAddrs == 0) {
         return false;
       }
+    }
+    {//charm updating for migration_client
+      exec("with row1 as (select DISTINCT(charm_text) from migration_client),\n"
+               + "row2 as (insert into charm(name) select row1.charm_text "
+               + "from row1 on conflict(name) do "
+               + "update SET name=EXCLUDED.name returning id, name)\n"
+               + "update migration_client mc set charm=row2.id "
+               + "from row2, row1 where mc.status=2 and mc.charm_text=row2.name");
     }
 
     {// clients for update
@@ -135,6 +99,14 @@ public class InMigrationWorker {
                + "then 2 else 4 end \n"
                + "where mac.status=2 or mac.status=4");
     }
+    {
+      exec("with mtt as (select distinct(transaction_type) from migration_transaction),\n"
+               + "tt as (insert into transaction_type(name) select mtt.transaction_type from mtt\n"
+               + "                         on conflict(name) do\n"
+               + "update SET name=EXCLUDED.name returning id, name)\n"
+               + "update migration_transaction mt set transaction_id = tt.id "
+               + "from tt where tt.name=mt.transaction_type and mt.status=2");
+    }
     {//Transaction whithout account
       exec("update migration_transaction as mt set status = case\n"
                + " when exists (select 1 from client_account as ca where\n"
@@ -143,28 +115,26 @@ public class InMigrationWorker {
                + "   then 2 else 4 end where status=2 or status=4");
     }
 
+
     return true;
   }
 
-  private int exec(String s, Date now) throws SQLException {
-    PreparedStatement ps = con.prepareStatement(s);
-    ps.setTimestamp(1, (Timestamp) now);
-    return ps.executeUpdate();
+  private void markBodyOfClients() throws SQLException {
+    exec("update migration_phone set status = status+10 where status=2");
+    exec("update migration_address set status = status+10 where status=2");
   }
 
-  private void exec(String s) throws SQLException {
-    PreparedStatement ps = con.prepareStatement(s);
-    ps.executeUpdate();
+  private void markTransactions() throws SQLException {
+    exec("update migration_transaction set status = status+10 where status=2");
   }
 
-  private Timestamp getTimestamp() throws SQLException {
-    PreparedStatement ps = con.prepareStatement("select moment()");
-    ResultSet rs = ps.executeQuery();
-    if (rs.next()) {
-      return rs.getTimestamp(1);
-    }
+  private void markAccounts() throws SQLException {
+    exec("update migration_account set status = status+10 where status=2 ");
+  }
 
-    return null;
+
+  private void markClients() throws SQLException {
+    exec("update migration_client set status = status+10 where status=2 or status=3");
   }
 
 

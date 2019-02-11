@@ -133,7 +133,7 @@ public class SqlProvider {
     String result = "";
     SQL sql = new SQL();
     sql.insert_into("migration_client")
-        .values("id, cia_id, name, surname, gender, birth, charm, status", "(select nextval('client_id_seq')),?, ?, ?, ?, ?::date, ?, ?");
+        .values("id, cia_id, name, surname, gender, birth, charm_text, status", "(select nextval('client_id_seq')),?, ?, ?, ?, ?::date, ?, ?");
     boolean nonNullPatronymic = Objects.nonNull(patronymic);
     if (nonNullPatronymic) {
       sql.values("patronymic", "?");

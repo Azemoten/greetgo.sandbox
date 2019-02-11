@@ -61,10 +61,12 @@
   </changeSet>
 
   <changeSet author="pompei" id="create-table-charm">
-    <sql endDelimiter=";;">create table charm(
-      id serial PRIMARY KEY,
-      name varchar(100),
+    <sql endDelimiter=";;">
+      create table charm(
+      id serial primary key,
+      name varchar(100) ,
       description varchar(255),
+      CONSTRAINT name_unique UNIQUE (name),
       energy float
       )
     </sql>
@@ -110,8 +112,7 @@
       type address,
       street varchar(255),
       house varchar(255),
-      flat varchar(255),
-      PRIMARY KEY(client, type)
+      flat varchar(255)
       );
     </sql>
   </changeSet>
@@ -121,8 +122,7 @@
       create table client_phone(
       client integer references client(id),
       number varchar(100),
-      type phone,
-      PRIMARY KEY(client, type)
+      type phone
       );
     </sql>
   </changeSet>
@@ -134,7 +134,8 @@
       client integer references client(id),
       money float,
       number varchar(100),
-      registered_at timestamp
+      registered_at timestamp,
+      cia_id varchar(100)
       );
     </sql>
   </changeSet>
@@ -144,7 +145,8 @@
       create table transaction_type(
       id serial PRIMARY KEY,
       code varchar(100),
-      name varchar(255)
+      name varchar(255),
+      CONSTRAINT transaction_name_unique UNIQUE (name)
       );
     </sql>
   </changeSet>
@@ -161,15 +163,6 @@
     </sql>
   </changeSet>
 
-  <changeSet author="pompei" id="create-table-migration_charm">
-    <sql endDelimiter=";;">
-      create table migration_charm(
-      id serial not null,
-      name varchar(100) not null,
-      status int default 0
-      );
-    </sql>
-  </changeSet>
 
   <changeSet author="pompei" id="create-table-migration_client">
     <sql endDelimiter=";;">
@@ -181,8 +174,9 @@
       patronymic varchar(100),
       gender varchar(10) not null,
       birth date not null,
-      charm int not null,
+      charm_text varchar(200) not null,
       status int default 0,
+      charm int,
       actual smallint default 1,
       inserted_at timestamp default CURRENT_TIMESTAMP
       )
@@ -194,7 +188,8 @@
       create table migration_transaction(
       money float not null,
       finished_at varchar(200),
-      transaction_type int not null,
+      transaction_type varchar(200) not null,
+      transaction_id int,
       account_number varchar(200),
       status int default 0,
       inserted_at timestamp default current_timestamp
@@ -222,7 +217,8 @@
       number varchar(200) not null,
       type varchar(10) not null,
       status int default 0,
-      actual smallint not null default 1
+      actual smallint not null default 1,
+      inserted_at timestamp default current_timestamp
       );
     </sql>
   </changeSet>
@@ -236,10 +232,38 @@
       house varchar(200) not null,
       flat varchar(200) not null,
       status int default 0,
-      actual smallint not null default 1
+      actual smallint not null default 1,
+      inserted_at timestamp default current_timestamp
       );
     </sql>
   </changeSet>
 
+  <changeSet author="pompei" id="create-index-client_ciaId">
+    <sql endDelimiter=";;">
+      CREATE INDEX idx_migration_ciaId
+      ON migration_client(cia_id);
+    </sql>
+  </changeSet>
+
+  <changeSet author="pompei" id="create-index-Realclient_ciaId">
+    <sql endDelimiter=";;">
+      CREATE INDEX idx_client_ciaId
+      ON client(cia_id);
+    </sql>
+  </changeSet>
+
+  <changeSet author="pompei" id="create-index_ciaId">
+    <sql endDelimiter=";;">
+      CREATE INDEX idx_migration_account_ciaId
+      ON migration_account(cia_id);
+    </sql>
+  </changeSet>
+
+  <changeSet author="pompei" id="create-index-account_accountNumber">
+    <sql endDelimiter=";;">
+      CREATE INDEX idx_account_number
+      ON migration_transaction(account_number);
+    </sql>
+  </changeSet>
 
 </databaseChangeLog>
