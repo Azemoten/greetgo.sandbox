@@ -84,4 +84,10 @@ public class RandomMigrationEntity {
 
     return client;
   }
+
+  public Client createClient(String ciaId) {
+    Client client = createClient();
+    client.ciaId = ciaId;
+    return client;
+  }
 }

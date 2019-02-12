@@ -11,4 +11,5 @@ public class ClientAccount {
   public String number;
   public Date registered_at;
   public String ciaId;
+  public int status;
 }

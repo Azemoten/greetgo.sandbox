@@ -44,6 +44,8 @@ public class MigrationTest extends ParentTestNg {
   XMLReader xmlReader = parser.getXMLReader();
   XMLHandler handler = new XMLHandler();
 
+  InMigration inMigration = new InMigration();
+
 
   public MigrationTest() throws Exception {}
 
@@ -120,15 +122,19 @@ public class MigrationTest extends ParentTestNg {
   public void checkNullSurname() throws IOException, SAXException {
     xmlReader.setContentHandler(handler);
     xmlReader.parse(String.valueOf(new File("test4.xml")));
+    //
+    //
 
     assertThat(parseFile("testLog.log", "Invalid surname, name, or id")).isNotEqualTo(-1);
   }
 
   @Test
   public void checkNullName() throws Exception {
-
     xmlReader.setContentHandler(handler);
     xmlReader.parse(String.valueOf(new File("test1.xml")));
+    //
+    //
+
     assertThat(parseFile("testLog.log", "Invalid surname, name, or id")).isNotEqualTo(-1);
 
   }
@@ -137,6 +143,8 @@ public class MigrationTest extends ParentTestNg {
   public void checkCorrectDate() throws IOException, SAXException {
     xmlReader.setContentHandler(handler);
     xmlReader.parse(String.valueOf(new File("test2.xml")));
+    //
+    //
 
     assertThat(parseFile("testLog.log", "DateTimeException")).isNotEqualTo(-1);
   }
@@ -145,6 +153,8 @@ public class MigrationTest extends ParentTestNg {
   public void chechNullciaId() throws IOException, SAXException {
     xmlReader.setContentHandler(handler);
     xmlReader.parse(String.valueOf(new File("test3.xml")));
+    //
+    //
 
     assertThat(parseFile("testLog.log", "Invalid surname, name, or id")).isNotEqualTo(-1);
   }
@@ -154,14 +164,12 @@ public class MigrationTest extends ParentTestNg {
     Client client = randomEntity.get().createClientForMigrate();
 
     migrationTestDao.get().insertMigrationClient(client);
-    new InMigration().execute();
+    inMigration.execute();
 
     Client client1 = clientDao.get().getClientByCiaId(client.ciaId);
 
     assertThat(client1.name).isEqualTo(client.name);
     assertThat(client1.patronymic).isEqualTo(client.patronymic);
-
-//    inMigrationWorker.migrate();
 
   }
 
@@ -173,7 +181,7 @@ public class MigrationTest extends ParentTestNg {
     client.surname = "UPDATED";
     client.name = "UPDATED";
     migrationTestDao.get().insertMigrationClient(client);
-    new InMigration().execute();
+    inMigration.execute();
 
     Client client1 = clientDao.get().getClientByCiaId(client.ciaId);
 
@@ -188,14 +196,41 @@ public class MigrationTest extends ParentTestNg {
     ClientAccount clientAccount = randomEntity.get().createAccount(client.ciaId);
     migrationTestDao.get().insertMigrationClient(client);
     migrationTestDao.get().insertMigrationAccount(clientAccount);
-
-    new InMigration().execute();
-
+    //
+    //
+    inMigration.execute();
     ClientAccount clientAccount1 = clientDao.get().getAccount(client.ciaId);
-
+    //
+    //
     assertThat(clientAccount1.number).isEqualTo(clientAccount.number);
     assertThat(clientAccount1.money).isEqualTo(clientAccount.money);
   }
+
+  @Test
+  public void insertAccountWithoutClient() throws Exception {
+    ClientAccount clientAccount = randomEntity.get().createAccount();
+    migrationTestDao.get().insertMigrationAccount(clientAccount);
+
+    //
+    //
+    inMigration.execute();
+    ClientAccount clientAccount1 = migrationTestDao.get().selectAccount(clientAccount.ciaId);
+    //
+    // 4 - no client
+
+    assertThat(clientAccount1.status).isEqualTo(4);
+
+    Client client = randomEntity.get().createClient(clientAccount.ciaId);
+    migrationTestDao.get().insertMigrationClient(client);
+
+    inMigration.execute();
+
+    ClientAccount clientAccount2 = migrationTestDao.get().selectAccount(client.ciaId);
+
+    assertThat(clientAccount2.status).isNotEqualTo(4);
+
+  }
+
 
 
 

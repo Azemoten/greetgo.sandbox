@@ -51,7 +51,7 @@ public interface MigrationDaoTest {
   ClientPhone selectPhone(String ciaId);
 
 
-  @Select("Select account_number as number, money, registered_at from migration_account where cia_id=#{ciaId}")
+  @Select("Select account_number as number, money, registered_at, status from migration_account where cia_id=#{ciaId}")
   ClientAccount selectAccount(String ciaId);
 
   @Select("select account_number as accountNumber, transaction_type as type, finished_at as finishedAt, money from migration_transactions where account_number=#{accountNumber}")
