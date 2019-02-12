@@ -34,14 +34,16 @@ public class SqlWorker {
       + "select c.id, ma.type::address, ma.street, ma.house, ma.flat\n"
       + "from migration_address ma join client c on c.cia_id=ma.cia_id where status=2 and ma.actual=1";
 
-  String accountSql = "insert into client_account (client, money, number, registered_at)\n"
-      + "select c.id, 0.0, ma.account_number, ma.registered_at::timestamp\n"
+  String accountSql = "insert into client_account (client, money, number, registered_at, cia_id)\n"
+      + "select c.id, 0.0, ma.account_number, ma.registered_at::timestamp, ma.cia_id\n"
       + "from client c join migration_account ma on ma.cia_id=c.cia_id\n"
       + "where ma.status=2";
 
+
+
   String transactionSql = "insert into client_account_transaction (account, money, finished_at, type)\n"
-      + "select (select id from client_account ca where mt.account_number=ca.number), money, finished_at::timestamp, transaction_id\n"
-      + "  from migration_transaction mt ";
+      + "       select ca.id, mt.money, mt.finished_at::timestamp, mt.transaction_id\n"
+      + "         from migration_transaction mt join client_account ca on ca.number=mt.account_number where mt.status=2";
 
   public void migrClientsWithBody() throws SQLException {
     exec(insertClient);

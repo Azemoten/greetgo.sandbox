@@ -12,7 +12,7 @@ import kz.greetgo.scheduling.UsePool;
 
 public class MigrationScheduledClass {
 //  @FromConfig("Таска номер 1")
-  @Scheduled("repeat every 10 sec")
+  @Scheduled("repeat every 10 min")
   public void migrateData() throws Exception {
     InMigration inMigration = new InMigration();
     inMigration.execute();

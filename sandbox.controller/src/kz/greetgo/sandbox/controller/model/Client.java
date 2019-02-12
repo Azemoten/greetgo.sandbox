@@ -14,4 +14,5 @@ public class Client {
   public String ciaId;
   public Date insertedAt;
   public int status;
+  public String charm_text;
 }

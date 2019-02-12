@@ -62,5 +62,11 @@ public interface ClientDao {
           +
           "on conflict(client, type) do update set (client, number, type) = (#{client}, #{number}, #{type}::phone)")
   void upsertPhone(ClientPhone clientPhone);
+
+  @Select("select * from client where cia_id = #{cia_id}")
+  Client getClientByCiaId(String cia_id);
+
+  @Select("select * from client_account where cia_id = #{cia_id}")
+  ClientAccount getAccount(String cia_id);
 }
 

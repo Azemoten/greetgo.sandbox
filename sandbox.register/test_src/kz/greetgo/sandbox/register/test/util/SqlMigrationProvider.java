@@ -17,8 +17,8 @@ public class SqlMigrationProvider {
 //      throw new NullCiaIdException();
 //    }
     String sql = "INSERT INTO public.migration_client(" +
-        "cia_id, name, surname, patronymic, gender, birth, charm, inserted_at)" +
-        "  VALUES (#{ciaId}, #{name}, #{surname}, #{patronymic}, #{gender}, #{birthDate}, #{charm}, #{insertedAt}) returning id";
+        "cia_id, name, surname, patronymic, gender, birth, charm, inserted_at, charm_text)" +
+        "  VALUES (#{ciaId}, #{name}, #{surname}, #{patronymic}, #{gender}, #{birthDate}, #{charm}, #{insertedAt}, #{charm_text})";
 
     return sql;
   }

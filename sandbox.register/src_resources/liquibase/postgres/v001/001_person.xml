@@ -261,9 +261,17 @@
 
   <changeSet author="pompei" id="create-index-account_accountNumber">
     <sql endDelimiter=";;">
-      CREATE INDEX idx_account_number
+      CREATE INDEX idx_transaction_account_number
       ON migration_transaction(account_number);
     </sql>
   </changeSet>
+
+  <changeSet author="pompei" id="create-index-migration_account_accountNumber">
+    <sql endDelimiter=";;">
+      CREATE INDEX idx_migration_account_number
+      ON migration_account(account_number);
+    </sql>
+  </changeSet>
+
 
 </databaseChangeLog>

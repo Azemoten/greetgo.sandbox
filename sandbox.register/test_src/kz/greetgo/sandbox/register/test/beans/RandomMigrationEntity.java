@@ -25,6 +25,7 @@ public class RandomMigrationEntity {
     client.gender = Gender.MALE;
     client.surname = RND.str(10);
     client.charm = 1;
+    client.charm_text = "asdff";
 
     return client;
   }
@@ -50,9 +51,17 @@ public class RandomMigrationEntity {
   public ClientAccount createAccount() {
     ClientAccount account = new ClientAccount();
     account.ciaId = RND.str(10);
-    account.money = RND.plusDouble(1000.0, 10);
+    account.money = 0.0;
     account.registered_at = new Timestamp(RND.plusInt(500000000));
     account.number = RND.str(10);
+
+    return account;
+
+  }
+
+  public ClientAccount createAccount(String ciaId) {
+    ClientAccount account = createAccount();
+    account.ciaId = ciaId;
 
     return account;
 
@@ -71,6 +80,7 @@ public class RandomMigrationEntity {
   public Client createClientForMigrate() {
     Client client = createClient();
     client.status = 2;
+    client.charm_text="Takoi sebe";
 
     return client;
   }

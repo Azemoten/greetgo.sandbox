@@ -14,7 +14,9 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
 
 public interface MigrationDaoTest {
-  @SelectProvider(type = SqlMigrationProvider.class, method = "createClient")
+  @Insert("INSERT INTO public.migration_client(" +
+      "cia_id, name, surname, patronymic, gender, birth, charm, charm_text)" +
+      "  VALUES (#{ciaId}, #{name}, #{surname}, #{patronymic}, #{gender}, #{birthDate}, #{charm}, #{charm_text})")
   void insertMigrationClient(Client client);
 
   @Insert("INSERT INTO public.migration_address(\n"

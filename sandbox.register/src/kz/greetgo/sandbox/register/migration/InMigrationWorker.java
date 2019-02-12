@@ -32,12 +32,11 @@ public class InMigrationWorker extends SqlWorker {
     //
     //Migration clients
     //
-    {//CiaIntegration
+    {
       migrClientsWithBody();
     }
-    {//FrsIntegration
+    {
       migrAccounts();
-//      migrTransactionType();
       migrTransactions();
     }
     {
@@ -75,29 +74,42 @@ public class InMigrationWorker extends SqlWorker {
         return false;
       }
     }
+    {//fix dublicates and old datas
+      exec("update migration_client mc\n"
+               + "set status = case when mc.id in (select max(id) as maxId\n"
+               + "                                 from migration_client\n"
+               + "                                 group by cia_id)\n"
+               + "  then 2\n"
+               + "             else -1 end"
+               + " where mc.status=2");
+    }
     {//charm updating for migration_client
       exec("with row1 as (select DISTINCT(charm_text) from migration_client),\n"
-               + "row2 as (insert into charm(name) select row1.charm_text "
-               + "from row1 on conflict(name) do "
-               + "update SET name=EXCLUDED.name returning id, name)\n"
-               + "update migration_client mc set charm=row2.id "
-               + "from row2, row1 where mc.status=2 and mc.charm_text=row2.name");
+               + "               row2 as (insert into charm(name) select row1.charm_text \n"
+               + "               from row1 on conflict(name) do \n"
+               + "               update SET name=EXCLUDED.name returning id, name)\n"
+               + "               update migration_client mc set charm=row2.id \n"
+               + "               from row2 where mc.status=2 and mc.charm_text=row2.name");
     }
 
     {// clients for update
-      exec("update migration_client as mc "
-               + "set status = case"
-               + " when inserted_at=(select max(inserted_at) from migration_client) then"
-               + " 3 else -1"
-               + " end"
-               + " from client as c "
-               + "where c.cia_id = mc.cia_id and  mc.status = 2 ");
+      exec("update migration_client mc\n"
+               + "set status = case when mc.id in (select max(id) as maxId\n"
+               + "                                 from migration_client\n"
+               + "                                 group by cia_id)\n"
+               + "  then 3\n"
+               + "             else -1 end\n"
+               + "from client c where mc.cia_id = c.cia_id and status=2");
     }
     {//Account whithout client
       exec("update migration_account as mac set status = case \n"
                + "when exists (select 1 from client c where c.cia_id=mac.cia_id) or exists (select 1 from migration_client mc where mc.cia_id=mac.cia_id)\n"
                + "then 2 else 4 end \n"
                + "where mac.status=2 or mac.status=4");
+    }
+    {//transaction without account
+      exec("update migration_transaction as mt set status = ma.status from migration_account ma"
+               + " where ma.account_number=mt.account_number");
     }
     {
       exec("with mtt as (select distinct(transaction_type) from migration_transaction),\n"
@@ -106,13 +118,6 @@ public class InMigrationWorker extends SqlWorker {
                + "update SET name=EXCLUDED.name returning id, name)\n"
                + "update migration_transaction mt set transaction_id = tt.id "
                + "from tt where tt.name=mt.transaction_type and mt.status=2");
-    }
-    {//Transaction whithout account
-      exec("update migration_transaction as mt set status = case\n"
-               + " when exists (select 1 from client_account as ca where\n"
-               + "  ca.number = mt.account_number) or exists \n"
-               + "  (select 1 from migration_account as ma where ma.account_number=mt.account_number)\n"
-               + "   then 2 else 4 end where status=2 or status=4");
     }
 
 

@@ -41,7 +41,7 @@ public class JsonReader {
       + ")\n"
       + "    VALUES (?, ?, ?, ? \n"
       + ")";
-  int batchSize = 5000;
+  int batchSize = 30000;
   int currentAccountSize = 0;
   int currentTransactionSize = 0;
   PreparedStatement accountStmt = conn.prepareStatement(sqlInsertNewAccount);
